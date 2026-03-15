@@ -1,0 +1,504 @@
+import { notFound } from 'next/navigation';
+import Link from 'next/link';
+import { ChevronRight, MapPin, Building2, Calendar, ExternalLink } from 'lucide-react';
+import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { getPropertyBySlug } from '@/lib/supabase/queries';
+import { formatPrice } from '@/lib/formatters';
+import SchemaMarkup from '@/components/shared/SchemaMarkup';
+import ContactForm from '@/components/property/ContactForm';
+import { slugify } from '@/lib/utils';
+import { getAllDesarrollos, getDesarrolloBySlug, getDesarrollosByCity } from '@/data/desarrollos';
+
+export const revalidate = 3600; // ISR: revalidate every hour
+
+// ── City detection ──────────────────────────────────
+const CITY_MAP: Record<string, { name: string; state: string; descEs: string; descEn: string }> = {
+  'cancun': { name: 'Cancun', state: 'Quintana Roo', descEs: 'Explora los nuevos desarrollos inmobiliarios en Cancun, Quintana Roo. Preventas de departamentos, casas y terrenos con los mejores precios.', descEn: 'Explore new real estate developments in Cancun, Quintana Roo. Pre-sale apartments, houses, and land at the best prices.' },
+  'playa-del-carmen': { name: 'Playa del Carmen', state: 'Quintana Roo', descEs: 'Descubre los nuevos desarrollos en Playa del Carmen. Condos de inversion, preventas y oportunidades en la Riviera Maya.', descEn: 'Discover new developments in Playa del Carmen. Investment condos, pre-sales, and opportunities in the Riviera Maya.' },
+  'tulum': { name: 'Tulum', state: 'Quintana Roo', descEs: 'Nuevos lanzamientos inmobiliarios en Tulum. Departamentos, villas y terrenos en preventa con alto potencial de inversion.', descEn: 'New real estate launches in Tulum. Apartments, villas, and land in pre-sale with high investment potential.' },
+  'merida': { name: 'Merida', state: 'Yucatan', descEs: 'Desarrollos inmobiliarios en Merida, Yucatan. Terrenos, casas y departamentos en preventa en las mejores zonas.', descEn: 'Real estate developments in Merida, Yucatan. Land, houses, and apartments in pre-sale in the best zones.' },
+};
+
+function isCity(slug: string) { return slug in CITY_MAP; }
+
+export async function generateStaticParams() {
+  const cityParams = Object.keys(CITY_MAP).map(city => ({ slug: city }));
+
+  try {
+    const supabase = await createServerSupabaseClient();
+    const { data } = await supabase
+      .from('properties')
+      .select('slug')
+      .eq('published', true)
+      .limit(1000);
+
+    if (data && data.length > 0) {
+      return [...cityParams, ...data.map(p => ({ slug: p.slug }))];
+    }
+  } catch {
+    // Supabase not available
+  }
+
+  // Fallback to static data
+  const staticDevs = getAllDesarrollos().map(d => ({ slug: d.slug }));
+  return [...cityParams, ...staticDevs];
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string; slug: string }> }) {
+  const { locale, slug } = await params;
+  const isEn = locale === 'en';
+
+  // ── City page metadata ──
+  if (isCity(slug)) {
+    const city = CITY_MAP[slug];
+    return {
+      title: isEn
+        ? `New Developments in ${city.name}, ${city.state} | Pre-Sales & Prices | Propyte`
+        : `Nuevos Desarrollos en ${city.name}, ${city.state} | Preventas y Precios | Propyte`,
+      description: isEn ? city.descEn : city.descEs,
+      alternates: { languages: { es: `/es/desarrollos/${slug}`, en: `/en/desarrollos/${slug}`, 'x-default': `/es/desarrollos/${slug}` } },
+    };
+  }
+
+  // ── Development page metadata ──
+  let property: any = null;
+  try {
+    const supabase = await createServerSupabaseClient();
+    const { data } = await getPropertyBySlug(supabase, slug);
+    if (data) property = data;
+  } catch {
+    // fallback
+  }
+  if (!property) {
+    const staticDev = getDesarrolloBySlug(slug);
+    if (staticDev) property = staticDev;
+  }
+  if (!property) return {};
+  const title = isEn
+    ? `${property.name} — ${property.city} | Pre-sale ${property.stage === 'preventa' ? 'Prices' : 'Now'} | Propyte`
+    : `${property.name} — ${property.city} | ${property.stage === 'preventa' ? 'Preventa' : 'En Construccion'} | Propyte`;
+
+  const description = isEn
+    ? (property.description_en || `${property.name} in ${property.zone}, ${property.city}. ${property.price_mxn > 0 ? `From ${formatPrice(property.price_mxn)}.` : ''} Pre-sale opportunity in Riviera Maya.`)
+    : (property.description_es || `${property.name} en ${property.zone}, ${property.city}. ${property.price_mxn > 0 ? `Desde ${formatPrice(property.price_mxn)}.` : ''} Oportunidad de preventa.`);
+
+  return {
+    title,
+    description: description.slice(0, 155),
+    openGraph: {
+      title: property.name,
+      description,
+      images: property.images?.[0] ? [{ url: property.images[0], width: 800, height: 450 }] : [],
+      type: 'website',
+      locale: isEn ? 'en_US' : 'es_MX',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: property.name,
+      description,
+    },
+    alternates: {
+      languages: {
+        es: `/es/desarrollos/${slug}`,
+        en: `/en/desarrollos/${slug}`,
+        'x-default': `/es/desarrollos/${slug}`,
+      },
+    },
+  };
+}
+
+// Helper to safely get supabase client
+async function getSupabase() {
+  try {
+    return await createServerSupabaseClient();
+  } catch {
+    return null;
+  }
+}
+
+export default async function DesarrolloDetailPage({ params }: { params: Promise<{ locale: string; slug: string }> }) {
+  const { locale, slug } = await params;
+  const isEn = locale === 'en';
+  const supabase = await getSupabase();
+
+  // ── CITY PAGE ─────────────────────────────────────
+  if (isCity(slug)) {
+    const cityInfo = CITY_MAP[slug];
+
+    let properties: any[] = [];
+    let count = 0;
+
+    try {
+      if (!supabase) throw new Error('No Supabase');
+      const { data, count: dbCount } = await supabase
+        .from('properties')
+        .select('id, slug, name, city, zone, state, price_mxn, stage, property_type, images, developers(name, logo_url)', { count: 'exact' })
+        .eq('published', true)
+        .ilike('city', `%${cityInfo.name}%`)
+        .order('price_mxn', { ascending: false })
+        .limit(100);
+
+      if (data && data.length > 0) {
+        properties = data;
+        count = dbCount || data.length;
+      } else {
+        throw new Error('No data');
+      }
+    } catch {
+      const staticData = getDesarrollosByCity(cityInfo.name);
+      properties = staticData;
+      count = staticData.length;
+    }
+
+    const zoneMap: Record<string, number> = {};
+    properties?.forEach((p: { zone: string }) => { zoneMap[p.zone || cityInfo.name] = (zoneMap[p.zone || cityInfo.name] || 0) + 1; });
+    const zones = Object.entries(zoneMap).sort((a, b) => b[1] - a[1]);
+    const withPrice = properties?.filter((p: { price_mxn: number }) => p.price_mxn > 0) || [];
+    const minPrice = withPrice.length > 0 ? Math.min(...withPrice.map((p: { price_mxn: number }) => p.price_mxn)) : 0;
+
+    return (
+      <>
+        <SchemaMarkup type="breadcrumb" data={{ itemListElement: [
+          { '@type': 'ListItem', position: 1, name: isEn ? 'Home' : 'Inicio', item: `https://propyte.com/${locale}` },
+          { '@type': 'ListItem', position: 2, name: isEn ? 'Developments' : 'Desarrollos', item: `https://propyte.com/${locale}/desarrollos` },
+          { '@type': 'ListItem', position: 3, name: cityInfo.name },
+        ] }} />
+        <div className="max-w-[1280px] mx-auto px-4 md:px-6 py-4">
+          <nav className="flex items-center gap-1 text-xs text-gray-500 mb-6">
+            <Link href={`/${locale}`} className="hover:text-[#00B4C8]">{isEn ? 'Home' : 'Inicio'}</Link>
+            <ChevronRight size={12} />
+            <Link href={`/${locale}/desarrollos`} className="hover:text-[#00B4C8]">{isEn ? 'Developments' : 'Desarrollos'}</Link>
+            <ChevronRight size={12} />
+            <span className="text-gray-700 font-medium">{cityInfo.name}</span>
+          </nav>
+          <div className="mb-8">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
+              {isEn ? `New Developments in ${cityInfo.name}` : `Nuevos Desarrollos en ${cityInfo.name}`}
+            </h1>
+            <p className="mt-2 text-lg text-gray-600">{isEn ? cityInfo.descEn : cityInfo.descEs}</p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <div className="bg-[#00B4C8]/5 rounded-xl p-4 text-center">
+              <div className="text-2xl font-bold text-[#00B4C8]">{count || 0}</div>
+              <div className="text-xs text-gray-500">{isEn ? 'Developments' : 'Desarrollos'}</div>
+            </div>
+            <div className="bg-[#00B4C8]/5 rounded-xl p-4 text-center">
+              <div className="text-2xl font-bold text-[#00B4C8]">{zones.length}</div>
+              <div className="text-xs text-gray-500">{isEn ? 'Zones' : 'Zonas'}</div>
+            </div>
+            {minPrice > 0 && (
+              <div className="bg-[#00B4C8]/5 rounded-xl p-4 text-center col-span-2">
+                <div className="text-lg font-bold text-[#00B4C8]">{formatPrice(minPrice)}</div>
+                <div className="text-xs text-gray-500">{isEn ? 'Starting from' : 'Desde'}</div>
+              </div>
+            )}
+          </div>
+          {zones.length > 1 && (
+            <div className="mb-8">
+              <h2 className="text-lg font-bold text-gray-900 mb-3">{isEn ? `Zones in ${cityInfo.name}` : `Zonas en ${cityInfo.name}`}</h2>
+              <div className="flex flex-wrap gap-2">
+                {zones.map(([zone, zoneCount]) => (
+                  <span key={zone} className="px-3 py-1.5 bg-gray-100 text-gray-700 text-sm rounded-full">{zone} ({zoneCount})</span>
+                ))}
+              </div>
+            </div>
+          )}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+            {(properties || []).map((dev: any) => (
+              <Link key={dev.id} href={`/${locale}/desarrollos/${dev.slug}`} className="group bg-white rounded-2xl border border-gray-100 hover:border-[#00B4C8]/30 hover:shadow-lg transition-all overflow-hidden">
+                <div className="aspect-[16/10] bg-gradient-to-br from-gray-100 to-gray-200 relative">
+                  {dev.images?.[0] ? <img src={dev.images[0]} alt={dev.name} className="w-full h-full object-cover" /> : <div className="absolute inset-0 flex items-center justify-center"><Building2 size={36} className="text-gray-300" /></div>}
+                  <div className="absolute top-3 left-3"><span className="px-2.5 py-1 bg-[#00B4C8] text-white text-xs font-bold rounded-full uppercase">{dev.stage === 'preventa' ? (isEn ? 'Pre-sale' : 'Preventa') : (isEn ? 'Construction' : 'Construccion')}</span></div>
+                </div>
+                <div className="p-4">
+                  <h3 className="font-bold text-gray-900 group-hover:text-[#00B4C8] transition-colors line-clamp-1">{dev.name}</h3>
+                  <div className="flex items-center gap-1 mt-1 text-sm text-gray-500"><MapPin size={14} /><span>{dev.zone !== dev.city ? `${dev.zone}, ` : ''}{dev.city}</span></div>
+                  {dev.price_mxn > 0 && <div className="mt-2 font-bold text-gray-900">{isEn ? 'From ' : 'Desde '}{formatPrice(dev.price_mxn)}</div>}
+                </div>
+              </Link>
+            ))}
+          </div>
+          <div className="mt-16 prose prose-gray max-w-none">
+            <h2>{isEn ? `Investing in ${cityInfo.name}` : `Invertir en ${cityInfo.name}`}</h2>
+            <p>{isEn
+              ? `${cityInfo.name}, ${cityInfo.state} is one of Mexico's fastest-growing real estate markets with ${count || 0} active developments across ${zones.length} zones.`
+              : `${cityInfo.name}, ${cityInfo.state} es uno de los mercados inmobiliarios de mayor crecimiento en Mexico con ${count || 0} desarrollos activos en ${zones.length} zonas.`
+            }</p>
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  // ── DEVELOPMENT DETAIL PAGE ───────────────────────
+  let property: any = null;
+
+  try {
+    if (!supabase) throw new Error('No Supabase');
+    const { data } = await getPropertyBySlug(supabase, slug);
+    if (data) property = data;
+  } catch {
+    // Supabase not available
+  }
+
+  // Fallback to static data
+  if (!property) {
+    const staticDev = getDesarrolloBySlug(slug);
+    if (staticDev) property = staticDev;
+  }
+
+  if (!property) notFound();
+
+  const citySlug = slugify(property.city);
+  const description = isEn ? (property.description_en || '') : (property.description_es || '');
+
+  // Get similar developments in same city
+  let similar: any[] = [];
+  try {
+    if (!supabase) throw new Error('No Supabase');
+    const { data } = await supabase
+      .from('properties')
+      .select('id, slug, name, city, zone, price_mxn, stage, property_type, images, developers(name)')
+      .eq('published', true)
+      .eq('city', property.city)
+      .neq('id', property.id)
+      .limit(6);
+    if (data) similar = data;
+  } catch {
+    similar = getDesarrollosByCity(property.city).filter((d: any) => d.id !== property.id).slice(0, 6);
+  }
+
+  const stageLabel = property.stage === 'preventa'
+    ? (isEn ? 'Pre-sale' : 'Preventa')
+    : property.stage === 'construccion'
+      ? (isEn ? 'Under Construction' : 'En Construccion')
+      : (isEn ? 'Ready to Move In' : 'Entrega Inmediata');
+
+  const typeLabel = property.property_type === 'departamento' ? (isEn ? 'Apartments' : 'Departamentos')
+    : property.property_type === 'terreno' ? (isEn ? 'Land' : 'Terrenos')
+    : property.property_type === 'casa' ? (isEn ? 'Houses' : 'Casas')
+    : property.property_type === 'penthouse' ? 'Penthouse'
+    : property.property_type;
+
+  return (
+    <>
+      {/* Schema: RealEstateListing */}
+      <SchemaMarkup
+        type="realEstateListing"
+        data={{
+          name: property.name,
+          description: description,
+          url: `https://propyte.com/${locale}/desarrollos/${slug}`,
+          image: property.images?.[0] || undefined,
+          datePosted: property.created_at,
+          ...(property.price_mxn > 0 && {
+            offers: {
+              '@type': 'Offer',
+              price: property.price_mxn,
+              priceCurrency: 'MXN',
+              availability: 'https://schema.org/InStock',
+            },
+          }),
+          address: {
+            '@type': 'PostalAddress',
+            streetAddress: property.zone || property.city,
+            addressLocality: property.city,
+            addressRegion: property.state,
+            addressCountry: 'MX',
+          },
+        }}
+      />
+
+      {/* Schema: Breadcrumb */}
+      <SchemaMarkup
+        type="breadcrumb"
+        data={{
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: isEn ? 'Home' : 'Inicio', item: `https://propyte.com/${locale}` },
+            { '@type': 'ListItem', position: 2, name: isEn ? 'Developments' : 'Desarrollos', item: `https://propyte.com/${locale}/desarrollos` },
+            { '@type': 'ListItem', position: 3, name: property.city, item: `https://propyte.com/${locale}/desarrollos/${citySlug}` },
+            { '@type': 'ListItem', position: 4, name: property.name },
+          ],
+        }}
+      />
+
+      <div className="max-w-[1280px] mx-auto px-4 md:px-6 py-4">
+        {/* Breadcrumbs */}
+        <nav className="flex items-center gap-1 text-xs text-gray-500 mb-6">
+          <Link href={`/${locale}`} className="hover:text-[#00B4C8]">{isEn ? 'Home' : 'Inicio'}</Link>
+          <ChevronRight size={12} />
+          <Link href={`/${locale}/desarrollos`} className="hover:text-[#00B4C8]">{isEn ? 'Developments' : 'Desarrollos'}</Link>
+          <ChevronRight size={12} />
+          <Link href={`/${locale}/desarrollos/${citySlug}`} className="hover:text-[#00B4C8]">{property.city}</Link>
+          <ChevronRight size={12} />
+          <span className="text-gray-700 font-medium truncate max-w-[200px]">{property.name}</span>
+        </nav>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Main Content */}
+          <div className="lg:col-span-2 space-y-8">
+            {/* Hero Image / Placeholder */}
+            <div className="aspect-[16/9] bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl overflow-hidden relative">
+              {property.images?.[0] ? (
+                <img src={property.images[0]} alt={property.name} className="w-full h-full object-cover" />
+              ) : (
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-300">
+                  <Building2 size={64} />
+                  <p className="mt-2 text-sm">{isEn ? 'Images coming soon' : 'Imagenes proximamente'}</p>
+                </div>
+              )}
+              <div className="absolute top-4 left-4">
+                <span className="px-3 py-1.5 bg-[#00B4C8] text-white text-sm font-bold rounded-full">
+                  {stageLabel}
+                </span>
+              </div>
+            </div>
+
+            {/* Title & Location */}
+            <div>
+              <h1 className="text-3xl md:text-4xl font-bold text-gray-900">{property.name}</h1>
+              <div className="flex items-center gap-2 mt-2 text-gray-500">
+                <MapPin size={18} />
+                <span className="text-lg">{property.zone !== property.city ? `${property.zone}, ` : ''}{property.city}, {property.state}</span>
+              </div>
+
+              {property.price_mxn > 0 && (
+                <div className="mt-4">
+                  <span className="text-sm text-gray-500">{isEn ? 'Starting from' : 'Desde'}</span>
+                  <div className="text-3xl font-bold text-gray-900">{formatPrice(property.price_mxn)}</div>
+                </div>
+              )}
+            </div>
+
+            {/* Key Details */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="bg-gray-50 rounded-xl p-4 text-center">
+                <Building2 size={24} className="mx-auto text-[#00B4C8] mb-2" />
+                <div className="text-sm font-bold text-gray-900">{typeLabel}</div>
+                <div className="text-xs text-gray-500">{isEn ? 'Property Type' : 'Tipo'}</div>
+              </div>
+              <div className="bg-gray-50 rounded-xl p-4 text-center">
+                <Calendar size={24} className="mx-auto text-[#00B4C8] mb-2" />
+                <div className="text-sm font-bold text-gray-900">{stageLabel}</div>
+                <div className="text-xs text-gray-500">{isEn ? 'Stage' : 'Etapa'}</div>
+              </div>
+              <div className="bg-gray-50 rounded-xl p-4 text-center">
+                <MapPin size={24} className="mx-auto text-[#00B4C8] mb-2" />
+                <div className="text-sm font-bold text-gray-900">{property.zone || property.city}</div>
+                <div className="text-xs text-gray-500">{isEn ? 'Zone' : 'Zona'}</div>
+              </div>
+              <div className="bg-gray-50 rounded-xl p-4 text-center">
+                <MapPin size={24} className="mx-auto text-[#00B4C8] mb-2" />
+                <div className="text-sm font-bold text-gray-900">{property.state}</div>
+                <div className="text-xs text-gray-500">{isEn ? 'State' : 'Estado'}</div>
+              </div>
+            </div>
+
+            {/* Description */}
+            {description && (
+              <div>
+                <h2 className="text-xl font-bold text-gray-900 mb-3">
+                  {isEn ? 'About this Development' : 'Sobre este Desarrollo'}
+                </h2>
+                <p className="text-gray-600 leading-relaxed">{description}</p>
+              </div>
+            )}
+
+            {/* Amenities */}
+            {property.amenities?.length > 0 && (
+              <div>
+                <h2 className="text-xl font-bold text-gray-900 mb-3">
+                  {isEn ? 'Amenities' : 'Amenidades'}
+                </h2>
+                <div className="flex flex-wrap gap-2">
+                  {property.amenities.map((amenity: string) => (
+                    <span key={amenity} className="px-3 py-1.5 bg-gray-100 text-gray-700 text-sm rounded-full">
+                      {amenity}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Developer info */}
+            {property.developers?.name && (
+              <div className="bg-gray-50 rounded-2xl p-6">
+                <h2 className="text-lg font-bold text-gray-900 mb-2">
+                  {isEn ? 'Developer' : 'Desarrolladora'}
+                </h2>
+                <div className="flex items-center gap-3">
+                  {property.developers.logo_url && (
+                    <img src={property.developers.logo_url} alt={property.developers.name} className="w-12 h-12 rounded-lg object-contain bg-white" />
+                  )}
+                  <div>
+                    <div className="font-bold text-gray-900">{property.developers.name}</div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Sidebar */}
+          <div className="space-y-6">
+            {/* Contact Card */}
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sticky top-24">
+              <h3 className="text-lg font-bold text-gray-900 mb-4">
+                {isEn ? 'Interested in this development?' : 'Te interesa este desarrollo?'}
+              </h3>
+              <p className="text-sm text-gray-500 mb-4">
+                {isEn
+                  ? 'Get pricing, floor plans, and availability directly from our advisors.'
+                  : 'Recibe precios, planos y disponibilidad directamente de nuestros asesores.'
+                }
+              </p>
+              <ContactForm propertyId={property.id} propertyName={property.name} />
+            </div>
+          </div>
+        </div>
+
+        {/* Similar Developments */}
+        {similar && similar.length > 0 && (
+          <div className="mt-16">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">
+              {isEn ? `More Developments in ${property.city}` : `Mas Desarrollos en ${property.city}`}
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {similar.map((dev) => (
+                <Link
+                  key={dev.id}
+                  href={`/${locale}/desarrollos/${dev.slug}`}
+                  className="group bg-white rounded-2xl border border-gray-100 hover:border-[#00B4C8]/30 hover:shadow-lg transition-all overflow-hidden"
+                >
+                  <div className="aspect-[16/10] bg-gradient-to-br from-gray-100 to-gray-200 relative">
+                    {dev.images?.[0] ? (
+                      <img src={dev.images[0]} alt={dev.name} className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <Building2 size={36} className="text-gray-300" />
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-4">
+                    <h3 className="font-bold text-gray-900 group-hover:text-[#00B4C8] transition-colors line-clamp-1">
+                      {dev.name}
+                    </h3>
+                    <div className="flex items-center gap-1 mt-1 text-sm text-gray-500">
+                      <MapPin size={14} />
+                      <span>{dev.zone}, {dev.city}</span>
+                    </div>
+                    {dev.price_mxn > 0 && (
+                      <div className="mt-2 font-bold text-gray-900">
+                        {isEn ? 'From ' : 'Desde '}{formatPrice(dev.price_mxn)}
+                      </div>
+                    )}
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </>
+  );
+}

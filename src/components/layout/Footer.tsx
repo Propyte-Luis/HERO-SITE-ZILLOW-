@@ -62,6 +62,7 @@ export default function Footer() {
             <ul className="space-y-2.5">
               <li><Link href="#" className="text-sm text-white/50 hover:text-white transition-colors">{t('aboutUs')}</Link></li>
               <li><Link href={`/${locale}/desarrolladores`} className="text-sm text-white/50 hover:text-white transition-colors">{t('developersLink')}</Link></li>
+              <li><Link href={`/${locale}/corredores`} className="text-sm text-white/50 hover:text-white transition-colors">{t('brokersLink')}</Link></li>
               <li><Link href="#" className="text-sm text-white/50 hover:text-white transition-colors">{t('careers')}</Link></li>
               <li><Link href="#" className="text-sm text-white/50 hover:text-white transition-colors">{t('blogLink')}</Link></li>
             </ul>

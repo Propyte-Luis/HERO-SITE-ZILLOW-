@@ -26,6 +26,8 @@ export default function Header() {
     { href: `/${locale}/propiedades?stage=preventa`, label: t('presale') },
     { href: `/${locale}/propiedades`, label: t('properties') },
     { href: `/${locale}/desarrolladores`, label: t('developers') },
+    { href: `/${locale}/corredores`, label: t('brokers') },
+    { href: `/${locale}/unete`, label: 'Únete' },
   ];
 
   return (
