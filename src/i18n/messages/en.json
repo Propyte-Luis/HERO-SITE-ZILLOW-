@@ -120,7 +120,11 @@
   },
   "marketplace": {
     "title": "Properties",
-    "results": "{count} properties found",
+    "results": "{count} results",
+    "searchPlaceholder": "Search zone or development...",
+    "filterAll": "All",
+    "filterPriceRange": "Price range",
+    "saveSearch": "Save search",
     "noResults": "No properties found with these filters",
     "noResultsSuggestion": "Try broadening your search or adjusting the filters",
     "clearAll": "Clear all",

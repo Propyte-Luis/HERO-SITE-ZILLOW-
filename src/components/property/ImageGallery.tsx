@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import Image from 'next/image';
-import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, X, Camera } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 interface ImageGalleryProps {
@@ -20,96 +20,97 @@ export default function ImageGallery({ images, alt }: ImageGalleryProps) {
 
   return (
     <>
-      <div className="relative max-w-[900px] mx-auto">
-        <div
-          className="relative aspect-[16/9] rounded-xl overflow-hidden cursor-pointer bg-gray-100"
-          onClick={() => setLightbox(true)}
-          role="button"
-          aria-roledescription="carousel"
-          aria-label={t('gallery')}
-        >
-          <Image
-            src={images[current]}
-            alt={`${alt} - ${current + 1}`}
-            fill
-            sizes="(max-width: 900px) 100vw, 900px"
-            className="object-cover"
-            priority={current === 0}
-          />
-          <div className="absolute bottom-3 right-3 bg-black/60 text-white text-xs px-2 py-1 rounded">
-            {current + 1} / {images.length}
-          </div>
-        </div>
-
-        {images.length > 1 && (
-          <>
-            <button
-              onClick={prev}
-              className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-md transition-colors"
-              aria-label="Previous image"
-            >
-              <ChevronLeft size={20} />
-            </button>
-            <button
-              onClick={next}
-              className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-md transition-colors"
-              aria-label="Next image"
-            >
-              <ChevronRight size={20} />
-            </button>
-          </>
-        )}
-
-        {images.length > 1 && (
-          <div className="flex justify-center gap-1.5 mt-3">
-            {images.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setCurrent(i)}
-                className={`w-2 h-2 rounded-full transition-colors ${i === current ? 'bg-[#00B4C8]' : 'bg-gray-300'}`}
-                aria-label={`Go to image ${i + 1}`}
+      {/* Zillow-style mosaic grid */}
+      <div className="relative rounded-xl overflow-hidden cursor-pointer" onClick={() => setLightbox(true)}>
+        {images.length >= 3 ? (
+          <div className="grid grid-cols-2 gap-1 h-[280px] md:h-[420px]">
+            <div className="relative row-span-2">
+              <Image
+                src={images[0]}
+                alt={`${alt} - 1`}
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover hover:brightness-95 transition-all"
+                priority
               />
-            ))}
+            </div>
+            <div className="relative">
+              <Image
+                src={images[1]}
+                alt={`${alt} - 2`}
+                fill
+                sizes="25vw"
+                className="object-cover hover:brightness-95 transition-all"
+              />
+            </div>
+            <div className="relative">
+              <Image
+                src={images[2]}
+                alt={`${alt} - 3`}
+                fill
+                sizes="25vw"
+                className="object-cover hover:brightness-95 transition-all"
+              />
+              {images.length > 3 && (
+                <div className="absolute inset-0 bg-black/30 flex items-center justify-center hover:bg-black/40 transition-colors">
+                  <span className="text-white font-bold text-lg">+{images.length - 3}</span>
+                </div>
+              )}
+            </div>
+          </div>
+        ) : (
+          <div className="relative aspect-[16/9]">
+            <Image src={images[0]} alt={`${alt} - 1`} fill sizes="100vw" className="object-cover" priority />
           </div>
         )}
+
+        <button
+          onClick={(e) => { e.stopPropagation(); setLightbox(true); }}
+          className="absolute bottom-4 right-4 flex items-center gap-2 px-4 py-2 bg-white/95 hover:bg-white text-[#2C2C2C] text-sm font-semibold rounded-lg shadow-md backdrop-blur-sm transition-colors"
+        >
+          <Camera size={16} />
+          {t('photoCount', { count: images.length })}
+        </button>
       </div>
 
+      {/* Lightbox */}
       {lightbox && (
-        <div className="fixed inset-0 z-50 bg-black flex items-center justify-center" onClick={() => setLightbox(false)}>
-          <button
-            onClick={() => setLightbox(false)}
-            className="absolute top-4 right-4 w-12 h-12 text-white hover:bg-white/10 rounded-full flex items-center justify-center z-10"
-            aria-label="Close lightbox"
-          >
-            <X size={28} />
-          </button>
-          <div className="relative w-full h-full max-w-[90vw] max-h-[90vh]" onClick={e => e.stopPropagation()}>
-            <Image
-              src={images[current]}
-              alt={`${alt} - ${current + 1}`}
-              fill
-              sizes="90vw"
-              className="object-contain"
-            />
+        <div className="fixed inset-0 z-50 bg-black/95 flex flex-col" onClick={() => setLightbox(false)}>
+          <div className="flex items-center justify-between px-4 py-3 text-white" onClick={e => e.stopPropagation()}>
+            <span className="text-sm font-medium">{current + 1} / {images.length}</span>
+            <button onClick={() => setLightbox(false)} className="w-10 h-10 hover:bg-white/10 rounded-full flex items-center justify-center" aria-label="Close">
+              <X size={24} />
+            </button>
           </div>
+
+          <div className="flex-1 flex items-center justify-center px-4" onClick={e => e.stopPropagation()}>
+            <div className="relative w-full h-full max-w-[90vw] max-h-[80vh]">
+              <Image src={images[current]} alt={`${alt} - ${current + 1}`} fill sizes="90vw" className="object-contain" />
+            </div>
+          </div>
+
           {images.length > 1 && (
             <>
-              <button
-                onClick={e => { e.stopPropagation(); prev(); }}
-                className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 text-white hover:bg-white/10 rounded-full flex items-center justify-center"
-                aria-label="Previous"
-              >
-                <ChevronLeft size={32} />
+              <button onClick={e => { e.stopPropagation(); prev(); }} className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white" aria-label="Previous">
+                <ChevronLeft size={28} />
               </button>
-              <button
-                onClick={e => { e.stopPropagation(); next(); }}
-                className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 text-white hover:bg-white/10 rounded-full flex items-center justify-center"
-                aria-label="Next"
-              >
-                <ChevronRight size={32} />
+              <button onClick={e => { e.stopPropagation(); next(); }} className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white" aria-label="Next">
+                <ChevronRight size={28} />
               </button>
             </>
           )}
+
+          <div className="flex justify-center gap-2 px-4 py-4 overflow-x-auto" onClick={e => e.stopPropagation()}>
+            {images.map((img, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrent(i)}
+                className={`relative w-16 h-12 rounded-md overflow-hidden flex-shrink-0 border-2 transition-all ${i === current ? 'border-white' : 'border-transparent opacity-50 hover:opacity-80'}`}
+              >
+                <Image src={img} alt="" fill sizes="64px" className="object-cover" />
+              </button>
+            ))}
+          </div>
         </div>
       )}
     </>

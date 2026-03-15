@@ -120,7 +120,11 @@
   },
   "marketplace": {
     "title": "Propiedades",
-    "results": "{count} propiedades encontradas",
+    "results": "{count} resultados",
+    "searchPlaceholder": "Buscar zona o desarrollo...",
+    "filterAll": "Todos",
+    "filterPriceRange": "Rango de precio",
+    "saveSearch": "Guardar búsqueda",
     "noResults": "No se encontraron propiedades con estos filtros",
     "noResultsSuggestion": "Intenta ampliar tu búsqueda o modificar los filtros",
     "clearAll": "Limpiar todo",

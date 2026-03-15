@@ -1,8 +1,9 @@
 'use client';
 
 import { useLocale, useTranslations } from 'next-intl';
-import { MessageCircle, Calendar, Clock } from 'lucide-react';
+import { MessageCircle, Calendar, Clock, Phone, Shield } from 'lucide-react';
 import type { Property } from '@/types/property';
+import { formatPrice } from '@/lib/formatters';
 
 interface ContactSidebarProps {
   property: Property;
@@ -21,34 +22,82 @@ export default function ContactSidebar({ property }: ContactSidebarProps) {
   const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(messages[locale] || messages.es)}`;
 
   return (
-    <div className="sticky top-24 bg-white rounded-xl border border-gray-100 shadow-[0_2px_8px_rgba(0,0,0,0.08)] p-6">
-      <div className="flex items-center gap-3 mb-4">
-        <div className="w-10 h-10 bg-[#1E3A5F] rounded-full flex items-center justify-center text-white font-bold text-sm">
-          P
+    <div className="sticky top-20 space-y-4">
+      {/* Main contact card */}
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+        {/* Price reminder */}
+        <div className="text-2xl font-bold text-[#2C2C2C] mb-1">{formatPrice(property.price.mxn)}</div>
+        {property.roi.rentalMonthly > 0 && (
+          <p className="text-sm text-gray-500 mb-4">
+            {locale === 'es' ? 'Renta estimada' : 'Est. rent'}: {formatPrice(property.roi.rentalMonthly)}/mes
+          </p>
+        )}
+
+        {/* Agent avatar + info */}
+        <div className="flex items-center gap-3 mb-5 pb-5 border-b border-gray-100">
+          <div className="w-12 h-12 bg-gradient-to-br from-[#1E3A5F] to-[#00B4C8] rounded-full flex items-center justify-center text-white font-bold text-lg shadow-sm">
+            P
+          </div>
+          <div>
+            <p className="font-bold text-[#2C2C2C]">{t('contactAdvisor')}</p>
+            <div className="flex items-center gap-1 text-xs text-gray-500">
+              <Shield size={10} className="text-[#22C55E]" />
+              <span>{locale === 'es' ? 'Asesor verificado' : 'Verified advisor'}</span>
+            </div>
+          </div>
         </div>
-        <div>
-          <p className="font-semibold text-[#2C2C2C]">{t('contactAdvisor')}</p>
+
+        {/* WhatsApp */}
+        <a
+          href={whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-center gap-2 w-full h-12 bg-[#25D366] hover:bg-[#1EBE57] text-white font-bold rounded-lg transition-colors mb-3 shadow-sm"
+        >
+          <MessageCircle size={20} />
+          {t('whatsappContact')}
+        </a>
+
+        {/* Schedule visit */}
+        <button className="flex items-center justify-center gap-2 w-full h-12 bg-[#00B4C8] hover:bg-[#009AB0] text-white font-bold rounded-lg transition-colors mb-3 shadow-sm">
+          <Calendar size={20} />
+          {t('scheduleVisit')}
+        </button>
+
+        {/* Call */}
+        <a
+          href={`tel:+${phone}`}
+          className="flex items-center justify-center gap-2 w-full h-12 border-2 border-gray-200 hover:border-gray-300 text-[#2C2C2C] font-semibold rounded-lg transition-colors"
+        >
+          <Phone size={18} />
+          {locale === 'es' ? 'Llamar ahora' : 'Call now'}
+        </a>
+
+        <div className="flex items-center justify-center gap-1 text-xs text-gray-400 mt-4">
+          <Clock size={12} />
+          {t('responseTime')}
         </div>
       </div>
 
-      <a
-        href={whatsappUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex items-center justify-center gap-2 w-full h-12 bg-[#25D366] hover:bg-[#1EBE57] text-white font-semibold rounded-lg transition-colors mb-3"
-      >
-        <MessageCircle size={20} />
-        {t('whatsappContact')}
-      </a>
-
-      <button className="flex items-center justify-center gap-2 w-full h-12 bg-[#00B4C8] hover:bg-[#009AB0] text-white font-semibold rounded-lg transition-colors mb-4">
-        <Calendar size={20} />
-        {t('scheduleVisit')}
-      </button>
-
-      <div className="flex items-center justify-center gap-1 text-xs text-gray-400">
-        <Clock size={12} />
-        {t('responseTime')}
+      {/* Financing quick info */}
+      <div className="bg-[#F4F6F8] rounded-xl p-5">
+        <h4 className="font-bold text-sm text-[#2C2C2C] mb-3">
+          {locale === 'es' ? 'Financiamiento' : 'Financing'}
+        </h4>
+        <div className="space-y-2 text-sm">
+          <div className="flex justify-between">
+            <span className="text-gray-500">{locale === 'es' ? 'Enganche desde' : 'Down payment from'}</span>
+            <span className="font-semibold">{property.financing.downPaymentMin}%</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-gray-500">{locale === 'es' ? 'Plazo hasta' : 'Term up to'}</span>
+            <span className="font-semibold">{Math.max(...property.financing.months)} {locale === 'es' ? 'meses' : 'months'}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-gray-500">{locale === 'es' ? 'Tasa de interés' : 'Interest rate'}</span>
+            <span className="font-semibold">{property.financing.interestRate}%</span>
+          </div>
+        </div>
       </div>
     </div>
   );
