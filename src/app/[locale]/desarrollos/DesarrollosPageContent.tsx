@@ -67,7 +67,7 @@ export default function DesarrollosPageContent({ properties, totalCount, cities,
           placeholder={isEn ? 'Search developments...' : 'Buscar desarrollos...'}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:border-[#00B4C8] focus:ring-2 focus:ring-[#00B4C8]/20 outline-none transition-colors"
+          className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:border-[#5CE0D2] focus:ring-2 focus:ring-[#5CE0D2]/20 outline-none transition-colors"
         />
       </div>
 
@@ -77,7 +77,7 @@ export default function DesarrollosPageContent({ properties, totalCount, cities,
           onClick={() => setSelectedCity(null)}
           className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
             !selectedCity
-              ? 'bg-[#00B4C8] text-white'
+              ? 'bg-[#5CE0D2] text-white'
               : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           }`}
         >
@@ -93,7 +93,7 @@ export default function DesarrollosPageContent({ properties, totalCount, cities,
             }}
             className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
               selectedCity === city
-                ? 'bg-[#00B4C8] text-white'
+                ? 'bg-[#5CE0D2] text-white'
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
           >
@@ -108,7 +108,7 @@ export default function DesarrollosPageContent({ properties, totalCount, cities,
           <Link
             key={dev.id}
             href={`/${locale}/desarrollos/${dev.slug}`}
-            className="group bg-white rounded-2xl border border-gray-100 hover:border-[#00B4C8]/30 hover:shadow-lg transition-all overflow-hidden"
+            className="group bg-white rounded-2xl border border-gray-100 hover:border-[#5CE0D2]/30 hover:shadow-lg transition-all overflow-hidden"
           >
             {/* Image placeholder */}
             <div className="aspect-[16/10] bg-gradient-to-br from-gray-100 to-gray-200 relative">
@@ -120,7 +120,7 @@ export default function DesarrollosPageContent({ properties, totalCount, cities,
                 </div>
               )}
               <div className="absolute top-3 left-3">
-                <span className="px-2.5 py-1 bg-[#00B4C8] text-white text-xs font-bold rounded-full uppercase">
+                <span className="px-2.5 py-1 bg-[#5CE0D2] text-white text-xs font-bold rounded-full uppercase">
                   {dev.stage === 'preventa' ? (isEn ? 'Pre-sale' : 'Preventa') : (isEn ? 'Construction' : 'Construccion')}
                 </span>
               </div>
@@ -128,7 +128,7 @@ export default function DesarrollosPageContent({ properties, totalCount, cities,
 
             {/* Content */}
             <div className="p-4">
-              <h3 className="font-bold text-gray-900 group-hover:text-[#00B4C8] transition-colors line-clamp-1">
+              <h3 className="font-bold text-gray-900 group-hover:text-[#5CE0D2] transition-colors line-clamp-1">
                 {dev.name}
               </h3>
               <div className="flex items-center gap-1 mt-1 text-sm text-gray-500">

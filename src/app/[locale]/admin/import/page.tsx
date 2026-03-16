@@ -250,7 +250,7 @@ export default function AdminImport() {
         <div
           onDrop={handleDrop}
           onDragOver={e => e.preventDefault()}
-          className="border-2 border-dashed border-gray-300 hover:border-[#00B4C8] rounded-xl p-12 text-center transition-colors cursor-pointer"
+          className="border-2 border-dashed border-gray-300 hover:border-[#5CE0D2] rounded-xl p-12 text-center transition-colors cursor-pointer"
           onClick={() => document.getElementById('csv-input')?.click()}
         >
           <Upload size={40} className="mx-auto text-gray-300 mb-4" />
@@ -269,7 +269,7 @@ export default function AdminImport() {
       {/* Template download */}
       <div className="mt-4 p-4 bg-[#F4F6F8] rounded-xl">
         <div className="flex items-start gap-3">
-          <FileSpreadsheet size={20} className="text-[#00B4C8] flex-shrink-0 mt-0.5" />
+          <FileSpreadsheet size={20} className="text-[#5CE0D2] flex-shrink-0 mt-0.5" />
           <div>
             <p className="text-sm font-semibold text-[#2C2C2C]">Formato del CSV</p>
             <p className="text-xs text-gray-500 mt-0.5">
@@ -345,7 +345,7 @@ export default function AdminImport() {
             <button
               onClick={handleImport}
               disabled={importing || validCount === 0}
-              className="mt-4 flex items-center gap-2 px-6 py-3 bg-[#00B4C8] hover:bg-[#009AB0] disabled:bg-gray-300 text-white font-bold rounded-lg transition-colors"
+              className="mt-4 flex items-center gap-2 px-6 py-3 bg-[#5CE0D2] hover:bg-[#4BCEC0] disabled:bg-gray-300 text-white font-bold rounded-lg transition-colors"
             >
               {importing ? (
                 <>

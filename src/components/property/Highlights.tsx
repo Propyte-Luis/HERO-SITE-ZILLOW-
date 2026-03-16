@@ -70,7 +70,7 @@ export default function Highlights({ property }: HighlightsProps) {
             key={i}
             className="flex items-center gap-1.5 px-3 py-1.5 bg-[#F4F6F8] border border-gray-100 rounded-full text-sm text-[#2C2C2C] font-medium"
           >
-            <tag.icon size={14} className="text-[#00B4C8]" />
+            <tag.icon size={14} className="text-[#5CE0D2]" />
             {tag.label}
           </div>
         ))}

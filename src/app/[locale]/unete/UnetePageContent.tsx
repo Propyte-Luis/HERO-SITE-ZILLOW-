@@ -36,7 +36,7 @@ function HeroSection() {
     <section className="relative min-h-[90vh] flex items-center overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0D1B2A] via-[#1E3A5F] to-[#0D1B2A]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0F1923] via-[#1A2F3F] to-[#0F1923]" />
         <div
           className="absolute inset-0 opacity-20"
           style={{
@@ -44,7 +44,7 @@ function HeroSection() {
           }}
         />
         {/* Gradient orbs */}
-        <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-[#00B4C8]/10 rounded-full blur-3xl" />
+        <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-[#5CE0D2]/10 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-[#F5A623]/5 rounded-full blur-3xl" />
       </div>
 
@@ -52,14 +52,14 @@ function HeroSection() {
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Left: Content */}
           <div>
-            <div className="inline-flex items-center gap-2 bg-[#00B4C8]/20 text-[#00B4C8] text-sm font-bold px-4 py-2 rounded-full mb-6">
+            <div className="inline-flex items-center gap-2 bg-[#5CE0D2]/20 text-[#5CE0D2] text-sm font-bold px-4 py-2 rounded-full mb-6">
               <Zap size={14} />
               La inmobiliaria digital #1 del Caribe Mexicano
             </div>
 
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
               Tu carrera inmobiliaria{' '}
-              <span className="text-[#00B4C8]">sin límites</span>
+              <span className="text-[#5CE0D2]">sin límites</span>
             </h1>
 
             <p className="text-lg md:text-xl text-white/70 leading-relaxed mb-8 max-w-xl">
@@ -71,7 +71,7 @@ function HeroSection() {
             <div className="flex flex-col sm:flex-row gap-4 mb-10">
               <a
                 href="#aplicar"
-                className="inline-flex items-center justify-center gap-2 h-14 px-8 bg-[#00B4C8] hover:bg-[#009AB0] text-white font-bold text-lg rounded-xl transition-all hover:scale-[1.02] hover:shadow-lg hover:shadow-[#00B4C8]/20"
+                className="inline-flex items-center justify-center gap-2 h-14 px-8 bg-[#5CE0D2] hover:bg-[#4BCEC0] text-white font-bold text-lg rounded-xl transition-all hover:scale-[1.02] hover:shadow-lg hover:shadow-[#5CE0D2]/20"
               >
                 Quiero unirme
                 <ArrowRight size={20} />
@@ -93,7 +93,7 @@ function HeroSection() {
                 { value: '95%', label: 'Satisfacción' },
               ].map((stat) => (
                 <div key={stat.label}>
-                  <div className="text-2xl md:text-3xl font-bold text-[#00B4C8]">{stat.value}</div>
+                  <div className="text-2xl md:text-3xl font-bold text-[#5CE0D2]">{stat.value}</div>
                   <div className="text-sm text-white/50">{stat.label}</div>
                 </div>
               ))}
@@ -102,7 +102,7 @@ function HeroSection() {
 
           {/* Right: Video/Image card */}
           <div className="relative">
-            <div className="relative bg-gradient-to-br from-[#1E3A5F] to-[#0D1B2A] rounded-2xl overflow-hidden border border-white/10 shadow-2xl aspect-video">
+            <div className="relative bg-gradient-to-br from-[#1A2F3F] to-[#0F1923] rounded-2xl overflow-hidden border border-white/10 shadow-2xl aspect-video">
               {showVideo ? (
                 <iframe
                   src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&rel=0"
@@ -113,7 +113,7 @@ function HeroSection() {
               ) : (
                 <div className="absolute inset-0 flex items-center justify-center">
                   {/* Placeholder visual */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0D1B2A] via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0F1923] via-transparent to-transparent" />
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="text-center">
                       <div className="w-24 h-24 mx-auto bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/20 hover:bg-white/20 transition-colors cursor-pointer group"
@@ -177,7 +177,7 @@ function SocialProofBar() {
         </p>
         <div className="flex flex-wrap items-center justify-center gap-6 md:gap-10">
           {logos.map((city) => (
-            <div key={city} className="flex items-center gap-2 text-gray-400 hover:text-[#1E3A5F] transition-colors">
+            <div key={city} className="flex items-center gap-2 text-gray-400 hover:text-[#1A2F3F] transition-colors">
               <MapPin size={14} />
               <span className="text-sm font-semibold">{city}</span>
             </div>
@@ -235,9 +235,9 @@ function WhyPropyte() {
     <section className="py-20 md:py-28 bg-[#F4F6F8]">
       <div className="max-w-[1280px] mx-auto px-4 md:px-6">
         <div className="text-center mb-14">
-          <span className="text-[#00B4C8] font-bold text-sm uppercase tracking-wider">¿Por qué Propyte?</span>
+          <span className="text-[#5CE0D2] font-bold text-sm uppercase tracking-wider">¿Por qué Propyte?</span>
           <h2 className="text-3xl md:text-4xl font-bold text-[#2C2C2C] mt-3">
-            Todo lo que necesitas para <span className="text-[#1E3A5F]">triunfar</span>
+            Todo lo que necesitas para <span className="text-[#1A2F3F]">triunfar</span>
           </h2>
           <p className="text-gray-500 mt-4 max-w-2xl mx-auto">
             No somos una inmobiliaria tradicional. Somos una plataforma tecnológica que empodera
@@ -249,13 +249,13 @@ function WhyPropyte() {
           {benefits.map((b) => (
             <div
               key={b.title}
-              className="bg-white rounded-2xl p-6 border border-gray-100 hover:border-[#00B4C8]/30 hover:shadow-lg transition-all group"
+              className="bg-white rounded-2xl p-6 border border-gray-100 hover:border-[#5CE0D2]/30 hover:shadow-lg transition-all group"
             >
               <div className="flex items-start justify-between mb-4">
-                <div className="w-12 h-12 bg-[#00B4C8]/10 rounded-xl flex items-center justify-center group-hover:bg-[#00B4C8]/20 transition-colors">
-                  <b.icon size={24} className="text-[#00B4C8]" />
+                <div className="w-12 h-12 bg-[#5CE0D2]/10 rounded-xl flex items-center justify-center group-hover:bg-[#5CE0D2]/20 transition-colors">
+                  <b.icon size={24} className="text-[#5CE0D2]" />
                 </div>
-                <span className="text-xs font-bold text-[#00B4C8] bg-[#00B4C8]/10 px-2.5 py-1 rounded-full">
+                <span className="text-xs font-bold text-[#5CE0D2] bg-[#5CE0D2]/10 px-2.5 py-1 rounded-full">
                   {b.highlight}
                 </span>
               </div>
@@ -279,7 +279,7 @@ function CommissionModel() {
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Left: Visual */}
           <div className="relative">
-            <div className="bg-gradient-to-br from-[#0D1B2A] to-[#1E3A5F] rounded-2xl p-8 md:p-10">
+            <div className="bg-gradient-to-br from-[#0F1923] to-[#1A2F3F] rounded-2xl p-8 md:p-10">
               <h3 className="text-white text-xl font-bold mb-8">Tu plan de comisiones</h3>
 
               {/* Commission tiers */}
@@ -292,16 +292,16 @@ function CommissionModel() {
                   <div key={tier.range} className="bg-white/5 rounded-xl p-4 border border-white/10">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-sm text-white/60">{tier.range}</span>
-                      <span className="text-lg font-bold text-[#00B4C8]">{tier.pct}</span>
+                      <span className="text-lg font-bold text-[#5CE0D2]">{tier.pct}</span>
                     </div>
                     <div className="h-2 bg-white/10 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-gradient-to-r from-[#00B4C8] to-[#00D4EA] rounded-full transition-all"
+                        className="h-full bg-gradient-to-r from-[#5CE0D2] to-[#00D4EA] rounded-full transition-all"
                         style={{ width: `${tier.bar}%` }}
                       />
                     </div>
                     <div className="flex justify-between mt-2 text-xs">
-                      <span className="text-[#00B4C8]">Tú: {tier.you}</span>
+                      <span className="text-[#5CE0D2]">Tú: {tier.you}</span>
                       <span className="text-white/40">Propyte: {tier.propyte}</span>
                     </div>
                   </div>
@@ -323,10 +323,10 @@ function CommissionModel() {
 
           {/* Right: Content */}
           <div>
-            <span className="text-[#00B4C8] font-bold text-sm uppercase tracking-wider">Modelo de comisiones</span>
+            <span className="text-[#5CE0D2] font-bold text-sm uppercase tracking-wider">Modelo de comisiones</span>
             <h2 className="text-3xl md:text-4xl font-bold text-[#2C2C2C] mt-3 mb-6">
               Gana más,{' '}
-              <span className="text-[#1E3A5F]">quédate con más</span>
+              <span className="text-[#1A2F3F]">quédate con más</span>
             </h2>
             <p className="text-gray-500 leading-relaxed mb-8">
               Nuestro modelo progresivo está diseñado para que los agentes más productivos
@@ -343,7 +343,7 @@ function CommissionModel() {
                 'Bonos trimestrales por volumen y productividad',
               ].map((item) => (
                 <div key={item} className="flex items-start gap-3">
-                  <CheckCircle size={20} className="text-[#00B4C8] flex-shrink-0 mt-0.5" />
+                  <CheckCircle size={20} className="text-[#5CE0D2] flex-shrink-0 mt-0.5" />
                   <span className="text-[#2C2C2C] font-medium">{item}</span>
                 </div>
               ))}
@@ -360,11 +360,11 @@ function CommissionModel() {
 // ============================================================
 function RevenueSharing() {
   const levels = [
-    { level: 1, pct: '3.5%', agents: 'Tú invitas', color: '#00B4C8' },
-    { level: 2, pct: '1.5%', agents: 'Ellos invitan', color: '#009AB0' },
+    { level: 1, pct: '3.5%', agents: 'Tú invitas', color: '#5CE0D2' },
+    { level: 2, pct: '1.5%', agents: 'Ellos invitan', color: '#4BCEC0' },
     { level: 3, pct: '1.0%', agents: 'Nivel 3', color: '#0D7A8A' },
-    { level: 4, pct: '0.5%', agents: 'Nivel 4', color: '#1E3A5F' },
-    { level: 5, pct: '0.25%', agents: 'Nivel 5', color: '#0D1B2A' },
+    { level: 4, pct: '0.5%', agents: 'Nivel 4', color: '#1A2F3F' },
+    { level: 5, pct: '0.25%', agents: 'Nivel 5', color: '#0F1923' },
   ];
 
   return (
@@ -373,10 +373,10 @@ function RevenueSharing() {
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Left: Content */}
           <div>
-            <span className="text-[#00B4C8] font-bold text-sm uppercase tracking-wider">Revenue sharing</span>
+            <span className="text-[#5CE0D2] font-bold text-sm uppercase tracking-wider">Revenue sharing</span>
             <h2 className="text-3xl md:text-4xl font-bold text-[#2C2C2C] mt-3 mb-6">
               Construye tu propia{' '}
-              <span className="text-[#1E3A5F]">red de ingresos</span>
+              <span className="text-[#1A2F3F]">red de ingresos</span>
             </h2>
             <p className="text-gray-500 leading-relaxed mb-8">
               Cada agente que invites a Propyte genera ingresos para ti. Y cuando ellos inviten más agentes,
@@ -388,7 +388,7 @@ function RevenueSharing() {
               <h4 className="font-bold text-[#2C2C2C] mb-4">Ejemplo de ingresos mensuales</h4>
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-[#F4F6F8] rounded-xl p-4 text-center">
-                  <div className="text-2xl font-bold text-[#00B4C8]">10</div>
+                  <div className="text-2xl font-bold text-[#5CE0D2]">10</div>
                   <div className="text-xs text-gray-500 mt-1">Agentes directos</div>
                 </div>
                 <div className="bg-[#F4F6F8] rounded-xl p-4 text-center">
@@ -418,7 +418,7 @@ function RevenueSharing() {
                 <div className="flex-1">
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-[#2C2C2C]">Nivel {l.level}</span>
-                    <span className="text-lg font-bold text-[#00B4C8]">{l.pct}</span>
+                    <span className="text-lg font-bold text-[#5CE0D2]">{l.pct}</span>
                   </div>
                   <span className="text-sm text-gray-400">{l.agents}</span>
                 </div>
@@ -434,7 +434,7 @@ function RevenueSharing() {
               </div>
             ))}
 
-            <div className="bg-[#00B4C8]/5 border border-[#00B4C8]/20 rounded-xl p-4 mt-4">
+            <div className="bg-[#5CE0D2]/5 border border-[#5CE0D2]/20 rounded-xl p-4 mt-4">
               <p className="text-sm text-[#2C2C2C] font-medium">
                 💡 Los ingresos por revenue sharing son <strong>adicionales</strong> a tus comisiones
                 por ventas propias. No hay límite en el tamaño de tu red.
@@ -467,9 +467,9 @@ function TechPlatform() {
 
       <div className="relative max-w-[1280px] mx-auto px-4 md:px-6">
         <div className="text-center mb-14">
-          <span className="text-[#00B4C8] font-bold text-sm uppercase tracking-wider">Tecnología</span>
+          <span className="text-[#5CE0D2] font-bold text-sm uppercase tracking-wider">Tecnología</span>
           <h2 className="text-3xl md:text-4xl font-bold text-[#2C2C2C] mt-3">
-            Herramientas de <span className="text-[#1E3A5F]">clase mundial</span>
+            Herramientas de <span className="text-[#1A2F3F]">clase mundial</span>
           </h2>
           <p className="text-gray-500 mt-4 max-w-2xl mx-auto">
             Cada agente Propyte recibe acceso a nuestra suite completa de herramientas
@@ -480,8 +480,8 @@ function TechPlatform() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {tools.map((tool) => (
             <div key={tool.name} className="flex items-start gap-4 p-5 rounded-2xl hover:bg-[#F4F6F8] transition-colors">
-              <div className="w-10 h-10 bg-[#1E3A5F] rounded-lg flex items-center justify-center flex-shrink-0">
-                <tool.icon size={20} className="text-[#00B4C8]" />
+              <div className="w-10 h-10 bg-[#1A2F3F] rounded-lg flex items-center justify-center flex-shrink-0">
+                <tool.icon size={20} className="text-[#5CE0D2]" />
               </div>
               <div>
                 <h4 className="font-bold text-[#2C2C2C] mb-1">{tool.name}</h4>
@@ -492,8 +492,8 @@ function TechPlatform() {
         </div>
 
         {/* Platform screenshot placeholder */}
-        <div className="mt-14 bg-gradient-to-br from-[#0D1B2A] to-[#1E3A5F] rounded-2xl p-1 mx-auto max-w-4xl">
-          <div className="bg-[#0D1B2A] rounded-xl overflow-hidden">
+        <div className="mt-14 bg-gradient-to-br from-[#0F1923] to-[#1A2F3F] rounded-2xl p-1 mx-auto max-w-4xl">
+          <div className="bg-[#0F1923] rounded-xl overflow-hidden">
             {/* Browser chrome */}
             <div className="flex items-center gap-2 px-4 py-3 border-b border-white/10">
               <div className="flex gap-1.5">
@@ -525,7 +525,7 @@ function TechPlatform() {
             <div className="px-6 pb-6">
               <div className="h-32 bg-white/5 rounded-lg flex items-end justify-around p-4 gap-2">
                 {[40, 65, 55, 80, 70, 90, 75, 95, 85, 60, 88, 92].map((h, i) => (
-                  <div key={i} className="flex-1 bg-[#00B4C8]/60 rounded-t" style={{ height: `${h}%` }} />
+                  <div key={i} className="flex-1 bg-[#5CE0D2]/60 rounded-t" style={{ height: `${h}%` }} />
                 ))}
               </div>
             </div>
@@ -565,10 +565,10 @@ function Testimonials() {
   ];
 
   return (
-    <section className="py-20 md:py-28 bg-[#0D1B2A]">
+    <section className="py-20 md:py-28 bg-[#0F1923]">
       <div className="max-w-[1280px] mx-auto px-4 md:px-6">
         <div className="text-center mb-14">
-          <span className="text-[#00B4C8] font-bold text-sm uppercase tracking-wider">Testimonios</span>
+          <span className="text-[#5CE0D2] font-bold text-sm uppercase tracking-wider">Testimonios</span>
           <h2 className="text-3xl md:text-4xl font-bold text-white mt-3">
             Lo que dicen nuestros agentes
           </h2>
@@ -578,7 +578,7 @@ function Testimonials() {
           {testimonials.map((t) => (
             <div
               key={t.name}
-              className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-[#00B4C8]/30 transition-all"
+              className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-[#5CE0D2]/30 transition-all"
             >
               <div className="flex gap-1 mb-4">
                 {Array.from({ length: 5 }).map((_, i) => (
@@ -587,7 +587,7 @@ function Testimonials() {
               </div>
               <p className="text-white/80 leading-relaxed mb-6 text-sm">&ldquo;{t.quote}&rdquo;</p>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-[#00B4C8]/20 rounded-full flex items-center justify-center text-[#00B4C8] font-bold text-sm">
+                <div className="w-10 h-10 bg-[#5CE0D2]/20 rounded-full flex items-center justify-center text-[#5CE0D2] font-bold text-sm">
                   {t.avatar}
                 </div>
                 <div>
@@ -596,7 +596,7 @@ function Testimonials() {
                 </div>
               </div>
               <div className="mt-4 pt-4 border-t border-white/10">
-                <span className="text-[#00B4C8] font-bold text-sm">{t.stats}</span>
+                <span className="text-[#5CE0D2] font-bold text-sm">{t.stats}</span>
               </div>
             </div>
           ))}
@@ -625,8 +625,8 @@ function StatsSection() {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
           {stats.map((s) => (
             <div key={s.label} className="text-center">
-              <div className="w-12 h-12 mx-auto bg-[#00B4C8]/10 rounded-xl flex items-center justify-center mb-3">
-                <s.icon size={24} className="text-[#00B4C8]" />
+              <div className="w-12 h-12 mx-auto bg-[#5CE0D2]/10 rounded-xl flex items-center justify-center mb-3">
+                <s.icon size={24} className="text-[#5CE0D2]" />
               </div>
               <div className="text-2xl md:text-3xl font-bold text-[#2C2C2C]">{s.value}</div>
               <div className="text-xs text-gray-500 mt-1">{s.label}</div>
@@ -669,9 +669,9 @@ function JoinProcess() {
     <section className="py-20 md:py-28 bg-[#F4F6F8]">
       <div className="max-w-[1280px] mx-auto px-4 md:px-6">
         <div className="text-center mb-14">
-          <span className="text-[#00B4C8] font-bold text-sm uppercase tracking-wider">Proceso</span>
+          <span className="text-[#5CE0D2] font-bold text-sm uppercase tracking-wider">Proceso</span>
           <h2 className="text-3xl md:text-4xl font-bold text-[#2C2C2C] mt-3">
-            Únete en <span className="text-[#1E3A5F]">4 simples pasos</span>
+            Únete en <span className="text-[#1A2F3F]">4 simples pasos</span>
           </h2>
         </div>
 
@@ -680,10 +680,10 @@ function JoinProcess() {
             <div key={step.num} className="relative">
               {/* Connector line */}
               {i < steps.length - 1 && (
-                <div className="hidden md:block absolute top-8 left-[calc(50%+32px)] right-[-calc(50%-32px)] w-[calc(100%-64px)] h-0.5 bg-[#00B4C8]/20" style={{ left: 'calc(50% + 32px)', width: 'calc(100% - 32px)' }} />
+                <div className="hidden md:block absolute top-8 left-[calc(50%+32px)] right-[-calc(50%-32px)] w-[calc(100%-64px)] h-0.5 bg-[#5CE0D2]/20" style={{ left: 'calc(50% + 32px)', width: 'calc(100% - 32px)' }} />
               )}
-              <div className="bg-white rounded-2xl p-6 text-center border border-gray-100 hover:border-[#00B4C8]/30 hover:shadow-lg transition-all relative">
-                <div className="w-16 h-16 mx-auto bg-gradient-to-br from-[#00B4C8] to-[#009AB0] rounded-2xl flex items-center justify-center text-white text-2xl font-bold mb-4">
+              <div className="bg-white rounded-2xl p-6 text-center border border-gray-100 hover:border-[#5CE0D2]/30 hover:shadow-lg transition-all relative">
+                <div className="w-16 h-16 mx-auto bg-gradient-to-br from-[#5CE0D2] to-[#4BCEC0] rounded-2xl flex items-center justify-center text-white text-2xl font-bold mb-4">
                   {step.num}
                 </div>
                 <h4 className="font-bold text-[#2C2C2C] text-lg mb-2">{step.title}</h4>
@@ -742,7 +742,7 @@ function FAQ() {
     <section className="py-20 md:py-28 bg-white">
       <div className="max-w-3xl mx-auto px-4 md:px-6">
         <div className="text-center mb-14">
-          <span className="text-[#00B4C8] font-bold text-sm uppercase tracking-wider">Preguntas frecuentes</span>
+          <span className="text-[#5CE0D2] font-bold text-sm uppercase tracking-wider">Preguntas frecuentes</span>
           <h2 className="text-3xl md:text-4xl font-bold text-[#2C2C2C] mt-3">
             ¿Tienes dudas?
           </h2>
@@ -753,7 +753,7 @@ function FAQ() {
             <div
               key={i}
               className={`border rounded-xl overflow-hidden transition-all ${
-                open === i ? 'border-[#00B4C8]/30 shadow-sm' : 'border-gray-200'
+                open === i ? 'border-[#5CE0D2]/30 shadow-sm' : 'border-gray-200'
               }`}
             >
               <button
@@ -762,7 +762,7 @@ function FAQ() {
               >
                 <span className="font-semibold text-[#2C2C2C] pr-4">{faq.q}</span>
                 {open === i ? (
-                  <ChevronUp size={20} className="text-[#00B4C8] flex-shrink-0" />
+                  <ChevronUp size={20} className="text-[#5CE0D2] flex-shrink-0" />
                 ) : (
                   <ChevronDown size={20} className="text-gray-400 flex-shrink-0" />
                 )}
@@ -797,9 +797,9 @@ function ApplicationForm() {
   }
 
   return (
-    <section id="aplicar" className="py-20 md:py-28 bg-gradient-to-br from-[#0D1B2A] via-[#1E3A5F] to-[#0D1B2A] relative overflow-hidden">
+    <section id="aplicar" className="py-20 md:py-28 bg-gradient-to-br from-[#0F1923] via-[#1A2F3F] to-[#0F1923] relative overflow-hidden">
       {/* Background orbs */}
-      <div className="absolute top-1/4 right-0 w-96 h-96 bg-[#00B4C8]/5 rounded-full blur-3xl" />
+      <div className="absolute top-1/4 right-0 w-96 h-96 bg-[#5CE0D2]/5 rounded-full blur-3xl" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#F5A623]/5 rounded-full blur-3xl" />
 
       <div className="relative max-w-[1280px] mx-auto px-4 md:px-6">
@@ -808,7 +808,7 @@ function ApplicationForm() {
           <div>
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
               ¿Listo para transformar tu{' '}
-              <span className="text-[#00B4C8]">carrera inmobiliaria</span>?
+              <span className="text-[#5CE0D2]">carrera inmobiliaria</span>?
             </h2>
             <p className="text-white/70 leading-relaxed mb-8 text-lg">
               Completa el formulario y un miembro de nuestro equipo te contactará
@@ -822,7 +822,7 @@ function ApplicationForm() {
               ].map((c) => (
                 <div key={c.text} className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center">
-                    <c.icon size={18} className="text-[#00B4C8]" />
+                    <c.icon size={18} className="text-[#5CE0D2]" />
                   </div>
                   <span className="text-white/80 font-medium">{c.text}</span>
                 </div>
@@ -853,7 +853,7 @@ function ApplicationForm() {
                       <input
                         type="text"
                         required
-                        className="w-full h-11 px-4 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#00B4C8]/20 focus:border-[#00B4C8]"
+                        className="w-full h-11 px-4 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#5CE0D2]/20 focus:border-[#5CE0D2]"
                         placeholder="Tu nombre"
                       />
                     </div>
@@ -862,7 +862,7 @@ function ApplicationForm() {
                       <input
                         type="tel"
                         required
-                        className="w-full h-11 px-4 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#00B4C8]/20 focus:border-[#00B4C8]"
+                        className="w-full h-11 px-4 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#5CE0D2]/20 focus:border-[#5CE0D2]"
                         placeholder="+52 984 ..."
                       />
                     </div>
@@ -873,7 +873,7 @@ function ApplicationForm() {
                     <input
                       type="email"
                       required
-                      className="w-full h-11 px-4 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#00B4C8]/20 focus:border-[#00B4C8]"
+                      className="w-full h-11 px-4 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#5CE0D2]/20 focus:border-[#5CE0D2]"
                       placeholder="tu@correo.com"
                     />
                   </div>
@@ -882,7 +882,7 @@ function ApplicationForm() {
                     <label className="block text-sm font-semibold text-[#2C2C2C] mb-1.5">Ciudad de operación *</label>
                     <select
                       required
-                      className="w-full h-11 px-4 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#00B4C8]/20 focus:border-[#00B4C8] bg-white"
+                      className="w-full h-11 px-4 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#5CE0D2]/20 focus:border-[#5CE0D2] bg-white"
                     >
                       <option value="">Selecciona tu ciudad</option>
                       <option value="playa">Playa del Carmen</option>
@@ -899,7 +899,7 @@ function ApplicationForm() {
                   <div>
                     <label className="block text-sm font-semibold text-[#2C2C2C] mb-1.5">Experiencia en bienes raíces</label>
                     <select
-                      className="w-full h-11 px-4 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#00B4C8]/20 focus:border-[#00B4C8] bg-white"
+                      className="w-full h-11 px-4 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#5CE0D2]/20 focus:border-[#5CE0D2] bg-white"
                     >
                       <option value="">Selecciona</option>
                       <option value="0">Sin experiencia (quiero empezar)</option>
@@ -913,7 +913,7 @@ function ApplicationForm() {
                     <label className="block text-sm font-semibold text-[#2C2C2C] mb-1.5">¿Qué te interesa más de Propyte?</label>
                     <textarea
                       rows={3}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#00B4C8]/20 focus:border-[#00B4C8] resize-none"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#5CE0D2]/20 focus:border-[#5CE0D2] resize-none"
                       placeholder="Cuéntanos sobre ti y qué buscas..."
                     />
                   </div>
@@ -922,7 +922,7 @@ function ApplicationForm() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full mt-6 h-12 bg-[#00B4C8] hover:bg-[#009AB0] disabled:bg-gray-300 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-[#00B4C8]/20"
+                  className="w-full mt-6 h-12 bg-[#5CE0D2] hover:bg-[#4BCEC0] disabled:bg-gray-300 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-[#5CE0D2]/20"
                 >
                   {loading ? (
                     <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -952,7 +952,7 @@ function ApplicationForm() {
 // ============================================================
 function FinalCTA() {
   return (
-    <section className="py-16 bg-[#00B4C8]">
+    <section className="py-16 bg-[#5CE0D2]">
       <div className="max-w-[1280px] mx-auto px-4 md:px-6 text-center">
         <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
           El futuro de los bienes raíces en México es digital. Sé parte de él.
@@ -962,7 +962,7 @@ function FinalCTA() {
         </p>
         <a
           href="#aplicar"
-          className="inline-flex items-center gap-2 h-14 px-10 bg-white text-[#00B4C8] font-bold text-lg rounded-xl hover:bg-gray-50 transition-all hover:shadow-lg"
+          className="inline-flex items-center gap-2 h-14 px-10 bg-white text-[#5CE0D2] font-bold text-lg rounded-xl hover:bg-gray-50 transition-all hover:shadow-lg"
         >
           Únete hoy
           <ArrowRight size={20} />

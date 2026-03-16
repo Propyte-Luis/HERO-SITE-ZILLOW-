@@ -1,9 +1,19 @@
 @import "tailwindcss";
 
 :root {
-  --color-navy: #1E3A5F;
-  --color-teal: #00B4C8;
-  --color-teal-dark: #009AB0;
+  /* Brand: Propyte MX (B2B) — Aqua palette */
+  --color-aqua: #5CE0D2;
+  --color-aqua-bright: #99FFFF;
+  --color-aqua-hover: #4BCEC0;
+  --color-navy: #1A2F3F;
+  --color-deep-onyx: #1A1A2E;
+  --color-aztec: #0F1923;
+  /* Brand: Propyte Market (B2C) — Green palette */
+  --color-market-green: #99FF99;
+  --color-market-green-dark: #7AE47A;
+  /* Functional */
+  --color-teal: #5CE0D2;
+  --color-teal-dark: #4BCEC0;
   --color-amber: #F5A623;
   --color-graphite: #2C2C2C;
   --color-gray-light: #F4F6F8;
@@ -13,9 +23,15 @@
 }
 
 @theme inline {
-  --color-navy: #1E3A5F;
-  --color-teal: #00B4C8;
-  --color-teal-dark: #009AB0;
+  --color-aqua: #5CE0D2;
+  --color-aqua-bright: #99FFFF;
+  --color-aqua-hover: #4BCEC0;
+  --color-navy: #1A2F3F;
+  --color-deep-onyx: #1A1A2E;
+  --color-aztec: #0F1923;
+  --color-market-green: #99FF99;
+  --color-teal: #5CE0D2;
+  --color-teal-dark: #4BCEC0;
   --color-amber: #F5A623;
   --color-graphite: #2C2C2C;
   --color-gray-light: #F4F6F8;
@@ -30,7 +46,7 @@
 }
 
 body {
-  font-family: 'Inter', Arial, sans-serif;
+  font-family: var(--font-space-grotesk), 'Space Grotesk', Arial, sans-serif;
   color: var(--color-graphite);
   background: var(--color-white);
   -webkit-font-smoothing: antialiased;

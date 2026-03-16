@@ -21,7 +21,7 @@ export default function VirtualTour({ url, propertyName }: VirtualTourProps) {
       {!showTour ? (
         <button
           onClick={() => setShowTour(true)}
-          className="group relative w-full rounded-xl overflow-hidden bg-gradient-to-br from-[#1E3A5F] to-[#00B4C8] h-48 md:h-56 flex items-center justify-center cursor-pointer transition-all hover:shadow-lg"
+          className="group relative w-full rounded-xl overflow-hidden bg-gradient-to-br from-[#1A2F3F] to-[#5CE0D2] h-48 md:h-56 flex items-center justify-center cursor-pointer transition-all hover:shadow-lg"
         >
           {/* Animated 3D icon */}
           <div className="flex flex-col items-center gap-3 text-white">
@@ -44,7 +44,7 @@ export default function VirtualTour({ url, propertyName }: VirtualTourProps) {
           </div>
         </button>
       ) : (
-        <div className="relative w-full rounded-xl overflow-hidden bg-[#0D1B2A]">
+        <div className="relative w-full rounded-xl overflow-hidden bg-[#0F1923]">
           {/* Loading state */}
           {!loaded && (
             <div className="absolute inset-0 flex items-center justify-center z-10">

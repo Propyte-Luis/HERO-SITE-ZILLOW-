@@ -36,12 +36,12 @@ export default function ValueProposition() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           {cards.map((card, i) => (
             <div key={i} className="p-6 md:p-8 bg-white rounded-xl border border-gray-100 hover:shadow-lg transition-shadow">
-              <div className="w-12 h-12 mb-4 bg-[#1E3A5F]/10 rounded-lg flex items-center justify-center">
-                <card.icon size={24} className="text-[#1E3A5F]" />
+              <div className="w-12 h-12 mb-4 bg-[#1A2F3F]/10 rounded-lg flex items-center justify-center">
+                <card.icon size={24} className="text-[#1A2F3F]" />
               </div>
               <h3 className="text-lg font-semibold text-[#2C2C2C] mb-2">{card.title}</h3>
               <p className="text-gray-600 mb-4">{card.desc}</p>
-              <Link href={card.href} className="text-[#00B4C8] font-medium hover:underline">
+              <Link href={card.href} className="text-[#5CE0D2] font-medium hover:underline">
                 {card.cta} →
               </Link>
             </div>

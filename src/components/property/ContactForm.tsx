@@ -52,7 +52,7 @@ export default function ContactForm({ propertyId, propertyName }: ContactFormPro
         <input
           id="contact-name"
           {...register('name')}
-          className="w-full h-11 px-3 border border-gray-200 rounded-lg text-sm focus:border-[#00B4C8] focus:outline-none"
+          className="w-full h-11 px-3 border border-gray-200 rounded-lg text-sm focus:border-[#5CE0D2] focus:outline-none"
         />
         {errors.name && <p className="text-xs text-red-500 mt-1">{t('required')}</p>}
       </div>
@@ -63,13 +63,13 @@ export default function ContactForm({ propertyId, propertyName }: ContactFormPro
           id="contact-email"
           type="email"
           {...register('email')}
-          className="w-full h-11 px-3 border border-gray-200 rounded-lg text-sm focus:border-[#00B4C8] focus:outline-none"
+          className="w-full h-11 px-3 border border-gray-200 rounded-lg text-sm focus:border-[#5CE0D2] focus:outline-none"
         />
         {errors.email && <p className="text-xs text-red-500 mt-1">{t('invalidEmail')}</p>}
       </div>
 
       {!showPhone ? (
-        <button type="button" onClick={() => setShowPhone(true)} className="text-sm text-[#00B4C8] hover:underline">
+        <button type="button" onClick={() => setShowPhone(true)} className="text-sm text-[#5CE0D2] hover:underline">
           + {tContact('formPhone') || 'Phone'}
         </button>
       ) : (
@@ -79,7 +79,7 @@ export default function ContactForm({ propertyId, propertyName }: ContactFormPro
             id="contact-phone"
             type="tel"
             {...register('phone')}
-            className="w-full h-11 px-3 border border-gray-200 rounded-lg text-sm focus:border-[#00B4C8] focus:outline-none"
+            className="w-full h-11 px-3 border border-gray-200 rounded-lg text-sm focus:border-[#5CE0D2] focus:outline-none"
           />
         </div>
       )}
@@ -90,14 +90,14 @@ export default function ContactForm({ propertyId, propertyName }: ContactFormPro
           id="contact-message"
           {...register('message')}
           rows={3}
-          className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:border-[#00B4C8] focus:outline-none resize-none"
+          className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:border-[#5CE0D2] focus:outline-none resize-none"
         />
       </div>
 
       <button
         type="submit"
         disabled={status === 'sending'}
-        className="w-full h-12 bg-[#00B4C8] hover:bg-[#009AB0] text-white font-semibold rounded-lg transition-colors disabled:opacity-50"
+        className="w-full h-12 bg-[#5CE0D2] hover:bg-[#4BCEC0] text-white font-semibold rounded-lg transition-colors disabled:opacity-50"
       >
         {status === 'sending' ? t('sending') : status === 'sent' ? t('sent') : t('send')}
       </button>

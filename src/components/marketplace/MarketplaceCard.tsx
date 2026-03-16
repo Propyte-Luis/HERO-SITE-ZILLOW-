@@ -27,8 +27,8 @@ export default function MarketplaceCard({ property }: MarketplaceCardProps) {
   const badgeColors: Record<string, string> = {
     preventa: 'bg-[#F5A623]',
     nuevo: 'bg-[#22C55E]',
-    construccion: 'bg-[#1E3A5F]',
-    entrega_inmediata: 'bg-[#00B4C8]',
+    construccion: 'bg-[#1A2F3F]',
+    entrega_inmediata: 'bg-[#5CE0D2]',
   };
 
   return (
@@ -149,7 +149,7 @@ export default function MarketplaceCard({ property }: MarketplaceCardProps) {
 
           {/* ROI micro-badge */}
           {property.roi.projected > 0 && (
-            <div className="inline-flex items-center gap-1 mt-1.5 px-2 py-0.5 bg-[#00B4C8]/8 text-[#009AB0] text-[10px] font-bold rounded-full">
+            <div className="inline-flex items-center gap-1 mt-1.5 px-2 py-0.5 bg-[#5CE0D2]/8 text-[#4BCEC0] text-[10px] font-bold rounded-full">
               ROI {property.roi.projected}%
             </div>
           )}

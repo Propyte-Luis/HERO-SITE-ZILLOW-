@@ -46,12 +46,12 @@ export default function Header() {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="px-3 py-2 text-sm font-semibold text-[#2C2C2C] hover:text-[#00B4C8] rounded-lg hover:bg-gray-50 transition-colors"
+                    className="px-3 py-2 text-sm font-semibold text-[#2C2C2C] hover:text-[#5CE0D2] rounded-lg hover:bg-gray-50 transition-colors"
                   >
                     {link.label}
                   </Link>
                 ))}
-                <button className="px-3 py-2 text-sm font-semibold text-[#2C2C2C] hover:text-[#00B4C8] rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-1">
+                <button className="px-3 py-2 text-sm font-semibold text-[#2C2C2C] hover:text-[#5CE0D2] rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-1">
                   {t('more')} <ChevronDown size={14} />
                 </button>
               </nav>
@@ -63,14 +63,14 @@ export default function Header() {
 
               <Link
                 href={`/${locale}/desarrolladores`}
-                className="hidden md:flex items-center h-9 px-4 text-sm font-semibold text-[#2C2C2C] hover:text-[#00B4C8] hover:bg-gray-50 rounded-lg transition-colors"
+                className="hidden md:flex items-center h-9 px-4 text-sm font-semibold text-[#2C2C2C] hover:text-[#5CE0D2] hover:bg-gray-50 rounded-lg transition-colors"
               >
                 {t('advertise')}
               </Link>
 
               <Link
                 href={`/${locale}/contacto`}
-                className="hidden sm:flex items-center gap-1.5 h-10 px-5 bg-[#00B4C8] hover:bg-[#009AB0] text-white font-bold text-sm rounded-lg transition-colors"
+                className="hidden sm:flex items-center gap-1.5 h-10 px-5 bg-[#5CE0D2] hover:bg-[#4BCEC0] text-white font-bold text-sm rounded-lg transition-colors"
               >
                 <User size={16} />
                 {t('contact')}

@@ -30,7 +30,7 @@ export default function VideoPlayer({ url, propertyName, thumbnail }: VideoPlaye
       {!playing ? (
         <button
           onClick={() => setPlaying(true)}
-          className="group relative w-full rounded-xl overflow-hidden bg-[#0D1B2A] h-48 md:h-56 cursor-pointer transition-all hover:shadow-lg"
+          className="group relative w-full rounded-xl overflow-hidden bg-[#0F1923] h-48 md:h-56 cursor-pointer transition-all hover:shadow-lg"
         >
           {/* Thumbnail */}
           {thumbUrl && (

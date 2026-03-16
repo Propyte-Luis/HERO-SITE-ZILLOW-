@@ -65,7 +65,7 @@ export default function ContactPageContent() {
               <input
                 id="name"
                 {...register('name')}
-                className="w-full h-11 px-3 border border-gray-200 rounded-lg text-sm focus:border-[#00B4C8] focus:outline-none"
+                className="w-full h-11 px-3 border border-gray-200 rounded-lg text-sm focus:border-[#5CE0D2] focus:outline-none"
               />
               {errors.name && <p className="text-xs text-red-500 mt-1">{tCommon('required')}</p>}
             </div>
@@ -76,7 +76,7 @@ export default function ContactPageContent() {
                 id="email"
                 type="email"
                 {...register('email')}
-                className="w-full h-11 px-3 border border-gray-200 rounded-lg text-sm focus:border-[#00B4C8] focus:outline-none"
+                className="w-full h-11 px-3 border border-gray-200 rounded-lg text-sm focus:border-[#5CE0D2] focus:outline-none"
               />
               {errors.email && <p className="text-xs text-red-500 mt-1">{tCommon('invalidEmail')}</p>}
             </div>
@@ -86,7 +86,7 @@ export default function ContactPageContent() {
               <select
                 id="subject"
                 {...register('subject')}
-                className="w-full h-11 px-3 border border-gray-200 rounded-lg text-sm bg-white focus:border-[#00B4C8] focus:outline-none"
+                className="w-full h-11 px-3 border border-gray-200 rounded-lg text-sm bg-white focus:border-[#5CE0D2] focus:outline-none"
               >
                 <option value="">—</option>
                 {subjectOptions.map(opt => (
@@ -102,7 +102,7 @@ export default function ContactPageContent() {
                 id="message"
                 {...register('message')}
                 rows={5}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:border-[#00B4C8] focus:outline-none resize-none"
+                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:border-[#5CE0D2] focus:outline-none resize-none"
               />
               {errors.message && <p className="text-xs text-red-500 mt-1">{tCommon('required')}</p>}
             </div>
@@ -110,7 +110,7 @@ export default function ContactPageContent() {
             <button
               type="submit"
               disabled={status === 'sending'}
-              className="w-full h-12 bg-[#00B4C8] hover:bg-[#009AB0] text-white font-semibold rounded-lg transition-colors disabled:opacity-50"
+              className="w-full h-12 bg-[#5CE0D2] hover:bg-[#4BCEC0] text-white font-semibold rounded-lg transition-colors disabled:opacity-50"
             >
               {status === 'sending' ? tCommon('sending') : status === 'sent' ? tCommon('sent') : t('formSubmit')}
             </button>
@@ -121,7 +121,7 @@ export default function ContactPageContent() {
           {/* Contact Info */}
           <div className="space-y-6">
             <div className="flex items-start gap-3">
-              <MapPin size={20} className="text-[#1E3A5F] mt-0.5 shrink-0" />
+              <MapPin size={20} className="text-[#1A2F3F] mt-0.5 shrink-0" />
               <div>
                 <p className="font-medium text-[#2C2C2C]">Dirección</p>
                 <p className="text-sm text-gray-600">{t('info.address')}</p>
@@ -129,7 +129,7 @@ export default function ContactPageContent() {
             </div>
 
             <div className="flex items-start gap-3">
-              <Phone size={20} className="text-[#1E3A5F] mt-0.5 shrink-0" />
+              <Phone size={20} className="text-[#1A2F3F] mt-0.5 shrink-0" />
               <div>
                 <p className="font-medium text-[#2C2C2C]">Teléfono</p>
                 <p className="text-sm text-gray-600">{t('info.phone')}</p>
@@ -137,7 +137,7 @@ export default function ContactPageContent() {
             </div>
 
             <div className="flex items-start gap-3">
-              <Mail size={20} className="text-[#1E3A5F] mt-0.5 shrink-0" />
+              <Mail size={20} className="text-[#1A2F3F] mt-0.5 shrink-0" />
               <div>
                 <p className="font-medium text-[#2C2C2C]">Email</p>
                 <p className="text-sm text-gray-600">{t('info.email')}</p>
@@ -145,7 +145,7 @@ export default function ContactPageContent() {
             </div>
 
             <div className="flex items-start gap-3">
-              <Clock size={20} className="text-[#1E3A5F] mt-0.5 shrink-0" />
+              <Clock size={20} className="text-[#1A2F3F] mt-0.5 shrink-0" />
               <div>
                 <p className="font-medium text-[#2C2C2C]">Horario</p>
                 <p className="text-sm text-gray-600">{t('info.hours')}</p>

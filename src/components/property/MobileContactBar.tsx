@@ -29,7 +29,7 @@ export default function MobileContactBar({ property }: MobileContactBarProps) {
           <div className="text-xs text-gray-500">{property.name}</div>
         </div>
         {property.roi.projected > 0 && (
-          <span className="text-xs font-bold px-2 py-0.5 bg-[#00B4C8]/10 text-[#009AB0] rounded-full">
+          <span className="text-xs font-bold px-2 py-0.5 bg-[#5CE0D2]/10 text-[#4BCEC0] rounded-full">
             ROI {property.roi.projected}%
           </span>
         )}
@@ -45,7 +45,7 @@ export default function MobileContactBar({ property }: MobileContactBarProps) {
           <MessageCircle size={16} />
           WhatsApp
         </a>
-        <button className="flex-1 flex items-center justify-center gap-2 h-11 bg-[#00B4C8] hover:bg-[#009AB0] text-white font-bold rounded-lg transition-colors text-sm">
+        <button className="flex-1 flex items-center justify-center gap-2 h-11 bg-[#5CE0D2] hover:bg-[#4BCEC0] text-white font-bold rounded-lg transition-colors text-sm">
           <Calendar size={16} />
           {t('scheduleVisit')}
         </button>

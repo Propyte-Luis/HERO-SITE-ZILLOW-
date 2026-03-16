@@ -13,7 +13,7 @@ const STATUS_CONFIG: Record<LeadStatus, { label: string; color: string }> = {
   nuevo: { label: 'Nuevo', color: 'bg-blue-50 text-blue-600' },
   contactado: { label: 'Contactado', color: 'bg-purple-50 text-purple-600' },
   en_seguimiento: { label: 'Seguimiento', color: 'bg-yellow-50 text-yellow-600' },
-  visita_agendada: { label: 'Visita agendada', color: 'bg-[#00B4C8]/10 text-[#00B4C8]' },
+  visita_agendada: { label: 'Visita agendada', color: 'bg-[#5CE0D2]/10 text-[#5CE0D2]' },
   negociacion: { label: 'Negociación', color: 'bg-orange-50 text-orange-600' },
   cerrado: { label: 'Cerrado', color: 'bg-green-50 text-green-600' },
   perdido: { label: 'Perdido', color: 'bg-gray-100 text-gray-500' },
@@ -68,7 +68,7 @@ export default function AdminLeads() {
         <select
           value={filterStatus}
           onChange={e => setFilterStatus(e.target.value)}
-          className="h-9 px-3 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#00B4C8]/20"
+          className="h-9 px-3 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#5CE0D2]/20"
         >
           <option value="">Todos los estados</option>
           {ALL_STATUSES.map(s => (
@@ -80,7 +80,7 @@ export default function AdminLeads() {
       <div className="space-y-3">
         {loading ? (
           <div className="flex items-center justify-center h-48">
-            <div className="w-6 h-6 border-2 border-[#00B4C8]/30 border-t-[#00B4C8] rounded-full animate-spin" />
+            <div className="w-6 h-6 border-2 border-[#5CE0D2]/30 border-t-[#5CE0D2] rounded-full animate-spin" />
           </div>
         ) : leads.length === 0 ? (
           <div className="bg-white rounded-xl border border-gray-200 p-12 text-center text-gray-400">
@@ -118,7 +118,7 @@ export default function AdminLeads() {
                     <p className="text-sm text-gray-600 mt-2 line-clamp-2">{lead.message}</p>
                   )}
                   {lead.properties && (
-                    <p className="text-xs text-[#00B4C8] font-medium mt-1.5">
+                    <p className="text-xs text-[#5CE0D2] font-medium mt-1.5">
                       → {lead.properties.name} ({lead.properties.city})
                     </p>
                   )}
@@ -129,7 +129,7 @@ export default function AdminLeads() {
                   <select
                     value={lead.status}
                     onChange={e => updateStatus(lead.id, e.target.value as LeadStatus)}
-                    className="h-8 pl-2 pr-7 bg-gray-50 border border-gray-200 rounded-lg text-xs font-medium appearance-none focus:outline-none focus:ring-2 focus:ring-[#00B4C8]/20"
+                    className="h-8 pl-2 pr-7 bg-gray-50 border border-gray-200 rounded-lg text-xs font-medium appearance-none focus:outline-none focus:ring-2 focus:ring-[#5CE0D2]/20"
                   >
                     {ALL_STATUSES.map(s => (
                       <option key={s} value={s}>{STATUS_CONFIG[s].label}</option>

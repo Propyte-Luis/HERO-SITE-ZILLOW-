@@ -8,9 +8,9 @@ export default function TrendingMarket() {
 
   const stats = [
     { icon: TrendingUp, value: '12-15%', label: t('stat1Label'), color: 'text-[#22C55E]' },
-    { icon: DollarSign, value: '+25%', label: t('stat2Label'), color: 'text-[#00B4C8]' },
+    { icon: DollarSign, value: '+25%', label: t('stat2Label'), color: 'text-[#5CE0D2]' },
     { icon: Users, value: '30%', label: t('stat3Label'), color: 'text-[#F5A623]' },
-    { icon: BarChart3, value: '+18%', label: t('stat4Label'), color: 'text-[#1E3A5F]' },
+    { icon: BarChart3, value: '+18%', label: t('stat4Label'), color: 'text-[#1A2F3F]' },
   ];
 
   const zones = [
@@ -45,7 +45,7 @@ export default function TrendingMarket() {
         </div>
 
         {/* Trending zones */}
-        <div className="bg-[#1E3A5F] rounded-2xl p-6 md:p-8">
+        <div className="bg-[#1A2F3F] rounded-2xl p-6 md:p-8">
           <h3 className="text-lg font-bold text-white mb-4">{t('zonesTitle')}</h3>
           <div className="space-y-3">
             {zones.map((zone) => (

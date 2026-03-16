@@ -6,9 +6,9 @@ interface BadgeProps {
 
 const badgeStyles = {
   preventa: 'bg-[#F5A623] text-white',
-  nuevo: 'bg-[#00B4C8] text-white',
+  nuevo: 'bg-[#5CE0D2] text-white',
   entrega_inmediata: 'bg-[#22C55E] text-white',
-  construccion: 'bg-[#1E3A5F] text-white',
+  construccion: 'bg-[#1A2F3F] text-white',
 };
 
 export default function Badge({ type, label, className = '' }: BadgeProps) {

@@ -46,7 +46,7 @@ export default function MapView({ properties, onPropertyClick }: MapViewProps) {
           properties.forEach(property => {
             const el = document.createElement('div');
             el.className = 'mapbox-price-pin';
-            el.innerHTML = `<div style="background:#1E3A5F;color:white;padding:4px 8px;border-radius:4px;font-size:12px;font-weight:700;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,0.2);cursor:pointer">${formatPriceShort(property.price.mxn)}</div>`;
+            el.innerHTML = `<div style="background:#1A2F3F;color:white;padding:4px 8px;border-radius:4px;font-size:12px;font-weight:700;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,0.2);cursor:pointer">${formatPriceShort(property.price.mxn)}</div>`;
 
             el.addEventListener('click', () => {
               if (onPropertyClick) onPropertyClick(property);
@@ -78,8 +78,8 @@ export default function MapView({ properties, onPropertyClick }: MapViewProps) {
     return (
       <div className="w-full h-full bg-[#F4F6F8] flex items-center justify-center">
         <div className="text-center p-8">
-          <div className="w-16 h-16 mx-auto mb-4 bg-[#1E3A5F]/10 rounded-full flex items-center justify-center">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1E3A5F" strokeWidth="2">
+          <div className="w-16 h-16 mx-auto mb-4 bg-[#1A2F3F]/10 rounded-full flex items-center justify-center">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1A2F3F" strokeWidth="2">
               <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
               <circle cx="12" cy="10" r="3"/>
             </svg>

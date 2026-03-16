@@ -165,9 +165,9 @@ export default async function DesarrolloDetailPage({ params }: { params: Promise
         ] }} />
         <div className="max-w-[1280px] mx-auto px-4 md:px-6 py-4">
           <nav className="flex items-center gap-1 text-xs text-gray-500 mb-6">
-            <Link href={`/${locale}`} className="hover:text-[#00B4C8]">{isEn ? 'Home' : 'Inicio'}</Link>
+            <Link href={`/${locale}`} className="hover:text-[#5CE0D2]">{isEn ? 'Home' : 'Inicio'}</Link>
             <ChevronRight size={12} />
-            <Link href={`/${locale}/desarrollos`} className="hover:text-[#00B4C8]">{isEn ? 'Developments' : 'Desarrollos'}</Link>
+            <Link href={`/${locale}/desarrollos`} className="hover:text-[#5CE0D2]">{isEn ? 'Developments' : 'Desarrollos'}</Link>
             <ChevronRight size={12} />
             <span className="text-gray-700 font-medium">{cityInfo.name}</span>
           </nav>
@@ -178,17 +178,17 @@ export default async function DesarrolloDetailPage({ params }: { params: Promise
             <p className="mt-2 text-lg text-gray-600">{isEn ? cityInfo.descEn : cityInfo.descEs}</p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <div className="bg-[#00B4C8]/5 rounded-xl p-4 text-center">
-              <div className="text-2xl font-bold text-[#00B4C8]">{count || 0}</div>
+            <div className="bg-[#5CE0D2]/5 rounded-xl p-4 text-center">
+              <div className="text-2xl font-bold text-[#5CE0D2]">{count || 0}</div>
               <div className="text-xs text-gray-500">{isEn ? 'Developments' : 'Desarrollos'}</div>
             </div>
-            <div className="bg-[#00B4C8]/5 rounded-xl p-4 text-center">
-              <div className="text-2xl font-bold text-[#00B4C8]">{zones.length}</div>
+            <div className="bg-[#5CE0D2]/5 rounded-xl p-4 text-center">
+              <div className="text-2xl font-bold text-[#5CE0D2]">{zones.length}</div>
               <div className="text-xs text-gray-500">{isEn ? 'Zones' : 'Zonas'}</div>
             </div>
             {minPrice > 0 && (
-              <div className="bg-[#00B4C8]/5 rounded-xl p-4 text-center col-span-2">
-                <div className="text-lg font-bold text-[#00B4C8]">{formatPrice(minPrice)}</div>
+              <div className="bg-[#5CE0D2]/5 rounded-xl p-4 text-center col-span-2">
+                <div className="text-lg font-bold text-[#5CE0D2]">{formatPrice(minPrice)}</div>
                 <div className="text-xs text-gray-500">{isEn ? 'Starting from' : 'Desde'}</div>
               </div>
             )}
@@ -206,13 +206,13 @@ export default async function DesarrolloDetailPage({ params }: { params: Promise
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
             {(properties || []).map((dev: any) => (
-              <Link key={dev.id} href={`/${locale}/desarrollos/${dev.slug}`} className="group bg-white rounded-2xl border border-gray-100 hover:border-[#00B4C8]/30 hover:shadow-lg transition-all overflow-hidden">
+              <Link key={dev.id} href={`/${locale}/desarrollos/${dev.slug}`} className="group bg-white rounded-2xl border border-gray-100 hover:border-[#5CE0D2]/30 hover:shadow-lg transition-all overflow-hidden">
                 <div className="aspect-[16/10] bg-gradient-to-br from-gray-100 to-gray-200 relative">
                   {dev.images?.[0] ? <img src={dev.images[0]} alt={dev.name} className="w-full h-full object-cover" /> : <div className="absolute inset-0 flex items-center justify-center"><Building2 size={36} className="text-gray-300" /></div>}
-                  <div className="absolute top-3 left-3"><span className="px-2.5 py-1 bg-[#00B4C8] text-white text-xs font-bold rounded-full uppercase">{dev.stage === 'preventa' ? (isEn ? 'Pre-sale' : 'Preventa') : (isEn ? 'Construction' : 'Construccion')}</span></div>
+                  <div className="absolute top-3 left-3"><span className="px-2.5 py-1 bg-[#5CE0D2] text-white text-xs font-bold rounded-full uppercase">{dev.stage === 'preventa' ? (isEn ? 'Pre-sale' : 'Preventa') : (isEn ? 'Construction' : 'Construccion')}</span></div>
                 </div>
                 <div className="p-4">
-                  <h3 className="font-bold text-gray-900 group-hover:text-[#00B4C8] transition-colors line-clamp-1">{dev.name}</h3>
+                  <h3 className="font-bold text-gray-900 group-hover:text-[#5CE0D2] transition-colors line-clamp-1">{dev.name}</h3>
                   <div className="flex items-center gap-1 mt-1 text-sm text-gray-500"><MapPin size={14} /><span>{dev.zone !== dev.city ? `${dev.zone}, ` : ''}{dev.city}</span></div>
                   {dev.price_mxn > 0 && <div className="mt-2 font-bold text-gray-900">{isEn ? 'From ' : 'Desde '}{formatPrice(dev.price_mxn)}</div>}
                 </div>
@@ -326,11 +326,11 @@ export default async function DesarrolloDetailPage({ params }: { params: Promise
       <div className="max-w-[1280px] mx-auto px-4 md:px-6 py-4">
         {/* Breadcrumbs */}
         <nav className="flex items-center gap-1 text-xs text-gray-500 mb-6">
-          <Link href={`/${locale}`} className="hover:text-[#00B4C8]">{isEn ? 'Home' : 'Inicio'}</Link>
+          <Link href={`/${locale}`} className="hover:text-[#5CE0D2]">{isEn ? 'Home' : 'Inicio'}</Link>
           <ChevronRight size={12} />
-          <Link href={`/${locale}/desarrollos`} className="hover:text-[#00B4C8]">{isEn ? 'Developments' : 'Desarrollos'}</Link>
+          <Link href={`/${locale}/desarrollos`} className="hover:text-[#5CE0D2]">{isEn ? 'Developments' : 'Desarrollos'}</Link>
           <ChevronRight size={12} />
-          <Link href={`/${locale}/desarrollos/${citySlug}`} className="hover:text-[#00B4C8]">{property.city}</Link>
+          <Link href={`/${locale}/desarrollos/${citySlug}`} className="hover:text-[#5CE0D2]">{property.city}</Link>
           <ChevronRight size={12} />
           <span className="text-gray-700 font-medium truncate max-w-[200px]">{property.name}</span>
         </nav>
@@ -349,7 +349,7 @@ export default async function DesarrolloDetailPage({ params }: { params: Promise
                 </div>
               )}
               <div className="absolute top-4 left-4">
-                <span className="px-3 py-1.5 bg-[#00B4C8] text-white text-sm font-bold rounded-full">
+                <span className="px-3 py-1.5 bg-[#5CE0D2] text-white text-sm font-bold rounded-full">
                   {stageLabel}
                 </span>
               </div>
@@ -374,22 +374,22 @@ export default async function DesarrolloDetailPage({ params }: { params: Promise
             {/* Key Details */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="bg-gray-50 rounded-xl p-4 text-center">
-                <Building2 size={24} className="mx-auto text-[#00B4C8] mb-2" />
+                <Building2 size={24} className="mx-auto text-[#5CE0D2] mb-2" />
                 <div className="text-sm font-bold text-gray-900">{typeLabel}</div>
                 <div className="text-xs text-gray-500">{isEn ? 'Property Type' : 'Tipo'}</div>
               </div>
               <div className="bg-gray-50 rounded-xl p-4 text-center">
-                <Calendar size={24} className="mx-auto text-[#00B4C8] mb-2" />
+                <Calendar size={24} className="mx-auto text-[#5CE0D2] mb-2" />
                 <div className="text-sm font-bold text-gray-900">{stageLabel}</div>
                 <div className="text-xs text-gray-500">{isEn ? 'Stage' : 'Etapa'}</div>
               </div>
               <div className="bg-gray-50 rounded-xl p-4 text-center">
-                <MapPin size={24} className="mx-auto text-[#00B4C8] mb-2" />
+                <MapPin size={24} className="mx-auto text-[#5CE0D2] mb-2" />
                 <div className="text-sm font-bold text-gray-900">{property.zone || property.city}</div>
                 <div className="text-xs text-gray-500">{isEn ? 'Zone' : 'Zona'}</div>
               </div>
               <div className="bg-gray-50 rounded-xl p-4 text-center">
-                <MapPin size={24} className="mx-auto text-[#00B4C8] mb-2" />
+                <MapPin size={24} className="mx-auto text-[#5CE0D2] mb-2" />
                 <div className="text-sm font-bold text-gray-900">{property.state}</div>
                 <div className="text-xs text-gray-500">{isEn ? 'State' : 'Estado'}</div>
               </div>
@@ -468,7 +468,7 @@ export default async function DesarrolloDetailPage({ params }: { params: Promise
                 <Link
                   key={dev.id}
                   href={`/${locale}/desarrollos/${dev.slug}`}
-                  className="group bg-white rounded-2xl border border-gray-100 hover:border-[#00B4C8]/30 hover:shadow-lg transition-all overflow-hidden"
+                  className="group bg-white rounded-2xl border border-gray-100 hover:border-[#5CE0D2]/30 hover:shadow-lg transition-all overflow-hidden"
                 >
                   <div className="aspect-[16/10] bg-gradient-to-br from-gray-100 to-gray-200 relative">
                     {dev.images?.[0] ? (
@@ -480,7 +480,7 @@ export default async function DesarrolloDetailPage({ params }: { params: Promise
                     )}
                   </div>
                   <div className="p-4">
-                    <h3 className="font-bold text-gray-900 group-hover:text-[#00B4C8] transition-colors line-clamp-1">
+                    <h3 className="font-bold text-gray-900 group-hover:text-[#5CE0D2] transition-colors line-clamp-1">
                       {dev.name}
                     </h3>
                     <div className="flex items-center gap-1 mt-1 text-sm text-gray-500">

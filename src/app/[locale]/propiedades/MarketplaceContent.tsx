@@ -54,13 +54,13 @@ export default function MarketplaceContent() {
         <div className="flex border-b bg-white">
           <button
             onClick={() => setMobileView('map')}
-            className={`flex-1 flex items-center justify-center gap-2 py-3 text-sm font-medium ${mobileView === 'map' ? 'text-[#00B4C8] border-b-2 border-[#00B4C8]' : 'text-gray-500'}`}
+            className={`flex-1 flex items-center justify-center gap-2 py-3 text-sm font-medium ${mobileView === 'map' ? 'text-[#5CE0D2] border-b-2 border-[#5CE0D2]' : 'text-gray-500'}`}
           >
             <Map size={16} /> {t('mapView')}
           </button>
           <button
             onClick={() => setMobileView('list')}
-            className={`flex-1 flex items-center justify-center gap-2 py-3 text-sm font-medium ${mobileView === 'list' ? 'text-[#00B4C8] border-b-2 border-[#00B4C8]' : 'text-gray-500'}`}
+            className={`flex-1 flex items-center justify-center gap-2 py-3 text-sm font-medium ${mobileView === 'list' ? 'text-[#5CE0D2] border-b-2 border-[#5CE0D2]' : 'text-gray-500'}`}
           >
             <List size={16} /> {t('listView')}
           </button>

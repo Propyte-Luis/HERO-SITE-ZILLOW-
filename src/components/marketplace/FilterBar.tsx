@@ -40,7 +40,7 @@ function PillDropdown({
         onClick={() => setOpen(!open)}
         className={`h-10 px-4 flex items-center gap-1.5 rounded-full text-sm font-semibold border transition-all whitespace-nowrap ${
           isActive
-            ? 'bg-[#00B4C8]/10 border-[#00B4C8] text-[#009AB0]'
+            ? 'bg-[#5CE0D2]/10 border-[#5CE0D2] text-[#4BCEC0]'
             : 'bg-white border-gray-300 text-[#2C2C2C] hover:border-gray-400'
         }`}
       >
@@ -84,7 +84,7 @@ export default function FilterBar({ filters, onFilterChange, onOpenAdvanced, res
             value={filters.search}
             onChange={e => onFilterChange('search', e.target.value)}
             placeholder={t('searchPlaceholder')}
-            className="h-10 w-44 lg:w-56 pl-9 pr-3 rounded-full border border-gray-300 text-sm focus:border-[#00B4C8] focus:outline-none"
+            className="h-10 w-44 lg:w-56 pl-9 pr-3 rounded-full border border-gray-300 text-sm focus:border-[#5CE0D2] focus:outline-none"
           />
         </div>
 
@@ -100,7 +100,7 @@ export default function FilterBar({ filters, onFilterChange, onOpenAdvanced, res
                 key={city}
                 onClick={() => onFilterChange('city', city)}
                 className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
-                  filters.city === city ? 'bg-[#00B4C8]/10 text-[#009AB0] font-semibold' : 'hover:bg-gray-50'
+                  filters.city === city ? 'bg-[#5CE0D2]/10 text-[#4BCEC0] font-semibold' : 'hover:bg-gray-50'
                 }`}
               >
                 {city || t('filterAll')}
@@ -119,7 +119,7 @@ export default function FilterBar({ filters, onFilterChange, onOpenAdvanced, res
                 value={filters.priceMin || ''}
                 onChange={e => onFilterChange('priceMin', Number(e.target.value) || 0)}
                 placeholder="Min"
-                className="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:border-[#00B4C8] focus:outline-none"
+                className="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:border-[#5CE0D2] focus:outline-none"
               />
               <span className="text-gray-400 text-sm">—</span>
               <input
@@ -127,7 +127,7 @@ export default function FilterBar({ filters, onFilterChange, onOpenAdvanced, res
                 value={filters.priceMax < 50_000_000 ? filters.priceMax : ''}
                 onChange={e => onFilterChange('priceMax', Number(e.target.value) || 50_000_000)}
                 placeholder="Max"
-                className="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:border-[#00B4C8] focus:outline-none"
+                className="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:border-[#5CE0D2] focus:outline-none"
               />
             </div>
             <div className="flex flex-wrap gap-1.5">
@@ -140,7 +140,7 @@ export default function FilterBar({ filters, onFilterChange, onOpenAdvanced, res
                 <button
                   key={p.label}
                   onClick={() => { onFilterChange('priceMin', p.min); onFilterChange('priceMax', p.max); }}
-                  className="px-3 py-1.5 text-xs border border-gray-200 rounded-full hover:border-[#00B4C8] hover:text-[#00B4C8] transition-colors"
+                  className="px-3 py-1.5 text-xs border border-gray-200 rounded-full hover:border-[#5CE0D2] hover:text-[#5CE0D2] transition-colors"
                 >
                   {p.label}
                 </button>
@@ -159,7 +159,7 @@ export default function FilterBar({ filters, onFilterChange, onOpenAdvanced, res
             <button
               onClick={() => onFilterChange('type', '')}
               className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
-                !filters.type ? 'bg-[#00B4C8]/10 text-[#009AB0] font-semibold' : 'hover:bg-gray-50'
+                !filters.type ? 'bg-[#5CE0D2]/10 text-[#4BCEC0] font-semibold' : 'hover:bg-gray-50'
               }`}
             >
               {t('filterAll')}
@@ -169,7 +169,7 @@ export default function FilterBar({ filters, onFilterChange, onOpenAdvanced, res
                 key={opt.value}
                 onClick={() => onFilterChange('type', filters.type === opt.value ? '' : opt.value)}
                 className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
-                  filters.type === opt.value ? 'bg-[#00B4C8]/10 text-[#009AB0] font-semibold' : 'hover:bg-gray-50'
+                  filters.type === opt.value ? 'bg-[#5CE0D2]/10 text-[#4BCEC0] font-semibold' : 'hover:bg-gray-50'
                 }`}
               >
                 {opt.label}
@@ -190,7 +190,7 @@ export default function FilterBar({ filters, onFilterChange, onOpenAdvanced, res
                 key={roi}
                 onClick={() => onFilterChange('roiMin', roi)}
                 className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
-                  filters.roiMin === roi ? 'bg-[#00B4C8]/10 text-[#009AB0] font-semibold' : 'hover:bg-gray-50'
+                  filters.roiMin === roi ? 'bg-[#5CE0D2]/10 text-[#4BCEC0] font-semibold' : 'hover:bg-gray-50'
                 }`}
               >
                 {roi === 0 ? t('filterAll') : `${roi}%+`}

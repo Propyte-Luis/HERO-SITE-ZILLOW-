@@ -19,9 +19,9 @@ export default function B2BProcess() {
           {steps.map((step, i) => (
             <div key={i} className="relative text-center md:text-left">
               {i < steps.length - 1 && (
-                <div className="hidden md:block absolute top-6 left-[60%] w-[80%] h-0.5 bg-[#00B4C8]/30" />
+                <div className="hidden md:block absolute top-6 left-[60%] w-[80%] h-0.5 bg-[#5CE0D2]/30" />
               )}
-              <div className="w-12 h-12 mx-auto md:mx-0 mb-4 bg-[#1E3A5F] text-white rounded-full flex items-center justify-center font-bold text-sm relative z-10">
+              <div className="w-12 h-12 mx-auto md:mx-0 mb-4 bg-[#1A2F3F] text-white rounded-full flex items-center justify-center font-bold text-sm relative z-10">
                 {step.num}
               </div>
               <h3 className="text-lg font-semibold text-[#2C2C2C] mb-2">{step.title}</h3>

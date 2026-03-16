@@ -17,15 +17,15 @@ export default function MarketData() {
         <h2 className="text-2xl md:text-3xl font-semibold text-center text-[#2C2C2C] mb-12">{t('title')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {stats.map((stat, i) => (
-            <div key={i} className="p-6 bg-white border border-[#1E3A5F]/15 rounded-xl text-center">
-              <div className="text-4xl font-bold text-[#1E3A5F] mb-2">{stat.value}</div>
+            <div key={i} className="p-6 bg-white border border-[#1A2F3F]/15 rounded-xl text-center">
+              <div className="text-4xl font-bold text-[#1A2F3F] mb-2">{stat.value}</div>
               <p className="text-[#2C2C2C] font-medium mb-2">{stat.label}</p>
               <p className="text-xs text-gray-400">{stat.source}</p>
             </div>
           ))}
         </div>
         <div className="text-center mt-8">
-          <Link href="#" className="text-[#00B4C8] font-medium hover:underline">
+          <Link href="#" className="text-[#5CE0D2] font-medium hover:underline">
             {t('cta')} →
           </Link>
         </div>

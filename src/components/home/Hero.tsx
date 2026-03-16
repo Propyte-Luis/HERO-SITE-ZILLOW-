@@ -63,7 +63,7 @@ export default function Hero() {
                 onClick={() => setActiveTab(tab)}
                 className={`px-6 py-3 text-sm font-bold uppercase tracking-wide rounded-t-lg transition-all ${
                   activeTab === tab
-                    ? 'bg-white text-[#1E3A5F] shadow-sm'
+                    ? 'bg-white text-[#1A2F3F] shadow-sm'
                     : 'bg-white/20 text-white hover:bg-white/30 backdrop-blur-sm'
                 }`}
               >
@@ -87,7 +87,7 @@ export default function Hero() {
               </div>
               <button
                 type="submit"
-                className="h-14 md:h-16 px-8 md:px-10 bg-[#00B4C8] hover:bg-[#009AB0] text-white font-bold text-base transition-colors flex items-center gap-2 whitespace-nowrap"
+                className="h-14 md:h-16 px-8 md:px-10 bg-[#5CE0D2] hover:bg-[#4BCEC0] text-white font-bold text-base transition-colors flex items-center gap-2 whitespace-nowrap"
               >
                 <Search size={18} />
                 {t('searchButton')}

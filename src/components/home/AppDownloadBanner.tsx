@@ -8,10 +8,10 @@ export default function AppDownloadBanner() {
   return (
     <section className="py-12 md:py-16 bg-white">
       <div className="max-w-[1280px] mx-auto px-4 md:px-6">
-        <div className="relative bg-gradient-to-br from-[#1E3A5F] to-[#0D2740] rounded-2xl overflow-hidden">
+        <div className="relative bg-gradient-to-br from-[#1A2F3F] to-[#0D2740] rounded-2xl overflow-hidden">
           {/* Decorative circles */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-[#00B4C8]/10 rounded-full -translate-y-1/2 translate-x-1/3" />
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-[#00B4C8]/5 rounded-full translate-y-1/3 -translate-x-1/4" />
+          <div className="absolute top-0 right-0 w-64 h-64 bg-[#5CE0D2]/10 rounded-full -translate-y-1/2 translate-x-1/3" />
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-[#5CE0D2]/5 rounded-full translate-y-1/3 -translate-x-1/4" />
 
           <div className="relative flex flex-col md:flex-row items-center gap-8 p-8 md:p-12">
             {/* Text */}
@@ -25,7 +25,7 @@ export default function AppDownloadBanner() {
               <div className="flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
                 <Link
                   href="#"
-                  className="inline-flex items-center justify-center gap-2 h-12 px-6 bg-[#00B4C8] hover:bg-[#009AB0] text-white font-bold rounded-lg transition-colors"
+                  className="inline-flex items-center justify-center gap-2 h-12 px-6 bg-[#5CE0D2] hover:bg-[#4BCEC0] text-white font-bold rounded-lg transition-colors"
                 >
                   {t('ctaPrimary')} <ArrowRight size={18} />
                 </Link>
@@ -45,7 +45,7 @@ export default function AppDownloadBanner() {
                   <Smartphone size={48} className="text-white/40 mx-auto mb-3" />
                   <div className="flex items-baseline justify-center">
                     <span className="text-xl font-bold text-white">PROP</span>
-                    <span className="text-xl font-bold text-[#00B4C8]">YTE</span>
+                    <span className="text-xl font-bold text-[#5CE0D2]">YTE</span>
                   </div>
                   <p className="text-white/40 text-xs mt-1">{t('comingSoon')}</p>
                 </div>

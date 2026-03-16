@@ -33,10 +33,10 @@ function EditorialHero() {
   const words = [t('heroWord1'), t('heroWord2'), t('heroWord3')];
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#0D1B2A]">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#0F1923]">
       {/* Subtle background orbs */}
-      <div className="absolute top-1/4 right-1/4 w-[500px] h-[500px] bg-[#00B4C8]/5 rounded-full blur-[120px]" />
-      <div className="absolute bottom-1/3 left-1/3 w-[400px] h-[400px] bg-[#1E3A5F]/30 rounded-full blur-[100px]" />
+      <div className="absolute top-1/4 right-1/4 w-[500px] h-[500px] bg-[#5CE0D2]/5 rounded-full blur-[120px]" />
+      <div className="absolute bottom-1/3 left-1/3 w-[400px] h-[400px] bg-[#1A2F3F]/30 rounded-full blur-[100px]" />
 
       <div className="relative text-center px-4 md:px-6">
         <div className="space-y-2 md:space-y-4">
@@ -48,7 +48,7 @@ function EditorialHero() {
               transition={{ duration: 0.8, delay: 0.3 + i * 0.2, ease: [0.22, 1, 0.36, 1] }}
             >
               <span className="block text-5xl md:text-7xl lg:text-8xl font-bold text-white tracking-tight">
-                {word.replace('.', '')}<span className="text-[#00B4C8]">.</span>
+                {word.replace('.', '')}<span className="text-[#5CE0D2]">.</span>
               </span>
             </motion.div>
           ))}
@@ -71,7 +71,7 @@ function EditorialHero() {
         >
           <a
             href="#servicios"
-            className="inline-flex items-center gap-2 h-14 px-8 border border-white/20 text-white font-medium rounded-xl hover:bg-white hover:text-[#0D1B2A] transition-all duration-300"
+            className="inline-flex items-center gap-2 h-14 px-8 border border-white/20 text-white font-medium rounded-xl hover:bg-white hover:text-[#0F1923] transition-all duration-300"
           >
             {t('heroCta')} <ArrowRight size={18} />
           </a>
@@ -87,13 +87,13 @@ function EditorialHero() {
 function PhilosophyStatement() {
   const t = useTranslations('built');
   return (
-    <section className="py-24 md:py-32 bg-[#0D1B2A]">
+    <section className="py-24 md:py-32 bg-[#0F1923]">
       <div className="max-w-3xl mx-auto px-4 md:px-6 text-center">
         <FadeIn>
           <p className="text-2xl md:text-3xl font-light italic text-white/70 leading-relaxed">
             &ldquo;{t('philosophyQuote')}&rdquo;
           </p>
-          <div className="w-16 h-px bg-[#00B4C8] mx-auto mt-8" />
+          <div className="w-16 h-px bg-[#5CE0D2] mx-auto mt-8" />
           <p className="text-sm text-white/30 uppercase tracking-[0.2em] mt-4">Propyte Built</p>
         </FadeIn>
       </div>
@@ -116,19 +116,19 @@ function ServicesGrid() {
   ];
 
   return (
-    <section id="servicios" className="py-16 md:py-24 bg-[#0D1B2A]">
+    <section id="servicios" className="py-16 md:py-24 bg-[#0F1923]">
       <div className="max-w-[1280px] mx-auto px-4 md:px-6">
         <FadeIn>
           <div className="mb-12">
-            <span className="text-[#00B4C8] text-xs font-bold tracking-[0.2em]">{t('sectionServices')}</span>
+            <span className="text-[#5CE0D2] text-xs font-bold tracking-[0.2em]">{t('sectionServices')}</span>
             <h2 className="mt-3 text-3xl md:text-4xl font-bold text-white">{t('servicesTitle')}</h2>
           </div>
         </FadeIn>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map(({ icon: Icon, title, desc }, i) => (
             <FadeIn key={title} delay={i * 0.1}>
-              <div className="bg-white/5 border border-white/10 rounded-2xl p-8 hover:border-[#00B4C8]/30 hover:bg-white/[0.07] transition-all duration-300 group h-full">
-                <Icon size={28} className="text-white/30 group-hover:text-[#00B4C8] transition-colors duration-300" />
+              <div className="bg-white/5 border border-white/10 rounded-2xl p-8 hover:border-[#5CE0D2]/30 hover:bg-white/[0.07] transition-all duration-300 group h-full">
+                <Icon size={28} className="text-white/30 group-hover:text-[#5CE0D2] transition-colors duration-300" />
                 <h3 className="text-xl font-semibold text-white mt-4">{title}</h3>
                 <p className="text-white/50 text-sm mt-2 leading-relaxed">{desc}</p>
               </div>
@@ -153,7 +153,7 @@ function ImpactStats() {
   ];
 
   return (
-    <section className="bg-[#1E3A5F] border-t border-b border-white/10">
+    <section className="bg-[#1A2F3F] border-t border-b border-white/10">
       <div className="max-w-[1280px] mx-auto px-4 md:px-6 py-16 md:py-20">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
           {stats.map(({ value, label }, i) => (
@@ -195,7 +195,7 @@ function PortfolioShowcase() {
   const filtered = filter === 'all' ? projects : projects.filter(p => p.category === filter);
 
   return (
-    <section className="py-16 md:py-24 bg-[#0D1B2A]">
+    <section className="py-16 md:py-24 bg-[#0F1923]">
       <div className="max-w-[1280px] mx-auto px-4 md:px-6">
         <FadeIn>
           <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-12 gap-6">
@@ -207,7 +207,7 @@ function PortfolioShowcase() {
                   onClick={() => setFilter(key)}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
                     filter === key
-                      ? 'bg-[#00B4C8] text-white'
+                      ? 'bg-[#5CE0D2] text-white'
                       : 'bg-white/5 text-white/50 hover:text-white hover:bg-white/10'
                   }`}
                 >
@@ -223,7 +223,7 @@ function PortfolioShowcase() {
             <FadeIn key={project.title} delay={i * 0.08} className={project.wide ? 'md:col-span-2' : ''}>
               <div className={`relative overflow-hidden rounded-xl group cursor-pointer ${project.wide ? 'aspect-[21/9]' : 'aspect-[4/3]'}`}>
                 {/* Gradient placeholder with subtle grid texture */}
-                <div className="absolute inset-0 bg-gradient-to-br from-[#1E3A5F] to-[#0D1B2A]">
+                <div className="absolute inset-0 bg-gradient-to-br from-[#1A2F3F] to-[#0F1923]">
                   <div
                     className="absolute inset-0 opacity-[0.03]"
                     style={{
@@ -233,7 +233,7 @@ function PortfolioShowcase() {
                   />
                 </div>
                 {/* Hover overlay */}
-                <div className="absolute inset-0 bg-[#00B4C8]/0 group-hover:bg-[#00B4C8]/10 transition-colors duration-500" />
+                <div className="absolute inset-0 bg-[#5CE0D2]/0 group-hover:bg-[#5CE0D2]/10 transition-colors duration-500" />
                 {/* Content */}
                 <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/60 to-transparent">
                   <h3 className="text-xl md:text-2xl font-bold text-white">{project.title}</h3>
@@ -264,7 +264,7 @@ function ProcessTimeline() {
   ];
 
   return (
-    <section className="py-16 md:py-24 bg-[#0D1B2A]">
+    <section className="py-16 md:py-24 bg-[#0F1923]">
       <div className="max-w-[1280px] mx-auto px-4 md:px-6">
         <FadeIn>
           <h2 className="text-3xl md:text-4xl font-bold text-white text-center mb-16">{t('processTitle')}</h2>
@@ -274,12 +274,12 @@ function ProcessTimeline() {
         <div className="hidden md:flex items-start justify-between relative">
           {/* Connecting line */}
           <div className="absolute top-6 left-[10%] right-[10%] h-px bg-white/10" />
-          <div className="absolute top-6 left-[10%] h-px bg-[#00B4C8]/40" style={{ width: '80%' }} />
+          <div className="absolute top-6 left-[10%] h-px bg-[#5CE0D2]/40" style={{ width: '80%' }} />
 
           {steps.map(({ icon: Icon, title, desc }, i) => (
             <FadeIn key={title} delay={i * 0.15} className="flex-1 text-center relative px-4">
-              <div className="w-12 h-12 mx-auto rounded-full border-2 border-[#00B4C8] bg-[#0D1B2A] flex items-center justify-center relative z-10">
-                <Icon size={20} className="text-[#00B4C8]" />
+              <div className="w-12 h-12 mx-auto rounded-full border-2 border-[#5CE0D2] bg-[#0F1923] flex items-center justify-center relative z-10">
+                <Icon size={20} className="text-[#5CE0D2]" />
               </div>
               <h3 className="text-lg font-semibold text-white mt-4">{title}</h3>
               <p className="text-sm text-white/40 mt-2 leading-relaxed">{desc}</p>
@@ -293,8 +293,8 @@ function ProcessTimeline() {
             <FadeIn key={title} delay={i * 0.1}>
               <div className="flex gap-4">
                 <div className="flex flex-col items-center">
-                  <div className="w-10 h-10 rounded-full border-2 border-[#00B4C8] bg-[#0D1B2A] flex items-center justify-center flex-shrink-0">
-                    <Icon size={16} className="text-[#00B4C8]" />
+                  <div className="w-10 h-10 rounded-full border-2 border-[#5CE0D2] bg-[#0F1923] flex items-center justify-center flex-shrink-0">
+                    <Icon size={16} className="text-[#5CE0D2]" />
                   </div>
                   {i < steps.length - 1 && <div className="w-px flex-1 bg-white/10 mt-2" />}
                 </div>
@@ -323,7 +323,7 @@ function TeamExpertise() {
   ];
 
   return (
-    <section className="py-16 md:py-24 bg-[#1E3A5F]">
+    <section className="py-16 md:py-24 bg-[#1A2F3F]">
       <div className="max-w-[1280px] mx-auto px-4 md:px-6">
         <FadeIn>
           <h2 className="text-3xl md:text-4xl font-bold text-white text-center mb-12">{t('expertiseTitle')}</h2>
@@ -332,11 +332,11 @@ function TeamExpertise() {
           {areas.map(({ icon: Icon, title, role, desc }, i) => (
             <FadeIn key={title} delay={i * 0.15}>
               <div className="text-center">
-                <div className="w-16 h-16 mx-auto rounded-full bg-[#00B4C8]/10 flex items-center justify-center mb-4">
-                  <Icon size={28} className="text-[#00B4C8]" />
+                <div className="w-16 h-16 mx-auto rounded-full bg-[#5CE0D2]/10 flex items-center justify-center mb-4">
+                  <Icon size={28} className="text-[#5CE0D2]" />
                 </div>
                 <h3 className="text-xl font-bold text-white">{title}</h3>
-                <p className="text-sm text-[#00B4C8] font-medium mt-1 uppercase tracking-wider">{role}</p>
+                <p className="text-sm text-[#5CE0D2] font-medium mt-1 uppercase tracking-wider">{role}</p>
                 <p className="text-white/50 text-sm mt-3 leading-relaxed">{desc}</p>
               </div>
             </FadeIn>
@@ -374,12 +374,12 @@ function ConsultationForm() {
     }
   };
 
-  const inputClass = "w-full h-12 px-4 bg-white border border-gray-200 rounded-xl text-sm focus:border-[#00B4C8] focus:ring-2 focus:ring-[#00B4C8]/20 outline-none transition-colors";
+  const inputClass = "w-full h-12 px-4 bg-white border border-gray-200 rounded-xl text-sm focus:border-[#5CE0D2] focus:ring-2 focus:ring-[#5CE0D2]/20 outline-none transition-colors";
   const selectClass = `${inputClass} appearance-none`;
-  const labelClass = "block text-sm font-semibold text-[#1E3A5F] mb-1.5";
+  const labelClass = "block text-sm font-semibold text-[#1A2F3F] mb-1.5";
 
   return (
-    <section id="contacto" className="py-16 md:py-24 bg-[#0D1B2A]">
+    <section id="contacto" className="py-16 md:py-24 bg-[#0F1923]">
       <div className="max-w-[1280px] mx-auto px-4 md:px-6">
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           {/* Left: Info */}
@@ -395,8 +395,8 @@ function ConsultationForm() {
                   { icon: CheckCircle, text: t('formBenefit4') },
                 ].map(({ icon: Icon, text }) => (
                   <div key={text} className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-[#00B4C8]/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <Icon size={16} className="text-[#00B4C8]" />
+                    <div className="w-8 h-8 bg-[#5CE0D2]/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Icon size={16} className="text-[#5CE0D2]" />
                     </div>
                     <span className="text-white/70 text-sm">{text}</span>
                   </div>
@@ -422,7 +422,7 @@ function ConsultationForm() {
                   <div className="w-16 h-16 mx-auto mb-4 bg-green-100 rounded-full flex items-center justify-center">
                     <CheckCircle size={32} className="text-green-500" />
                   </div>
-                  <h3 className="text-xl font-bold text-[#1E3A5F] mb-2">{t('formSuccess')}</h3>
+                  <h3 className="text-xl font-bold text-[#1A2F3F] mb-2">{t('formSuccess')}</h3>
                   <p className="text-gray-500">{t('formSuccessDesc')}</p>
                 </div>
               ) : (
@@ -485,7 +485,7 @@ function ConsultationForm() {
                   <button
                     type="submit"
                     disabled={status === 'sending'}
-                    className="w-full h-14 bg-[#0D1B2A] hover:bg-[#1E3A5F] text-white font-bold text-base rounded-xl transition-all disabled:opacity-60 flex items-center justify-center gap-2"
+                    className="w-full h-14 bg-[#0F1923] hover:bg-[#1A2F3F] text-white font-bold text-base rounded-xl transition-all disabled:opacity-60 flex items-center justify-center gap-2"
                   >
                     {status === 'sending' ? t('formSending') : t('formSubmit')}
                     {status === 'idle' && <ArrowRight size={18} />}
@@ -507,14 +507,14 @@ function ConsultationForm() {
 function FinalCTA() {
   const t = useTranslations('built');
   return (
-    <section className="py-24 md:py-32 bg-[#0D1B2A]">
+    <section className="py-24 md:py-32 bg-[#0F1923]">
       <div className="max-w-3xl mx-auto px-4 md:px-6 text-center">
         <FadeIn>
           <h2 className="text-3xl md:text-5xl font-light text-white">{t('finalCtaText')}</h2>
           <div className="mt-10">
             <a
               href="#contacto"
-              className="inline-flex items-center gap-2 h-14 px-8 border border-white/20 text-white font-medium rounded-xl hover:bg-white hover:text-[#0D1B2A] transition-all duration-300"
+              className="inline-flex items-center gap-2 h-14 px-8 border border-white/20 text-white font-medium rounded-xl hover:bg-white hover:text-[#0F1923] transition-all duration-300"
             >
               {t('finalCtaButton')} <ArrowRight size={18} />
             </a>
@@ -530,7 +530,7 @@ function FinalCTA() {
 // ─────────────────────────────────────────────────────
 export default function BuiltPageContent() {
   return (
-    <div className="bg-[#0D1B2A]">
+    <div className="bg-[#0F1923]">
       <EditorialHero />
       <PhilosophyStatement />
       <ServicesGrid />

@@ -75,7 +75,7 @@ export default function ImageGallery({ images, alt, media }: ImageGalleryProps) 
               onClick={(e) => { e.stopPropagation(); }}
               className="flex items-center gap-1.5 px-3 py-2 bg-white/95 hover:bg-white text-[#2C2C2C] text-sm font-semibold rounded-lg shadow-md backdrop-blur-sm transition-colors"
             >
-              <Move3D size={14} className="text-[#00B4C8]" />
+              <Move3D size={14} className="text-[#5CE0D2]" />
               {locale === 'es' ? 'Tour 360°' : '360° Tour'}
             </a>
           )}

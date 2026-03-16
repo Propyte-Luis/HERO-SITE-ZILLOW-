@@ -68,7 +68,7 @@ export default function StickyBar({ property }: StickyBarProps) {
             <MessageCircle size={14} />
             WhatsApp
           </a>
-          <button className="flex items-center gap-1.5 h-9 px-4 bg-[#00B4C8] hover:bg-[#009AB0] text-white text-sm font-bold rounded-lg transition-colors">
+          <button className="flex items-center gap-1.5 h-9 px-4 bg-[#5CE0D2] hover:bg-[#4BCEC0] text-white text-sm font-bold rounded-lg transition-colors">
             <Calendar size={14} />
             {t('scheduleVisit')}
           </button>

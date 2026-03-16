@@ -33,7 +33,7 @@ export default function RecentBlog() {
       <div className="max-w-[1280px] mx-auto px-4 md:px-6">
         <div className="flex items-center justify-between mb-8">
           <h2 className="text-2xl md:text-3xl font-semibold text-[#2C2C2C]">{t('title')}</h2>
-          <Link href="#" className="hidden md:flex items-center gap-1 text-[#00B4C8] font-medium hover:underline">
+          <Link href="#" className="hidden md:flex items-center gap-1 text-[#5CE0D2] font-medium hover:underline">
             {t('viewAll')} <ArrowRight size={16} />
           </Link>
         </div>
@@ -50,7 +50,7 @@ export default function RecentBlog() {
                     className="object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute top-3 left-3">
-                    <span className="px-2 py-1 text-xs font-semibold bg-[#00B4C8] text-white rounded">
+                    <span className="px-2 py-1 text-xs font-semibold bg-[#5CE0D2] text-white rounded">
                       {article.category}
                     </span>
                   </div>

@@ -49,11 +49,11 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
         fixed lg:static inset-y-0 left-0 z-50
         ${collapsed ? 'w-16' : 'w-60'}
         ${mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
-        bg-[#0D1B2A] text-white flex flex-col transition-all duration-200
+        bg-[#0F1923] text-white flex flex-col transition-all duration-200
       `}>
         {/* Logo */}
         <div className={`flex items-center h-14 px-4 border-b border-white/10 ${collapsed ? 'justify-center' : 'justify-between'}`}>
-          {!collapsed && <span className="text-lg font-bold tracking-tight">PROPYTE <span className="text-[#00B4C8] text-xs font-normal">CRM</span></span>}
+          {!collapsed && <span className="text-lg font-bold tracking-tight">PROPYTE <span className="text-[#5CE0D2] text-xs font-normal">CRM</span></span>}
           <button onClick={() => setCollapsed(!collapsed)} className="hidden lg:flex w-8 h-8 items-center justify-center hover:bg-white/10 rounded-lg">
             <ChevronLeft size={16} className={`transition-transform ${collapsed ? 'rotate-180' : ''}`} />
           </button>
@@ -71,7 +71,7 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
               onClick={() => setMobileOpen(false)}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                 isActive(item.href)
-                  ? 'bg-[#00B4C8] text-white'
+                  ? 'bg-[#5CE0D2] text-white'
                   : 'text-gray-400 hover:text-white hover:bg-white/5'
               } ${collapsed ? 'justify-center' : ''}`}
             >
@@ -108,7 +108,7 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
             <Menu size={20} />
           </button>
           <div className="flex-1" />
-          <Link href={`/${locale}/propiedades`} className="text-xs text-[#00B4C8] hover:underline font-medium">
+          <Link href={`/${locale}/propiedades`} className="text-xs text-[#5CE0D2] hover:underline font-medium">
             Ver sitio →
           </Link>
         </header>

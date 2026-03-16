@@ -22,7 +22,7 @@ export default function FeaturedProperties() {
           </div>
           <Link
             href={`/${locale}/propiedades`}
-            className="hidden md:flex items-center gap-1.5 text-[#00B4C8] font-semibold hover:underline"
+            className="hidden md:flex items-center gap-1.5 text-[#5CE0D2] font-semibold hover:underline"
           >
             {t('viewAll')} <ArrowRight size={16} />
           </Link>
@@ -69,7 +69,7 @@ export default function FeaturedProperties() {
                             ? 'bg-[#F5A623] text-white'
                             : property.badge === 'nuevo'
                             ? 'bg-[#22C55E] text-white'
-                            : 'bg-[#00B4C8] text-white'
+                            : 'bg-[#5CE0D2] text-white'
                         }`}>
                           {tStages(property.badge)}
                         </span>
@@ -116,7 +116,7 @@ export default function FeaturedProperties() {
 
                     {/* ROI badge */}
                     {property.roi.projected > 0 && (
-                      <div className="mt-3 inline-flex items-center gap-1 px-2.5 py-1 bg-[#00B4C8]/10 text-[#009AB0] text-xs font-bold rounded-full">
+                      <div className="mt-3 inline-flex items-center gap-1 px-2.5 py-1 bg-[#5CE0D2]/10 text-[#4BCEC0] text-xs font-bold rounded-full">
                         ROI {property.roi.projected}% anual
                       </div>
                     )}
@@ -130,7 +130,7 @@ export default function FeaturedProperties() {
         <div className="mt-8 text-center md:hidden">
           <Link
             href={`/${locale}/propiedades`}
-            className="inline-flex items-center gap-1 text-[#00B4C8] font-semibold"
+            className="inline-flex items-center gap-1 text-[#5CE0D2] font-semibold"
           >
             {t('viewAll')} <ArrowRight size={16} />
           </Link>

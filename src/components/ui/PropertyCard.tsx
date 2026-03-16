@@ -81,7 +81,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
           )}
 
           {property.roi.projected > 0 && (
-            <div className="mt-2 text-sm font-medium text-[#00B4C8]">
+            <div className="mt-2 text-sm font-medium text-[#5CE0D2]">
               ROI {property.roi.projected}%
             </div>
           )}

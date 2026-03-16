@@ -58,7 +58,7 @@ export default function AdminProperties() {
         <h1 className="text-2xl font-bold text-[#2C2C2C]">Propiedades</h1>
         <Link
           href={`/${locale}/admin/properties/new`}
-          className="flex items-center gap-2 px-4 py-2 bg-[#00B4C8] hover:bg-[#009AB0] text-white text-sm font-bold rounded-lg transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-[#5CE0D2] hover:bg-[#4BCEC0] text-white text-sm font-bold rounded-lg transition-colors"
         >
           <Plus size={16} />
           Nueva propiedad
@@ -73,7 +73,7 @@ export default function AdminProperties() {
           value={search}
           onChange={e => setSearch(e.target.value)}
           placeholder="Buscar por nombre o ciudad..."
-          className="w-full pl-10 pr-4 h-10 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#00B4C8]/20 focus:border-[#00B4C8]"
+          className="w-full pl-10 pr-4 h-10 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#5CE0D2]/20 focus:border-[#5CE0D2]"
         />
       </div>
 
@@ -81,7 +81,7 @@ export default function AdminProperties() {
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
         {loading ? (
           <div className="flex items-center justify-center h-48">
-            <div className="w-6 h-6 border-2 border-[#00B4C8]/30 border-t-[#00B4C8] rounded-full animate-spin" />
+            <div className="w-6 h-6 border-2 border-[#5CE0D2]/30 border-t-[#5CE0D2] rounded-full animate-spin" />
           </div>
         ) : filtered.length === 0 ? (
           <div className="text-center py-12 text-gray-400">
@@ -137,13 +137,13 @@ export default function AdminProperties() {
                         <Link
                           href={`/${locale}/propiedades/${p.slug}`}
                           target="_blank"
-                          className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 rounded-lg text-gray-400 hover:text-[#00B4C8]"
+                          className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 rounded-lg text-gray-400 hover:text-[#5CE0D2]"
                         >
                           <ExternalLink size={14} />
                         </Link>
                         <Link
                           href={`/${locale}/admin/properties/${p.id}`}
-                          className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 rounded-lg text-gray-400 hover:text-[#00B4C8]"
+                          className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 rounded-lg text-gray-400 hover:text-[#5CE0D2]"
                         >
                           <Edit2 size={14} />
                         </Link>

@@ -34,7 +34,7 @@ export default function SearchBar() {
       </div>
       <button
         type="submit"
-        className="h-12 md:h-14 px-6 md:px-8 bg-[#00B4C8] hover:bg-[#009AB0] text-white font-semibold rounded-r-lg transition-colors whitespace-nowrap"
+        className="h-12 md:h-14 px-6 md:px-8 bg-[#5CE0D2] hover:bg-[#4BCEC0] text-white font-semibold rounded-r-lg transition-colors whitespace-nowrap"
       >
         {t('searchButton')}
       </button>

@@ -81,7 +81,7 @@ export default function AdminDashboard() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="w-8 h-8 border-3 border-[#00B4C8]/30 border-t-[#00B4C8] rounded-full animate-spin" />
+        <div className="w-8 h-8 border-3 border-[#5CE0D2]/30 border-t-[#5CE0D2] rounded-full animate-spin" />
       </div>
     );
   }
@@ -96,18 +96,18 @@ export default function AdminDashboard() {
           </p>
           <ol className="space-y-3 text-sm text-gray-600">
             <li className="flex gap-3">
-              <span className="w-6 h-6 bg-[#00B4C8] text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">1</span>
-              <span>Crea un proyecto en <a href="https://supabase.com/dashboard" target="_blank" rel="noopener" className="text-[#00B4C8] font-semibold hover:underline">supabase.com/dashboard</a></span>
+              <span className="w-6 h-6 bg-[#5CE0D2] text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">1</span>
+              <span>Crea un proyecto en <a href="https://supabase.com/dashboard" target="_blank" rel="noopener" className="text-[#5CE0D2] font-semibold hover:underline">supabase.com/dashboard</a></span>
             </li>
             <li className="flex gap-3">
-              <span className="w-6 h-6 bg-[#00B4C8] text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">2</span>
+              <span className="w-6 h-6 bg-[#5CE0D2] text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">2</span>
               <span>Ejecuta el archivo <code className="bg-gray-100 px-1.5 py-0.5 rounded text-xs">supabase/migrations/001_initial_schema.sql</code> en el SQL Editor</span>
             </li>
             <li className="flex gap-3">
-              <span className="w-6 h-6 bg-[#00B4C8] text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">3</span>
+              <span className="w-6 h-6 bg-[#5CE0D2] text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">3</span>
               <div>
                 Agrega estas variables a <code className="bg-gray-100 px-1.5 py-0.5 rounded text-xs">.env.local</code>:
-                <pre className="bg-[#0D1B2A] text-green-400 text-xs p-3 rounded-lg mt-2 overflow-x-auto">
+                <pre className="bg-[#0F1923] text-green-400 text-xs p-3 rounded-lg mt-2 overflow-x-auto">
 {`NEXT_PUBLIC_SUPABASE_URL=https://xxx.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
 SUPABASE_SERVICE_ROLE_KEY=eyJ...`}
@@ -115,7 +115,7 @@ SUPABASE_SERVICE_ROLE_KEY=eyJ...`}
               </div>
             </li>
             <li className="flex gap-3">
-              <span className="w-6 h-6 bg-[#00B4C8] text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">4</span>
+              <span className="w-6 h-6 bg-[#5CE0D2] text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">4</span>
               <span>Reinicia el dev server y recarga esta página</span>
             </li>
           </ol>
@@ -129,8 +129,8 @@ SUPABASE_SERVICE_ROLE_KEY=eyJ...`}
       <h1 className="text-2xl font-bold text-[#2C2C2C] mb-6">Dashboard</h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <StatCard icon={Building2} label="Propiedades" value={stats.totalProperties} color="bg-[#1E3A5F]" />
-        <StatCard icon={MessageSquare} label="Leads totales" value={stats.totalLeads} subvalue={`${stats.newLeads} nuevos`} color="bg-[#00B4C8]" />
+        <StatCard icon={Building2} label="Propiedades" value={stats.totalProperties} color="bg-[#1A2F3F]" />
+        <StatCard icon={MessageSquare} label="Leads totales" value={stats.totalLeads} subvalue={`${stats.newLeads} nuevos`} color="bg-[#5CE0D2]" />
         <StatCard icon={Eye} label="Visitas" value={stats.totalViews} color="bg-[#F5A623]" />
         <StatCard icon={TrendingUp} label="Conversión" value={stats.totalLeads > 0 ? `${((stats.newLeads / stats.totalLeads) * 100).toFixed(1)}%` : '—'} color="bg-[#22C55E]" />
       </div>
@@ -147,8 +147,8 @@ SUPABASE_SERVICE_ROLE_KEY=eyJ...`}
           <h2 className="text-lg font-bold text-[#2C2C2C] mb-4">Acciones rápidas</h2>
           <div className="space-y-2">
             <a href={`/es/admin/properties/new`} className="flex items-center gap-3 p-3 rounded-lg hover:bg-[#F4F6F8] transition-colors">
-              <div className="w-9 h-9 bg-[#00B4C8]/10 rounded-lg flex items-center justify-center">
-                <Building2 size={16} className="text-[#00B4C8]" />
+              <div className="w-9 h-9 bg-[#5CE0D2]/10 rounded-lg flex items-center justify-center">
+                <Building2 size={16} className="text-[#5CE0D2]" />
               </div>
               <div>
                 <p className="text-sm font-semibold text-[#2C2C2C]">Nueva propiedad</p>
@@ -165,8 +165,8 @@ SUPABASE_SERVICE_ROLE_KEY=eyJ...`}
               </div>
             </a>
             <a href={`/es/admin/developers`} className="flex items-center gap-3 p-3 rounded-lg hover:bg-[#F4F6F8] transition-colors">
-              <div className="w-9 h-9 bg-[#1E3A5F]/10 rounded-lg flex items-center justify-center">
-                <Users size={16} className="text-[#1E3A5F]" />
+              <div className="w-9 h-9 bg-[#1A2F3F]/10 rounded-lg flex items-center justify-center">
+                <Users size={16} className="text-[#1A2F3F]" />
               </div>
               <div>
                 <p className="text-sm font-semibold text-[#2C2C2C]">Nuevo desarrollador</p>

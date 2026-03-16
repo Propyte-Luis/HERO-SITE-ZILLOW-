@@ -61,7 +61,7 @@ export default function B2BForm() {
                 id={`b2b-${field.name}`}
                 type={field.type}
                 {...register(field.name)}
-                className="w-full h-11 px-3 border border-gray-200 rounded-lg text-sm focus:border-[#00B4C8] focus:outline-none"
+                className="w-full h-11 px-3 border border-gray-200 rounded-lg text-sm focus:border-[#5CE0D2] focus:outline-none"
               />
               {errors[field.name] && (
                 <p className="text-xs text-red-500 mt-1">{tCommon('required')}</p>
@@ -75,14 +75,14 @@ export default function B2BForm() {
               id="b2b-message"
               {...register('message')}
               rows={4}
-              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:border-[#00B4C8] focus:outline-none resize-none"
+              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:border-[#5CE0D2] focus:outline-none resize-none"
             />
           </div>
 
           <button
             type="submit"
             disabled={status === 'sending'}
-            className="w-full h-12 bg-[#00B4C8] hover:bg-[#009AB0] text-white font-semibold rounded-lg transition-colors disabled:opacity-50"
+            className="w-full h-12 bg-[#5CE0D2] hover:bg-[#4BCEC0] text-white font-semibold rounded-lg transition-colors disabled:opacity-50"
           >
             {status === 'sending' ? tCommon('sending') : status === 'sent' ? tCommon('sent') : t('formSubmit')}
           </button>

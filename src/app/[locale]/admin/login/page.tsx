@@ -39,7 +39,7 @@ export default function AdminLogin() {
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-[#2C2C2C]">
-            PROP<span className="text-[#00B4C8]">YTE</span> <span className="text-sm font-normal text-gray-400">CRM</span>
+            PROP<span className="text-[#5CE0D2]">YTE</span> <span className="text-sm font-normal text-gray-400">CRM</span>
           </h1>
           <p className="text-sm text-gray-500 mt-2">Ingresa a tu panel de administración</p>
         </div>
@@ -61,7 +61,7 @@ export default function AdminLogin() {
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 required
-                className="w-full pl-10 pr-4 h-10 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#00B4C8]/20 focus:border-[#00B4C8]"
+                className="w-full pl-10 pr-4 h-10 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#5CE0D2]/20 focus:border-[#5CE0D2]"
                 placeholder="admin@propyte.com"
               />
             </div>
@@ -76,7 +76,7 @@ export default function AdminLogin() {
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 required
-                className="w-full pl-10 pr-4 h-10 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#00B4C8]/20 focus:border-[#00B4C8]"
+                className="w-full pl-10 pr-4 h-10 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#5CE0D2]/20 focus:border-[#5CE0D2]"
                 placeholder="••••••••"
               />
             </div>
@@ -85,7 +85,7 @@ export default function AdminLogin() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full h-10 bg-[#00B4C8] hover:bg-[#009AB0] disabled:bg-gray-300 text-white font-bold rounded-lg transition-colors flex items-center justify-center gap-2"
+            className="w-full h-10 bg-[#5CE0D2] hover:bg-[#4BCEC0] disabled:bg-gray-300 text-white font-bold rounded-lg transition-colors flex items-center justify-center gap-2"
           >
             {loading ? <Loader2 size={16} className="animate-spin" /> : null}
             {loading ? 'Ingresando...' : 'Ingresar'}

@@ -27,8 +27,8 @@ export default function WhyPropyte() {
               key={i}
               className="bg-white rounded-xl p-6 hover:shadow-lg transition-shadow border border-gray-100"
             >
-              <div className="w-12 h-12 bg-[#00B4C8]/10 rounded-xl flex items-center justify-center mb-4">
-                <feat.icon size={24} className="text-[#00B4C8]" />
+              <div className="w-12 h-12 bg-[#5CE0D2]/10 rounded-xl flex items-center justify-center mb-4">
+                <feat.icon size={24} className="text-[#5CE0D2]" />
               </div>
               <h3 className="text-lg font-bold text-[#2C2C2C] mb-2">{feat.title}</h3>
               <p className="text-sm text-gray-600 leading-relaxed">{feat.desc}</p>

@@ -66,7 +66,7 @@ export default function FinancialSimulator({ property }: FinancialSimulatorProps
               max={100}
               value={downPaymentPct}
               onChange={e => setDownPaymentPct(Number(e.target.value))}
-              className="w-full accent-[#00B4C8]"
+              className="w-full accent-[#5CE0D2]"
               aria-valuemin={10}
               aria-valuemax={100}
               aria-valuenow={downPaymentPct}
@@ -81,7 +81,7 @@ export default function FinancialSimulator({ property }: FinancialSimulatorProps
                 <button
                   key={m}
                   onClick={() => setMonths(m)}
-                  className={`px-4 py-2 rounded-lg text-sm border transition-colors ${months === m ? 'bg-[#00B4C8] text-white border-[#00B4C8]' : 'border-gray-200 hover:border-[#00B4C8]'}`}
+                  className={`px-4 py-2 rounded-lg text-sm border transition-colors ${months === m ? 'bg-[#5CE0D2] text-white border-[#5CE0D2]' : 'border-gray-200 hover:border-[#5CE0D2]'}`}
                 >
                   {m} {t('months')}
                 </button>
@@ -99,7 +99,7 @@ export default function FinancialSimulator({ property }: FinancialSimulatorProps
                 step={0.5}
                 value={interestRate}
                 onChange={e => setInterestRate(Number(e.target.value))}
-                className="w-24 h-11 px-3 border border-gray-200 rounded-lg text-sm focus:border-[#00B4C8] focus:outline-none"
+                className="w-24 h-11 px-3 border border-gray-200 rounded-lg text-sm focus:border-[#5CE0D2] focus:outline-none"
                 aria-label={t('interestRate')}
               />
               <span className="text-sm text-gray-500">%</span>
@@ -115,7 +115,7 @@ export default function FinancialSimulator({ property }: FinancialSimulatorProps
               step={1000}
               value={monthlyRent}
               onChange={e => setMonthlyRent(Number(e.target.value))}
-              className="w-full h-11 px-3 border border-gray-200 rounded-lg text-sm focus:border-[#00B4C8] focus:outline-none"
+              className="w-full h-11 px-3 border border-gray-200 rounded-lg text-sm focus:border-[#5CE0D2] focus:outline-none"
               aria-label={t('monthlyRent')}
             />
           </div>
@@ -132,7 +132,7 @@ export default function FinancialSimulator({ property }: FinancialSimulatorProps
               step={0.5}
               value={appreciation}
               onChange={e => setAppreciation(Number(e.target.value))}
-              className="w-full accent-[#00B4C8]"
+              className="w-full accent-[#5CE0D2]"
               aria-valuemin={0}
               aria-valuemax={20}
               aria-valuenow={appreciation}
@@ -152,15 +152,15 @@ export default function FinancialSimulator({ property }: FinancialSimulatorProps
             <div className="text-sm text-gray-500 mb-3">{t('projectedRoi')}</div>
             <div className="grid grid-cols-3 gap-4 text-center">
               <div>
-                <div className="text-lg font-bold text-[#00B4C8]">{results.roi1.toFixed(1)}%</div>
+                <div className="text-lg font-bold text-[#5CE0D2]">{results.roi1.toFixed(1)}%</div>
                 <div className="text-xs text-gray-400">{t('years1')}</div>
               </div>
               <div>
-                <div className="text-lg font-bold text-[#00B4C8]">{results.roi3.toFixed(1)}%</div>
+                <div className="text-lg font-bold text-[#5CE0D2]">{results.roi3.toFixed(1)}%</div>
                 <div className="text-xs text-gray-400">{t('years3')}</div>
               </div>
               <div>
-                <div className="text-lg font-bold text-[#00B4C8]">{results.roi5.toFixed(1)}%</div>
+                <div className="text-lg font-bold text-[#5CE0D2]">{results.roi5.toFixed(1)}%</div>
                 <div className="text-xs text-gray-400">{t('years5')}</div>
               </div>
             </div>
@@ -185,7 +185,7 @@ export default function FinancialSimulator({ property }: FinancialSimulatorProps
             <div className="text-xl font-bold text-[#2C2C2C]">{formatPrice(results.projectedValue)}</div>
             <div className="mt-2 h-2 bg-gray-100 rounded-full overflow-hidden">
               <div
-                className="h-full bg-[#00B4C8] rounded-full"
+                className="h-full bg-[#5CE0D2] rounded-full"
                 style={{ width: `${Math.min((results.projectedValue / price) * 50, 100)}%` }}
               />
             </div>

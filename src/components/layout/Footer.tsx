@@ -7,9 +7,9 @@ export default function Footer() {
   const locale = useLocale();
 
   return (
-    <footer className="bg-[#0D1B2A] text-white">
+    <footer className="bg-[#0F1923] text-white">
       {/* Top CTA strip */}
-      <div className="bg-[#1E3A5F]">
+      <div className="bg-[#1A2F3F]">
         <div className="max-w-[1280px] mx-auto px-4 md:px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <div>
             <h3 className="text-lg font-bold">{t('ctaTitle')}</h3>
@@ -17,7 +17,7 @@ export default function Footer() {
           </div>
           <Link
             href={`/${locale}/contacto`}
-            className="h-11 px-6 bg-[#00B4C8] hover:bg-[#009AB0] text-white font-bold text-sm rounded-lg transition-colors flex items-center"
+            className="h-11 px-6 bg-[#5CE0D2] hover:bg-[#4BCEC0] text-white font-bold text-sm rounded-lg transition-colors flex items-center"
           >
             {t('ctaButton')}
           </Link>
@@ -31,7 +31,7 @@ export default function Footer() {
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-baseline mb-4">
               <span className="text-2xl font-bold tracking-tight text-white">PROP</span>
-              <span className="text-2xl font-bold tracking-tight text-[#00B4C8]">YTE</span>
+              <span className="text-2xl font-bold tracking-tight text-[#5CE0D2]">YTE</span>
             </div>
             <p className="text-sm text-white/50 leading-relaxed mb-4">{t('description')}</p>
             <div className="flex gap-3">

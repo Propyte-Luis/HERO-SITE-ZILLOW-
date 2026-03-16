@@ -42,11 +42,11 @@ export default function PropertyPageContent({ property, similar, locale }: Prope
       {/* Breadcrumbs */}
       <div className="max-w-[1280px] mx-auto px-4 md:px-6 py-3">
         <nav className="flex items-center gap-1 text-xs text-gray-500">
-          <Link href={`/${locale}`} className="hover:text-[#00B4C8]">{locale === 'es' ? 'Inicio' : 'Home'}</Link>
+          <Link href={`/${locale}`} className="hover:text-[#5CE0D2]">{locale === 'es' ? 'Inicio' : 'Home'}</Link>
           <ChevronRight size={12} />
-          <Link href={`/${locale}/propiedades`} className="hover:text-[#00B4C8]">{locale === 'es' ? 'Propiedades' : 'Properties'}</Link>
+          <Link href={`/${locale}/propiedades`} className="hover:text-[#5CE0D2]">{locale === 'es' ? 'Propiedades' : 'Properties'}</Link>
           <ChevronRight size={12} />
-          <Link href={`/${locale}/propiedades?city=${encodeURIComponent(property.location.city)}`} className="hover:text-[#00B4C8]">{property.location.city}</Link>
+          <Link href={`/${locale}/propiedades?city=${encodeURIComponent(property.location.city)}`} className="hover:text-[#5CE0D2]">{property.location.city}</Link>
           <ChevronRight size={12} />
           <span className="text-gray-700 font-medium truncate max-w-[200px]">{property.name}</span>
         </nav>
@@ -67,7 +67,7 @@ export default function PropertyPageContent({ property, similar, locale }: Prope
                     {formatPrice(property.price.mxn)}
                   </div>
                   {property.roi.projected > 0 && (
-                    <div className="inline-flex items-center mt-1 px-2.5 py-0.5 bg-[#00B4C8]/10 text-[#009AB0] text-sm font-bold rounded-full">
+                    <div className="inline-flex items-center mt-1 px-2.5 py-0.5 bg-[#5CE0D2]/10 text-[#4BCEC0] text-sm font-bold rounded-full">
                       ROI {property.roi.projected}% anual
                     </div>
                   )}
@@ -139,7 +139,7 @@ export default function PropertyPageContent({ property, similar, locale }: Prope
               <div className={`text-gray-600 leading-relaxed ${!expanded ? 'line-clamp-4' : ''}`}>
                 {description}
               </div>
-              <button onClick={() => setExpanded(!expanded)} className="text-[#00B4C8] text-sm font-semibold mt-2 hover:underline">
+              <button onClick={() => setExpanded(!expanded)} className="text-[#5CE0D2] text-sm font-semibold mt-2 hover:underline">
                 {expanded ? t('readLess') : t('readMore')}
               </button>
             </div>

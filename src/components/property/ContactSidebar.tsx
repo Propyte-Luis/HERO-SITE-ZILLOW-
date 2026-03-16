@@ -35,7 +35,7 @@ export default function ContactSidebar({ property }: ContactSidebarProps) {
 
         {/* Agent avatar + info */}
         <div className="flex items-center gap-3 mb-5 pb-5 border-b border-gray-100">
-          <div className="w-12 h-12 bg-gradient-to-br from-[#1E3A5F] to-[#00B4C8] rounded-full flex items-center justify-center text-white font-bold text-lg shadow-sm">
+          <div className="w-12 h-12 bg-gradient-to-br from-[#1A2F3F] to-[#5CE0D2] rounded-full flex items-center justify-center text-white font-bold text-lg shadow-sm">
             P
           </div>
           <div>
@@ -59,7 +59,7 @@ export default function ContactSidebar({ property }: ContactSidebarProps) {
         </a>
 
         {/* Schedule visit */}
-        <button className="flex items-center justify-center gap-2 w-full h-12 bg-[#00B4C8] hover:bg-[#009AB0] text-white font-bold rounded-lg transition-colors mb-3 shadow-sm">
+        <button className="flex items-center justify-center gap-2 w-full h-12 bg-[#5CE0D2] hover:bg-[#4BCEC0] text-white font-bold rounded-lg transition-colors mb-3 shadow-sm">
           <Calendar size={20} />
           {t('scheduleVisit')}
         </button>
