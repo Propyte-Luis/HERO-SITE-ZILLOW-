@@ -30,11 +30,32 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# env files — NEVER commit secrets
+.env
+.env.local
+.env.production
+.env.staging
+.env*.local
+# .env.example is safe to commit (template only)
+!.env.example
 
 # vercel
 .vercel
+
+# secrets & credentials
+*.pem
+*.key
+*.p12
+*.pfx
+credentials.json
+service-account.json
+
+# Claude Code local settings (may contain paths)
+.claude/settings.local.json
+
+# IDE
+.vscode/
+.idea/
 
 # typescript
 *.tsbuildinfo

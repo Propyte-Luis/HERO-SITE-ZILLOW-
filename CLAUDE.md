@@ -1,6 +1,23 @@
 # Propyte Web — Marketplace App Rules
 
-> Read the root `/CLAUDE.md` first for project-wide rules. This file has app-specific guidelines.
+> Migration project: This codebase (Next.js on Vercel) is being migrated to propyte.com,
+> combining this UX/UI with the custom Propyte Real Estate WordPress plugin.
+
+## Project Context
+
+- **Fork origin:** Propyte-Team/HERO-SITE-ZILLOW-
+- **Target domain:** propyte.com (currently WordPress on Hostinger)
+- **Goal:** Merge this Zillow-style design with Propyte's custom real estate plugin
+- **Owner:** Luis Flores (Coordinador de Marketing, Propyte)
+- **Brand:** Propyte™ — "Real estate en modo inteligente"
+
+## Security Rules
+
+- NEVER commit `.env`, `.env.local`, or any file containing API keys/secrets
+- NEVER expose `SUPABASE_SERVICE_ROLE_KEY` in client-side code
+- NEVER hardcode credentials — always use environment variables
+- Review all changes before pushing to remote
+- Use `.env.example` as the template for environment variables
 
 ## Quick Reference
 
