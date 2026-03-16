@@ -700,6 +700,38 @@ export const properties: Property[] = [
     featured: true,
     createdAt: '2026-03-16T01:25:14.586Z',
   },
+
+  // Marento — Unknown (sync automático)
+  {
+    id: 'sync-marento-unknown',
+    slug: 'marento-unknown',
+    name: 'Marento — Unknown',
+    developer: 'Desarrollador',
+    location: {
+      city: 'Playa del Carmen',
+      zone: 'Carretera Tulum-Cobá',
+      state: 'Quintana Roo',
+      lat: 20.2114,
+      lng: -87.4654,
+      address: 'Carretera Tulum-Cobá, Playa del Carmen, Q.Roo',
+    },
+    price: { mxn: 395000, currency: 'MXN' },
+    specs: { bedrooms: 1, bathrooms: 1, area: 0, type: 'departamento' },
+    stage: 'construccion',
+    usage: ['vacacional', 'renta'],
+    amenities: ['Alberca', 'Gym', 'Coworking', 'Rooftop'],
+    images: ['https://lh3.googleusercontent.com/d/1__Hr6_55PD6yeZtq8LKEaCmSGgDlStTK=w800', 'https://lh3.googleusercontent.com/d/1AxPgsUDi3vq9-EqcncKhO8-WtPyO4FaR=w800', 'https://lh3.googleusercontent.com/d/1i7QESFf3dfBZERp5UnrqbUP2XJ_WITAJ=w800', 'https://lh3.googleusercontent.com/d/1NpAnZBjLD8_tu-f3jLtgldJzH9yWSn3H=w800', 'https://lh3.googleusercontent.com/d/1f9vfAi5KI0CLAf5TPMGewyK6g43QcGRT=w800', 'https://lh3.googleusercontent.com/d/1-OATgHulGWOq_T5VrJXQSPQw34CLR8P2=w800'],
+    media: {},
+    roi: { projected: 12, rentalMonthly: 2370, appreciation: 11 },
+    financing: { downPaymentMin: 30, months: [6, 12, 18, 24], interestRate: 0 },
+    description: {
+      es: 'Unknown de 0 m² en Marento. Desarrollo boutique con arquitectura biofílica en la selva de Tulum. 0% avance. Entrega 2027. 200 unidades, 1 disponibles.',
+      en: 'Unknown of 0 sqm at Marento. Boutique development with biophilic architecture in the Tulum jungle. 0% progress. Delivery 2027.',
+    },
+    badge: 'nuevo',
+    featured: true,
+    createdAt: '2026-03-16T02:52:58.842Z',
+  },
 ];
 
 export function getAllProperties(): Property[] {

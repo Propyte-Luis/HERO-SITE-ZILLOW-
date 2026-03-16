@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { Menu, ChevronDown, User } from 'lucide-react';
@@ -13,6 +13,8 @@ export default function Header() {
   const t = useTranslations('nav');
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
+  const moreRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function handleScroll() {
@@ -22,14 +24,31 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navLinks = [
-    { href: `/${locale}/propiedades?stage=preventa`, label: t('presale') },
+  // Close "Más" dropdown on outside click
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (moreRef.current && !moreRef.current.contains(e.target as Node)) {
+        setMoreOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const mainLinks = [
     { href: `/${locale}/propiedades`, label: t('properties') },
+    { href: `/${locale}/propiedades?stage=preventa`, label: t('presale') },
+    { href: `/${locale}/contacto`, label: t('contact') },
+  ];
+
+  const moreLinks = [
     { href: `/${locale}/desarrolladores`, label: t('developers') },
     { href: `/${locale}/corredores`, label: t('brokers') },
     { href: `/${locale}/built`, label: t('built') },
     { href: `/${locale}/unete`, label: 'Únete' },
   ];
+
+  const linkClass = "px-3 py-2 text-sm font-semibold text-[#2C2C2C] hover:text-[#5CE0D2] rounded-lg hover:bg-gray-50 transition-colors";
 
   return (
     <>
@@ -42,18 +61,37 @@ export default function Header() {
               <Logo variant="compact" />
 
               <nav className="hidden lg:flex items-center gap-1" aria-label="Main navigation">
-                {navLinks.map(link => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className="px-3 py-2 text-sm font-semibold text-[#2C2C2C] hover:text-[#5CE0D2] rounded-lg hover:bg-gray-50 transition-colors"
-                  >
+                {mainLinks.map(link => (
+                  <Link key={link.href} href={link.href} className={linkClass}>
                     {link.label}
                   </Link>
                 ))}
-                <button className="px-3 py-2 text-sm font-semibold text-[#2C2C2C] hover:text-[#5CE0D2] rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-1">
-                  {t('more')} <ChevronDown size={14} />
-                </button>
+
+                {/* "Más" dropdown */}
+                <div ref={moreRef} className="relative">
+                  <button
+                    onClick={() => setMoreOpen(!moreOpen)}
+                    className={`${linkClass} flex items-center gap-1`}
+                    aria-expanded={moreOpen}
+                    aria-haspopup="true"
+                  >
+                    {t('more')} <ChevronDown size={14} className={`transition-transform ${moreOpen ? 'rotate-180' : ''}`} />
+                  </button>
+                  {moreOpen && (
+                    <div className="absolute top-full left-0 mt-1 w-56 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
+                      {moreLinks.map(link => (
+                        <Link
+                          key={link.href}
+                          href={link.href}
+                          className="block px-4 py-2.5 text-sm font-medium text-[#2C2C2C] hover:text-[#5CE0D2] hover:bg-gray-50 transition-colors"
+                          onClick={() => setMoreOpen(false)}
+                        >
+                          {link.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </nav>
             </div>
 
