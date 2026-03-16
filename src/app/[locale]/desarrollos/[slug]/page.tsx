@@ -53,8 +53,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     const city = CITY_MAP[slug];
     return {
       title: isEn
-        ? `New Developments in ${city.name}, ${city.state} | Pre-Sales & Prices | Propyte`
-        : `Nuevos Desarrollos en ${city.name}, ${city.state} | Preventas y Precios | Propyte`,
+        ? `New Developments in ${city.name}, ${city.state} | Pre-Sales & Prices`
+        : `Nuevos Desarrollos en ${city.name}, ${city.state} | Preventas y Precios`,
       description: isEn ? city.descEn : city.descEs,
       alternates: { languages: { es: `/es/desarrollos/${slug}`, en: `/en/desarrollos/${slug}`, 'x-default': `/es/desarrollos/${slug}` } },
     };
@@ -75,8 +75,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   }
   if (!property) return {};
   const title = isEn
-    ? `${property.name} — ${property.city} | Pre-sale ${property.stage === 'preventa' ? 'Prices' : 'Now'} | Propyte`
-    : `${property.name} — ${property.city} | ${property.stage === 'preventa' ? 'Preventa' : 'En Construccion'} | Propyte`;
+    ? `${property.name} — ${property.city} | Pre-sale ${property.stage === 'preventa' ? 'Prices' : 'Now'}`
+    : `${property.name} — ${property.city} | ${property.stage === 'preventa' ? 'Preventa' : 'En Construccion'}`;
 
   const description = isEn
     ? (property.description_en || `${property.name} in ${property.zone}, ${property.city}. ${property.price_mxn > 0 ? `From ${formatPrice(property.price_mxn)}.` : ''} Pre-sale opportunity in Riviera Maya.`)

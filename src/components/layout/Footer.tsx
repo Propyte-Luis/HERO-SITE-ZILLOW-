@@ -60,12 +60,12 @@ export default function Footer() {
           <div>
             <h4 className="font-bold text-sm mb-4 uppercase tracking-wider text-white/80">{t('company')}</h4>
             <ul className="space-y-2.5">
-              <li><Link href="#" className="text-sm text-white/50 hover:text-white transition-colors">{t('aboutUs')}</Link></li>
+              <li><Link href={`/${locale}/contacto`} className="text-sm text-white/50 hover:text-white transition-colors">{t('aboutUs')}</Link></li>
               <li><Link href={`/${locale}/desarrolladores`} className="text-sm text-white/50 hover:text-white transition-colors">{t('developersLink')}</Link></li>
               <li><Link href={`/${locale}/corredores`} className="text-sm text-white/50 hover:text-white transition-colors">{t('brokersLink')}</Link></li>
               <li><Link href={`/${locale}/built`} className="text-sm text-white/50 hover:text-white transition-colors">{t('builtLink')}</Link></li>
-              <li><Link href="#" className="text-sm text-white/50 hover:text-white transition-colors">{t('careers')}</Link></li>
-              <li><Link href="#" className="text-sm text-white/50 hover:text-white transition-colors">{t('blogLink')}</Link></li>
+              <li><Link href={`/${locale}/unete`} className="text-sm text-white/50 hover:text-white transition-colors">{t('careers')}</Link></li>
+              {/* TODO: Habilitar cuando haya blog — fase de contenido */}
             </ul>
           </div>
 
@@ -73,8 +73,8 @@ export default function Footer() {
           <div>
             <h4 className="font-bold text-sm mb-4 uppercase tracking-wider text-white/80">{t('legal')}</h4>
             <ul className="space-y-2.5">
-              <li><Link href="#" className="text-sm text-white/50 hover:text-white transition-colors">{t('privacy')}</Link></li>
-              <li><Link href="#" className="text-sm text-white/50 hover:text-white transition-colors">{t('terms')}</Link></li>
+              <li><span className="text-sm text-white/30 cursor-default" title="Próximamente" aria-disabled="true">{t('privacy')}</span></li>
+              <li><span className="text-sm text-white/30 cursor-default" title="Próximamente" aria-disabled="true">{t('terms')}</span></li>
             </ul>
           </div>
 

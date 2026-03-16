@@ -6,7 +6,8 @@ import { useTranslations, useLocale } from 'next-intl';
 import { Search, MapPin } from 'lucide-react';
 import Link from 'next/link';
 
-const TABS = ['comprar', 'rentar', 'preventa'] as const;
+// TODO: Habilitar 'rentar' cuando haya inventario de renta
+const TABS = ['comprar', 'preventa'] as const;
 type Tab = typeof TABS[number];
 
 export default function Hero() {
@@ -20,7 +21,8 @@ export default function Hero() {
     e.preventDefault();
     const params = new URLSearchParams();
     if (query.trim()) params.set('search', query.trim());
-    if (activeTab === 'rentar') params.set('usage', 'renta');
+    // TODO: Habilitar cuando haya inventario de renta
+    // if (activeTab === 'rentar') params.set('usage', 'renta');
     if (activeTab === 'preventa') params.set('stage', 'preventa');
     router.push(`/${locale}/propiedades${params.toString() ? '?' + params.toString() : ''}`);
   }

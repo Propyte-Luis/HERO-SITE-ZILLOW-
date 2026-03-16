@@ -10,8 +10,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
   return {
     title: isEn
-      ? 'New Developments & Pre-Sales | Riviera Maya, Cancun, Tulum, Merida | Propyte'
-      : 'Nuevos Desarrollos y Preventas | Riviera Maya, Cancun, Tulum, Merida | Propyte',
+      ? 'New Developments & Pre-Sales | Riviera Maya, Cancun, Tulum, Merida'
+      : 'Nuevos Desarrollos y Preventas | Riviera Maya, Cancun, Tulum, Merida',
     description: isEn
       ? 'Explore 700+ new real estate developments in Cancun, Playa del Carmen, Tulum, and Merida. Pre-sale prices, delivery dates, and investment analysis.'
       : 'Explora 700+ nuevos desarrollos inmobiliarios en Cancun, Playa del Carmen, Tulum y Merida. Precios de preventa, fechas de entrega y analisis de inversion.',

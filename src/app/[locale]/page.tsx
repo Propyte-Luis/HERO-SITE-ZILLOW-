@@ -36,7 +36,8 @@ export default function HomePage() {
       <WhyPropyte />
       <DeveloperBanner />
       <AppDownloadBanner />
-      <RecentBlog />
+      {/* TODO: Habilitar cuando haya articulos reales — fase de contenido */}
+      {/* <RecentBlog /> */}
     </>
   );
 }

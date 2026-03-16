@@ -1,9 +1,10 @@
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { Smartphone, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
 export default function AppDownloadBanner() {
   const t = useTranslations('appBanner');
+  const locale = useLocale();
 
   return (
     <section className="py-12 md:py-16 bg-white">
@@ -24,13 +25,13 @@ export default function AppDownloadBanner() {
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
                 <Link
-                  href="#"
+                  href={`/${locale}/propiedades`}
                   className="inline-flex items-center justify-center gap-2 h-12 px-6 bg-[#5CE0D2] hover:bg-[#4BCEC0] text-white font-bold rounded-lg transition-colors"
                 >
                   {t('ctaPrimary')} <ArrowRight size={18} />
                 </Link>
                 <Link
-                  href="#"
+                  href={`/${locale}/contacto`}
                   className="inline-flex items-center justify-center gap-2 h-12 px-6 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-lg border border-white/20 transition-colors"
                 >
                   {t('ctaSecondary')}

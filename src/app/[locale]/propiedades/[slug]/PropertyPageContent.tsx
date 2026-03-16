@@ -191,7 +191,6 @@ export default function PropertyPageContent({ property, similar, locale }: Prope
 
             {similar.length > 0 && (
               <div>
-                <h2 className="text-xl font-bold text-[#2C2C2C] mb-4">{t('similar')}</h2>
                 <SimilarProperties properties={similar} />
               </div>
             )}

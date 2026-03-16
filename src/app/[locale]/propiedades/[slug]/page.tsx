@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const description = property.description[locale as 'es' | 'en'] || property.description.es;
 
   return {
-    title: `${property.name} — ${formatPrice(property.price.mxn)} | Propyte`,
+    title: `${property.name} — ${formatPrice(property.price.mxn)}`,
     description: description.slice(0, 155),
     openGraph: {
       title: property.name,
