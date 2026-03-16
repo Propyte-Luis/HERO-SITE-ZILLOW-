@@ -1,20 +1,21 @@
 export function formatPrice(amount: number, currency: string = 'MXN'): string {
-  return new Intl.NumberFormat('es-MX', {
+  const formatted = new Intl.NumberFormat('es-MX', {
     style: 'currency',
     currency,
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   }).format(amount);
+  return `${formatted} ${currency}`;
 }
 
-export function formatPriceShort(amount: number): string {
+export function formatPriceShort(amount: number, currency: string = 'MXN'): string {
   if (amount >= 1_000_000) {
-    return `$${(amount / 1_000_000).toFixed(1)}M`;
+    return `$${(amount / 1_000_000).toFixed(1)}M ${currency}`;
   }
   if (amount >= 1_000) {
-    return `$${(amount / 1_000).toFixed(0)}K`;
+    return `$${(amount / 1_000).toFixed(0)}K ${currency}`;
   }
-  return `$${amount}`;
+  return `$${amount} ${currency}`;
 }
 
 export function formatArea(area: number): string {

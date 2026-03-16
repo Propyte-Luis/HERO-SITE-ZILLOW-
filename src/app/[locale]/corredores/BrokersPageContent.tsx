@@ -412,7 +412,7 @@ function BrokerForm() {
 
             <div className="space-y-4">
               {[
-                { icon: Shield, text: 'Sin costo de inscripcion ni mensualidad' },
+                { icon: Shield, text: 'Sin costo de inscripción ni mensualidad' },
                 { icon: Zap, text: 'Acceso inmediato al inventario completo' },
                 { icon: Users, text: 'Account Manager dedicado' },
                 { icon: CheckCircle, text: 'Comisiones en 48 horas' },
