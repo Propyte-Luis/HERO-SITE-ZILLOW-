@@ -60,7 +60,7 @@ export default function Footer() {
           <div>
             <h4 className="font-bold text-sm mb-4 uppercase tracking-wider text-white/80">{t('company')}</h4>
             <ul className="space-y-2.5">
-              <li><Link href={`/${locale}/contacto`} className="text-sm text-white/50 hover:text-white transition-colors">{t('aboutUs')}</Link></li>
+              <li><Link href={`/${locale}/nosotros/quienes-somos`} className="text-sm text-white/50 hover:text-white transition-colors">{t('aboutUs')}</Link></li>
               <li><Link href={`/${locale}/desarrolladores`} className="text-sm text-white/50 hover:text-white transition-colors">{t('developersLink')}</Link></li>
               <li><Link href={`/${locale}/corredores`} className="text-sm text-white/50 hover:text-white transition-colors">{t('brokersLink')}</Link></li>
               <li><Link href={`/${locale}/built`} className="text-sm text-white/50 hover:text-white transition-colors">{t('builtLink')}</Link></li>
