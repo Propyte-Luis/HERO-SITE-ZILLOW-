@@ -45,23 +45,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  // ── Dynamic property/development pages ────────
+  // ── Dynamic development pages ────────
   try {
     const supabase = await createServerSupabaseClient();
-    const { data: properties } = await supabase
-      .from('properties')
+    const { data: developments } = await supabase
+      .from('developments')
       .select('slug, updated_at')
       .eq('published', true)
+      .is('deleted_at', null)
       .order('updated_at', { ascending: false })
       .limit(5000);
 
-    if (properties) {
-      for (const property of properties) {
+    if (developments) {
+      for (const dev of developments) {
         for (const locale of LOCALES) {
-          // Development page
           entries.push({
-            url: `${BASE_URL}/${locale}/desarrollos/${property.slug}`,
-            lastModified: new Date(property.updated_at),
+            url: `${BASE_URL}/${locale}/desarrollos/${dev.slug}`,
+            lastModified: new Date(dev.updated_at),
             changeFrequency: 'weekly',
             priority: 0.8,
           });

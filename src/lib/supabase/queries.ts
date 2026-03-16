@@ -4,55 +4,60 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 type Client = SupabaseClient<any, any, any>;
 
 // ============================================================
-// PROPERTY QUERIES
+// DEVELOPMENT QUERIES (replaces old property queries)
 // ============================================================
 
-export interface PropertyFilters {
+export interface DevelopmentFilters {
   city?: string;
   zone?: string;
-  type?: string;
+  zoneId?: string;
+  plaza?: string;
+  type?: string;        // property_types contains
   stage?: string;
   minPrice?: number;
   maxPrice?: number;
   minRoi?: number;
-  bedrooms?: number;
   featured?: boolean;
   search?: string;
   limit?: number;
   offset?: number;
-  orderBy?: 'price_asc' | 'price_desc' | 'newest' | 'roi';
+  orderBy?: 'price_asc' | 'price_desc' | 'newest' | 'roi' | 'units';
 }
 
-export async function getProperties(client: Client, filters: PropertyFilters = {}) {
+export async function getDevelopments(client: Client, filters: DevelopmentFilters = {}) {
   let query = client
-    .from('properties')
-    .select('*, developers(name, logo_url, verified)', { count: 'exact' })
-    .eq('published', true);
+    .from('developments')
+    .select('*, developers(name, logo_url, verified, slug)', { count: 'exact' })
+    .eq('published', true)
+    .is('deleted_at', null);
 
   if (filters.city) query = query.eq('city', filters.city);
   if (filters.zone) query = query.eq('zone', filters.zone);
-  if (filters.type) query = query.eq('property_type', filters.type);
+  if (filters.zoneId) query = query.eq('zone_id', filters.zoneId);
+  if (filters.plaza) query = query.eq('plaza', filters.plaza);
+  if (filters.type) query = query.contains('property_types', [filters.type]);
   if (filters.stage) query = query.eq('stage', filters.stage);
-  if (filters.minPrice) query = query.gte('price_mxn', filters.minPrice);
-  if (filters.maxPrice) query = query.lte('price_mxn', filters.maxPrice);
+  if (filters.minPrice) query = query.gte('price_min_mxn', filters.minPrice);
+  if (filters.maxPrice) query = query.lte('price_min_mxn', filters.maxPrice);
   if (filters.minRoi) query = query.gte('roi_projected', filters.minRoi);
-  if (filters.bedrooms) query = query.gte('bedrooms', filters.bedrooms);
   if (filters.featured) query = query.eq('featured', true);
 
   if (filters.search) {
     query = query.textSearch('fts', filters.search, { type: 'websearch', config: 'spanish' });
   }
 
-  // Ordering
   switch (filters.orderBy) {
     case 'price_asc':
-      query = query.order('price_mxn', { ascending: true });
+      query = query.order('price_min_mxn', { ascending: true, nullsFirst: false });
       break;
     case 'price_desc':
-      query = query.order('price_mxn', { ascending: false });
+      query = query.order('price_min_mxn', { ascending: false });
       break;
     case 'roi':
-      query = query.order('roi_projected', { ascending: false });
+      query = query.order('roi_projected', { ascending: false, nullsFirst: false });
+      break;
+    case 'units':
+      query = query.order('available_units', { ascending: false, nullsFirst: false });
       break;
     case 'newest':
     default:
@@ -67,49 +72,121 @@ export async function getProperties(client: Client, filters: PropertyFilters = {
   return query;
 }
 
-export async function getPropertyBySlug(client: Client, slug: string) {
+export async function getDevelopmentBySlug(client: Client, slug: string) {
   return client
-    .from('properties')
+    .from('developments')
     .select('*, developers(name, logo_url, verified, slug)')
     .eq('slug', slug)
+    .is('deleted_at', null)
     .single();
 }
 
-export async function getSimilarProperties(client: Client, property: { id: string; city: string; property_type: string }, limit = 4) {
+export async function getDevelopmentWithUnits(client: Client, slug: string) {
+  // Get development
+  const { data: dev, error: devError } = await client
+    .from('developments')
+    .select('*, developers(name, logo_url, verified, slug)')
+    .eq('slug', slug)
+    .is('deleted_at', null)
+    .single();
+
+  if (devError || !dev) return { data: null, error: devError };
+
+  // Get its units
+  const { data: units, error: unitsError } = await client
+    .from('units')
+    .select('*')
+    .eq('development_id', dev.id)
+    .is('deleted_at', null)
+    .order('unit_number', { ascending: true });
+
+  return {
+    data: { ...dev, units: units || [] },
+    error: unitsError,
+  };
+}
+
+export async function getSimilarDevelopments(client: Client, dev: { id: string; city: string; stage: string }, limit = 4) {
   return client
-    .from('properties')
+    .from('developments')
     .select('*, developers(name, logo_url)')
     .eq('published', true)
-    .neq('id', property.id)
-    .or(`city.eq.${property.city},property_type.eq.${property.property_type}`)
+    .is('deleted_at', null)
+    .neq('id', dev.id)
+    .or(`city.eq.${dev.city},stage.eq.${dev.stage}`)
     .limit(limit);
 }
 
-export async function getFeaturedProperties(client: Client, limit = 6) {
+export async function getFeaturedDevelopments(client: Client, limit = 6) {
   return client
-    .from('properties')
+    .from('developments')
     .select('*, developers(name, logo_url)')
     .eq('published', true)
     .eq('featured', true)
+    .is('deleted_at', null)
     .order('created_at', { ascending: false })
     .limit(limit);
 }
 
-// ============================================================
-// LEAD QUERIES
-// ============================================================
-
-export async function createLead(client: Client, data: Record<string, unknown>) {
-  return client.from('leads').insert(data).select().single();
+export async function getDevelopmentsByCity(client: Client, city: string) {
+  return client
+    .from('developments')
+    .select('*, developers(name, logo_url)', { count: 'exact' })
+    .eq('published', true)
+    .eq('city', city)
+    .is('deleted_at', null)
+    .order('created_at', { ascending: false });
 }
 
-export async function getLeads(client: Client, filters: { status?: string; limit?: number; offset?: number } = {}) {
+export async function getCityCounts(client: Client) {
+  // Returns count of developments per city
+  return client
+    .from('developments')
+    .select('city', { count: 'exact', head: false })
+    .eq('published', true)
+    .is('deleted_at', null);
+}
+
+// ============================================================
+// UNIT QUERIES
+// ============================================================
+
+export async function getUnitBySlug(client: Client, slug: string) {
+  return client
+    .from('units')
+    .select('*, developments(name, slug, city, zone, developers(name, logo_url))')
+    .eq('slug', slug)
+    .is('deleted_at', null)
+    .single();
+}
+
+export async function getAvailableUnits(client: Client, developmentId: string) {
+  return client
+    .from('units')
+    .select('*')
+    .eq('development_id', developmentId)
+    .eq('status', 'disponible')
+    .is('deleted_at', null)
+    .order('price_mxn', { ascending: true });
+}
+
+// ============================================================
+// CONTACT/LEAD QUERIES (unified)
+// ============================================================
+
+export async function createContact(client: Client, data: Record<string, unknown>) {
+  return client.from('contacts').insert(data).select().single();
+}
+
+export async function getContacts(client: Client, filters: { status?: string; temperature?: string; limit?: number; offset?: number } = {}) {
   let query = client
-    .from('leads')
-    .select('*, properties(name, slug, city)', { count: 'exact' })
+    .from('contacts')
+    .select('*, developments:source_development_id(name, slug, city)', { count: 'exact' })
+    .is('deleted_at', null)
     .order('created_at', { ascending: false });
 
   if (filters.status) query = query.eq('status', filters.status);
+  if (filters.temperature) query = query.eq('temperature', filters.temperature);
 
   const limit = filters.limit || 50;
   const offset = filters.offset || 0;
@@ -118,8 +195,8 @@ export async function getLeads(client: Client, filters: { status?: string; limit
   return query;
 }
 
-export async function updateLeadStatus(client: Client, id: string, status: string) {
-  return client.from('leads').update({ status }).eq('id', id);
+export async function updateContactStatus(client: Client, id: string, status: string) {
+  return client.from('contacts').update({ status }).eq('id', id);
 }
 
 // ============================================================
@@ -129,7 +206,7 @@ export async function updateLeadStatus(client: Client, id: string, status: strin
 export async function getDevelopers(client: Client) {
   return client
     .from('developers')
-    .select('*, properties(count)')
+    .select('*, developments(count)')
     .order('name');
 }
 
@@ -142,53 +219,128 @@ export async function getDeveloperBySlug(client: Client, slug: string) {
 }
 
 // ============================================================
-// ANALYTICS QUERIES
+// ANALYTICS: WEB EVENTS
 // ============================================================
 
-export async function trackPropertyEvent(
+export async function trackWebEvent(
   client: Client,
-  propertyId: string,
+  developmentId: string,
   eventType: string,
   locale = 'es',
 ) {
-  return client.from('property_views').insert({
-    property_id: propertyId,
-    event_type: eventType,
-    locale,
-    user_agent: typeof navigator !== 'undefined' ? navigator.userAgent : null,
-    referrer: typeof document !== 'undefined' ? document.referrer || null : null,
+  // Aggregate into fact_web_events (daily)
+  const today = new Date().toISOString().slice(0, 10);
+  const weekStart = getWeekStart(new Date()).toISOString().slice(0, 10);
+
+  const columnMap: Record<string, string> = {
+    view: 'page_views',
+    whatsapp_click: 'whatsapp_clicks',
+    call_click: 'call_clicks',
+    form_submit: 'form_submissions',
+    share: 'shares',
+    save: 'saves',
+  };
+
+  const column = columnMap[eventType] || 'page_views';
+
+  // Try upsert with increment
+  const { error } = await client.rpc('increment_web_event', {
+    p_event_date: today,
+    p_week_start: weekStart,
+    p_development_id: developmentId,
+    p_column: column,
   });
+
+  // Fallback: direct insert if RPC not available
+  if (error) {
+    return client.from('fact_web_events').upsert({
+      event_date: today,
+      week_start: weekStart,
+      development_id: developmentId,
+      page_type: 'detail',
+      [column]: 1,
+    }, { onConflict: 'event_date,development_id,page_type' });
+  }
 }
 
-export async function getPropertyStats(client: Client, propertyId: string) {
+// ============================================================
+// ANALYTICS: DASHBOARD QUERIES
+// ============================================================
+
+export async function getInventorySnapshot(client: Client, developmentId: string, weeks = 12) {
   return client
-    .from('property_views')
-    .select('event_type')
-    .eq('property_id', propertyId);
+    .from('fact_inventory_weekly')
+    .select('*')
+    .eq('development_id', developmentId)
+    .order('week_start', { ascending: false })
+    .limit(weeks);
+}
+
+export async function getLeadsByWeek(client: Client, zoneId?: string, weeks = 12) {
+  let query = client
+    .from('fact_leads')
+    .select('week_start, channel_id, qualified, converted')
+    .gte('week_start', getWeeksAgo(weeks).toISOString().slice(0, 10));
+
+  if (zoneId) query = query.eq('zone_id', zoneId);
+
+  return query;
+}
+
+export async function getMarketingSpend(client: Client, weeks = 12) {
+  return client
+    .from('fact_marketing_spend')
+    .select('*')
+    .gte('week_start', getWeeksAgo(weeks).toISOString().slice(0, 10))
+    .order('week_start', { ascending: false });
+}
+
+export async function getMmmData(client: Client, zoneId?: string) {
+  let query = client
+    .from('mv_mmm_weekly')
+    .select('*')
+    .order('week_start', { ascending: true });
+
+  if (zoneId) query = query.eq('zone_id', zoneId);
+
+  return query;
 }
 
 // ============================================================
-// ADMIN: PROPERTY CRUD
+// ADMIN: DEVELOPMENT CRUD
 // ============================================================
 
-export async function createProperty(client: Client, data: Record<string, unknown>) {
-  return client.from('properties').insert(data).select().single();
+export async function createDevelopment(client: Client, data: Record<string, unknown>) {
+  return client.from('developments').insert(data).select().single();
 }
 
-export async function updateProperty(client: Client, id: string, data: Record<string, unknown>) {
-  return client.from('properties').update(data).eq('id', id).select().single();
+export async function updateDevelopment(client: Client, id: string, data: Record<string, unknown>) {
+  return client.from('developments').update(data).eq('id', id).select().single();
 }
 
-export async function deleteProperty(client: Client, id: string) {
-  return client.from('properties').delete().eq('id', id);
+export async function deleteDevelopment(client: Client, id: string) {
+  // Soft delete
+  return client.from('developments').update({ deleted_at: new Date().toISOString() }).eq('id', id);
+}
+
+export async function bulkInsertDevelopments(client: Client, developments: Record<string, unknown>[]) {
+  return client.from('developments').insert(developments).select();
 }
 
 // ============================================================
-// ADMIN: BULK IMPORT
+// ADMIN: UNIT CRUD
 // ============================================================
 
-export async function bulkInsertProperties(client: Client, properties: Record<string, unknown>[]) {
-  return client.from('properties').insert(properties).select();
+export async function createUnit(client: Client, data: Record<string, unknown>) {
+  return client.from('units').insert(data).select().single();
+}
+
+export async function updateUnit(client: Client, id: string, data: Record<string, unknown>) {
+  return client.from('units').update(data).eq('id', id).select().single();
+}
+
+export async function bulkInsertUnits(client: Client, units: Record<string, unknown>[]) {
+  return client.from('units').insert(units).select();
 }
 
 // ============================================================
@@ -207,3 +359,45 @@ export async function getCurrentProfile(client: Client) {
 
   return profile;
 }
+
+// ============================================================
+// HELPERS
+// ============================================================
+
+function getWeekStart(date: Date): Date {
+  const d = new Date(date);
+  const day = d.getDay();
+  const diff = d.getDate() - day + (day === 0 ? -6 : 1); // Monday
+  return new Date(d.setDate(diff));
+}
+
+function getWeeksAgo(weeks: number): Date {
+  const d = new Date();
+  d.setDate(d.getDate() - weeks * 7);
+  return getWeekStart(d);
+}
+
+// ============================================================
+// BACKWARD COMPAT: old function names mapping to new
+// ============================================================
+
+/** @deprecated Use getDevelopments() */
+export const getProperties = getDevelopments;
+/** @deprecated Use getDevelopmentBySlug() */
+export const getPropertyBySlug = getDevelopmentBySlug;
+/** @deprecated Use getSimilarDevelopments() */
+export const getSimilarProperties = getSimilarDevelopments;
+/** @deprecated Use getFeaturedDevelopments() */
+export const getFeaturedProperties = getFeaturedDevelopments;
+/** @deprecated Use createContact() */
+export const createLead = createContact;
+/** @deprecated Use getContacts() */
+export const getLeads = getContacts;
+/** @deprecated Use createDevelopment() */
+export const createProperty = createDevelopment;
+/** @deprecated Use updateDevelopment() */
+export const updateProperty = updateDevelopment;
+/** @deprecated Use deleteDevelopment() */
+export const deleteProperty = deleteDevelopment;
+/** @deprecated Use bulkInsertDevelopments() */
+export const bulkInsertProperties = bulkInsertDevelopments;
