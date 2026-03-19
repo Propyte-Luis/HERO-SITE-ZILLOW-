@@ -25,9 +25,10 @@ interface PropertyPageContentProps {
   property: Property;
   similar: Property[];
   locale: string;
+  smartRentEstimate?: number | null;
 }
 
-export default function PropertyPageContent({ property, similar, locale }: PropertyPageContentProps) {
+export default function PropertyPageContent({ property, similar, locale, smartRentEstimate }: PropertyPageContentProps) {
   const t = useTranslations('property');
   const tStages = useTranslations('stages');
   const tTypes = useTranslations('types');
@@ -169,7 +170,7 @@ export default function PropertyPageContent({ property, similar, locale }: Prope
 
             <PropertySpecs property={property} />
             <PriceTimeline property={property} />
-            <FinancialSimulator property={property} state={property.location.state} />
+            <FinancialSimulator property={property} state={property.location.state} mlEstimatedRent={smartRentEstimate || undefined} />
 
             {/* Location & Proximity */}
             <div>
@@ -198,7 +199,7 @@ export default function PropertyPageContent({ property, similar, locale }: Prope
 
           {/* Desktop Sidebar */}
           <div className="hidden lg:block">
-            <ContactSidebar property={property} />
+            <ContactSidebar property={property} smartRentEstimate={smartRentEstimate} />
           </div>
         </div>
       </div>

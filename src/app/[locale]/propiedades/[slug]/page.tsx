@@ -6,6 +6,8 @@ import { getPropertyBySlug, getSimilarProperties, getAllProperties } from '@/dat
 import { formatPrice } from '@/lib/formatters';
 import PropertyPageContent from './PropertyPageContent';
 import SchemaMarkup from '@/components/shared/SchemaMarkup';
+import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { getRentalEstimate } from '@/lib/supabase/queries';
 
 export async function generateStaticParams() {
   return getAllProperties().map(p => ({ slug: p.slug }));
@@ -55,6 +57,31 @@ export default async function PropertyPage({ params }: { params: Promise<{ local
 
   const similar = getSimilarProperties(property, 4);
 
+  // Fetch dynamic rent estimate from comparables
+  let smartRentEstimate: number | null = null;
+  try {
+    const supabase = await createServerSupabaseClient();
+    if (supabase) {
+      const result = await getRentalEstimate(
+        supabase,
+        property.location.city,
+        property.specs.type || 'departamento',
+        property.specs.bedrooms,
+        property.location.zone,
+      );
+      if (result.data) {
+        // Smart estimate: rent/m² × area
+        if (result.data.avg_rent_per_m2 && result.data.avg_rent_per_m2 > 0 && property.specs.area > 0) {
+          smartRentEstimate = Math.round(result.data.avg_rent_per_m2 * property.specs.area);
+        } else {
+          smartRentEstimate = result.data.median_rent_mxn;
+        }
+      }
+    }
+  } catch {
+    // Continue with static data
+  }
+
   return (
     <>
       <SchemaMarkup
@@ -77,7 +104,7 @@ export default async function PropertyPage({ params }: { params: Promise<{ local
           },
         }}
       />
-      <PropertyPageContent property={property} similar={similar} locale={locale} />
+      <PropertyPageContent property={property} similar={similar} locale={locale} smartRentEstimate={smartRentEstimate} />
     </>
   );
 }
