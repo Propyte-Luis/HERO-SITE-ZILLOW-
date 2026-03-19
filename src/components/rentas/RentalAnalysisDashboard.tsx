@@ -83,6 +83,151 @@ type SortKey = 'rent_yield_gross' | 'irr_5yr' | 'cap_rate' | 'cash_on_cash_pct' 
 
 const PROPERTY_TYPES = ['departamento', 'casa', 'penthouse', 'townhouse', 'studio', 'local_comercial'];
 
+// ── Zone normalization ──────────────────────────────
+// Canonical zones per city — everything else maps to "Otra zona"
+const CANONICAL_ZONES: Record<string, Record<string, string[]>> = {
+  Cancun: {
+    'Centro': ['Cancún Centro', 'Ciudad de Cancún', 'Cancún'],
+    'Zona Hotelera': ['Zona Hotelera', 'Zona Hotel', 'Pok Ta Pok', 'Pok-ta-pok', 'Blvd. Kukulcan 1'],
+    'Puerto Cancún': ['Puerto Cancun', 'Puerto Cancún', 'Avenida Puerto Cancun', 'Av. Puerto Cancún 1', 'Av. Puerto Cancun 1'],
+    'Isla Dorada': ['Isla Dorada'],
+    'Aqua Residencial': ['Aqua Residencial', 'Residencial Aqua 1', 'Residencial Aqua SN'],
+    'Cumbres': ['Cumbres', 'Fraccionamiento Vía Cumbres', 'Avenida Cumbres'],
+    'Arbolada': ['Arbolada', 'Fraccionamiento Arbolada', 'Arbolada Sur'],
+    'Alfredo V. Bonfil': ['Alfredo V. Bonfil', 'Alfredo V Bonfil'],
+    'Long Island': ['Fraccionamiento Long Island'],
+    'Lagos del Sol': ['Lagos del Sol'],
+    'Polígono Sur': ['Polígono Sur'],
+    'Residencial Río': ['Residencial Río', 'Fraccionamiento Residencial Rio'],
+    'Supermanzana 11-17': ['Supermanzana 11', 'Supermanzana 13', 'Supermanzana 15', 'Supermanzana 17', 'Supermanzana 12', 'Supermanzana 10', 'Supermanzana 15a'],
+    'Palmaris': ['Residencial Palmaris'],
+    'Selvamar': ['Fraccionamiento Selvamar'],
+    'Campestre': ['Campestre'],
+    'Puerto Juárez': ['Puerto Juárez'],
+    'Las Torres': ['Las Torres', 'Fraccionamiento Las Torres'],
+  },
+  Merida: {
+    'Temozón Norte': ['Temozon Norte', 'TEMOZON NORTE'],
+    'Yucatán Country Club': ['Yucatán Country Club', 'Yucatan Country Club'],
+    'Montebello': ['Montebello', 'Fraccionamiento Montebello'],
+    'Altabrisa': ['Altabrisa', 'Fraccionamiento Altabrisa'],
+    'Cholul': ['Cholul'],
+    'Mérida Centro': ['Mérida Centro', 'Centro', 'Mérida'],
+    'Benito Juárez Norte': ['Benito Juárez Nte'],
+    'Club de Golf La Ceiba': ['Club de Golf La Ceiba'],
+    'Santa Gertrudis Copo': ['Santa Gertrudis Copo'],
+    'Cabo Norte': ['Cabo norte', 'Fraccionamiento Cabo Norte', 'cabo norte'],
+    'Dzityá': ['Dzitya', 'Dzibichaltun'],
+    'Las Américas': ['Las Américas', 'Americas II', 'Las Americas'],
+    'Vía Montejo': ['Fraccionamiento Vía Montejo', 'Via Montejo', 'Paseo de Montejo', 'Prolongación Montejo'],
+    'Francisco de Montejo': ['Francisco de Montejo', 'Fraccionamiento Francisco de Montejo V'],
+    'Sodzil Norte': ['Sodzil Norte', 'Núcleo Sodzil'],
+    'México Norte': ['México Norte'],
+    'Montecristo': ['Montecristo'],
+    'Gran Santa Fe': ['Gran Santa Fe', 'Fraccionamiento Gran Santa Fe', 'Santa Fe', 'Grand Santa Fe', 'Santa Fe Plus'],
+    'Real Montejo': ['Real Montejo', 'Fraccionamiento Real Montejo'],
+    'Xcumpich': ['Xcumpich'],
+    'Campestre': ['Campestre'],
+    'García Ginerés': ['García Gineres', 'Garcia Gineres', 'Privada Garcia Gineres C - 29'],
+    'Maya': ['Maya'],
+    'Cocoyoles': ['Fraccionamiento Cocoyoles'],
+    'San Pedro Cholul': ['San Pedro Cholul'],
+    'Caucel': ['Caucel'],
+    'Chuburná': ['Chuburna de Hidalgo'],
+    'Los Héroes': ['Fraccionamiento Los Héroes'],
+    'Montes de Amé': ['Montes de Ame', 'Montes de ame'],
+  },
+  'Playa del Carmen': {
+    'Centro': ['Centro', 'Playa del Carmen Centro', 'centro'],
+    'Playacar Fase II': ['Playa Car Fase II', 'PLAYA CAR II 301 REAL DEL CARMEN', 'Playacar Fase 2 Vaiven del Mar Playa del carmen'],
+    'Ciudad Mayakoba': ['Jardines de Ciudad Mayakoba', 'Fraccionamiento Ciudad Mayakoba', 'Bosques de Mayakoba', 'Lagunas de Mayakoba'],
+    'Gonzalo Guerrero': ['Gonzalo Guerrero'],
+    'Ejidal': ['Ejidal'],
+    'Selvanova': ['Selvanova Residencial', 'Selvanova', 'Selvanova Coto 4'],
+    'Selvamar': ['Selvamar', 'Fraccionamiento Selvamar'],
+    'Polanco': ['Polanco'],
+    'Granada': ['Granada'],
+    'Campanario': ['Campanario'],
+    'Real Ibiza': ['Real Ibiza', 'Fraccionamiento Real Ibiza'],
+    'Real Amalfi': ['Real Amalfi'],
+    'Real Bilbao': ['Real Bilbao', 'Fraccionamiento Real Bilbao'],
+    'Colosio': ['Luis Donaldo Colosio'],
+    'Nicte-Ha': ['Nicte-ha'],
+    'El Cielo': ['El Cielo'],
+    'Playa Magna': ['Fraccionamiento Playa Magna'],
+    'Aviación': ['Aviación'],
+    'Solidaridad': ['Solidaridad'],
+    'Vela Mar': ['Vela Mar'],
+    'Misión del Carmen': ['Misión del Carmen'],
+  },
+  Tulum: {
+    'Aldea Zamá': ['Aldea Zama', 'Aldea Zamá', 'Eden Zama'],
+    'Tulum Centro': ['Tulum Centro', 'Pueblo Tulum'],
+    'Región 15': ['Region 15 Kukulcan', 'Region 15', 'C. 39 Pte. Supermanzana 15'],
+    'La Veleta': ['La Veleta'],
+    'Tumben Kaá': ['Tumben Kaa'],
+    'Riviera Tulum': ['Fraccionamiento Riviera Tulum'],
+    'Huracanes': ['Calle Asteroides Col Huracanes', 'Villas Huracanes'],
+  },
+  Cozumel: {
+    'Centro': ['Cozumel Centro'],
+  },
+  'Puerto Morelos': {
+    'Centro': ['Puerto Morelos'],
+  },
+  Bacalar: {},
+};
+
+// Set of junk zone values to always discard
+const JUNK_ZONES = new Set([
+  'piso', 'casa', 'villa', 'habitación', 'mansión', 'casa rural', 'dúplex amueblado',
+  'piso amueblado', 'casa amueblada', 'casa independiente', 'casa nueva', 'casa con terraza',
+  'piso con terraza', 'piso de planta baja con jardín', 'penthouse',
+  'amoblado', 'permite mascotas', 'aire acondicionado', 'asador', 'balcón',
+  'área de juegos infantiles', 'escuelas cercanas', 'mantenimiento', 'bajó de precio',
+  'colegios', 'renta', 'recámaras', 'recamaras', 'venta', 'sección', 'secc',
+  'mexico', 'null', 'n/a', 's/n', 'sn', 'residencial', '. .', 'q.r.',
+  'yucatan', 'nuevo-leon', 'guerrero', 'baja-california-sur', 'baja-california',
+  'coahuila-de-zaragoza', 'jalisco', 'puebla', 'sinaloa', 'ciudad-de-mexico',
+  'hidalgo', 'queretaro', 'guanajuato', 'durango', 'tamaulipas', 'morelos',
+  'veracruz-de-ignacio-de-la-llave', 'chihuahua', 'nayarit', 'san-luis-potosi',
+  'tlaxcala', 'quintana-roo',
+]);
+
+/**
+ * Normalize a raw zone value to a canonical zone name or null.
+ */
+function normalizeZone(city: string, rawZone: string | null): string | null {
+  if (!rawZone) return null;
+  const trimmed = rawZone.trim();
+  if (!trimmed) return null;
+
+  // Discard junk
+  if (JUNK_ZONES.has(trimmed.toLowerCase())) return null;
+
+  // Discard purely numeric values or short codes
+  if (/^\d+[\w-]*$/.test(trimmed) && trimmed.length <= 6) return null;
+
+  // Discard addresses (start with number + street name pattern)
+  if (/^\d+\s/.test(trimmed) && trimmed.length > 10) return null;
+
+  // Check canonical mapping
+  const cityZones = CANONICAL_ZONES[city];
+  if (cityZones) {
+    for (const [canonical, aliases] of Object.entries(cityZones)) {
+      if (aliases.some(a => a.toLowerCase() === trimmed.toLowerCase())) {
+        return canonical;
+      }
+    }
+  }
+
+  // If it's a known city's canonical zone (exact match), keep it
+  if (cityZones && trimmed in cityZones) return trimmed;
+
+  // Discard everything else that doesn't match a canonical zone
+  return 'Otra zona';
+}
+
 function computeMedian(arr: number[]): number {
   if (!arr.length) return 0;
   const s = [...arr].sort((a, b) => a - b);
@@ -129,14 +274,24 @@ export default function RentalAnalysisDashboard({ locale }: { locale: string }) 
     fetchData();
   }, []);
 
+  // ── Normalize zones once ──
+  type ComparableWithZone = Comparable & { normalizedZone: string | null };
+  const normalizedComparables = useMemo<ComparableWithZone[]>(() => {
+    if (!data?.comparables) return [];
+    return data.comparables.map(c => ({
+      ...c,
+      normalizedZone: normalizeZone(c.city, c.zone),
+    }));
+  }, [data?.comparables]);
+
   // ── Filtered comparables ──
   const filtered = useMemo(() => {
-    if (!data?.comparables) return [];
+    if (!normalizedComparables.length) return [] as ComparableWithZone[];
     // Pre-compute which cities to exclude based on minSamples
     let excludedCities: Set<string> | null = null;
     if (filters.minSamples > 0) {
       const cityCounts: Record<string, number> = {};
-      for (const c of data.comparables) {
+      for (const c of normalizedComparables) {
         cityCounts[c.city] = (cityCounts[c.city] || 0) + 1;
       }
       excludedCities = new Set(
@@ -146,10 +301,10 @@ export default function RentalAnalysisDashboard({ locale }: { locale: string }) 
       );
     }
 
-    return data.comparables.filter(c => {
+    return normalizedComparables.filter(c => {
       if (excludedCities && excludedCities.has(c.city)) return false;
       if (filters.city && c.city !== filters.city) return false;
-      if (filters.zone && c.zone !== filters.zone) return false;
+      if (filters.zone && c.normalizedZone !== filters.zone) return false;
       if (filters.propertyType && c.pt !== filters.propertyType) return false;
       if (filters.bedrooms && String(c.beds) !== filters.bedrooms) return false;
       if (filters.rentalType && c.rt !== filters.rentalType) return false;
@@ -159,7 +314,7 @@ export default function RentalAnalysisDashboard({ locale }: { locale: string }) 
       if (filters.rentMax > 0 && c.rent > filters.rentMax) return false;
       return true;
     });
-  }, [data?.comparables, filters]);
+  }, [normalizedComparables, filters]);
 
   // ── Computed metrics for filtered data ──
   const metrics: ComputedMetrics | null = useMemo(() => {
@@ -189,7 +344,7 @@ export default function RentalAnalysisDashboard({ locale }: { locale: string }) 
       if (!cityRents[c.city]) cityRents[c.city] = [];
       cityRents[c.city].push(c.rent);
 
-      const zone = c.zone || 'Sin zona';
+      const zone = c.normalizedZone || 'Sin zona';
       if (!zoneRents[zone]) zoneRents[zone] = [];
       zoneRents[zone].push(c.rent);
     }
@@ -225,21 +380,21 @@ export default function RentalAnalysisDashboard({ locale }: { locale: string }) 
 
   // ── Unique filter options from data ──
   const filterOptions = useMemo(() => {
-    if (!data?.comparables) return { cities: [], zones: [], types: [], beds: [] };
-    const cities = [...new Set(data.comparables.map(c => c.city))].sort();
-    // Zones: show all if no city selected, otherwise only zones for selected city
+    if (!normalizedComparables.length) return { cities: [], zones: [], types: [], beds: [] };
+    const cities = [...new Set(normalizedComparables.map(c => c.city))].sort();
+    // Zones: use normalized zones, scoped to selected city
     const zonesSource = filters.city
-      ? data.comparables.filter(c => c.city === filters.city)
-      : data.comparables;
-    const zones = [...new Set(zonesSource.map(c => c.zone).filter((z): z is string => !!z))].sort();
-    const types = [...new Set(data.comparables.map(c => c.pt).filter(Boolean))].sort();
-    const beds = [...new Set(data.comparables.map(c => String(c.beds ?? 'N/A')))].sort((a, b) => {
+      ? normalizedComparables.filter(c => c.city === filters.city)
+      : normalizedComparables;
+    const zones = [...new Set(zonesSource.map(c => c.normalizedZone).filter((z): z is string => !!z))].sort();
+    const types = [...new Set(normalizedComparables.map(c => c.pt).filter(Boolean))].sort();
+    const beds = [...new Set(normalizedComparables.map(c => String(c.beds ?? 'N/A')))].sort((a, b) => {
       if (a === 'N/A') return 1;
       if (b === 'N/A') return -1;
       return Number(a) - Number(b);
     });
     return { cities, zones, types, beds };
-  }, [data?.comparables, filters.city]);
+  }, [normalizedComparables, filters.city]);
 
   const activeFilterCount = [filters.city, filters.zone, filters.propertyType, filters.bedrooms, filters.rentalType, filters.furnished].filter(Boolean).length
     + (filters.rentMin > 0 ? 1 : 0) + (filters.rentMax > 0 ? 1 : 0) + (filters.minSamples > 0 ? 1 : 0);
