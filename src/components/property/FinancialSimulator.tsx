@@ -22,16 +22,20 @@ interface FinancialSimulatorProps {
   property: Property;
   mlEstimatedRent?: number;
   state?: string;
+  totalComparables?: number;
+  dataFreshness?: string;
 }
 
-export default function FinancialSimulator({ property, mlEstimatedRent, state }: FinancialSimulatorProps) {
+export default function FinancialSimulator({ property, mlEstimatedRent, state, totalComparables, dataFreshness }: FinancialSimulatorProps) {
   const t = useTranslations('simulator');
 
   const [downPaymentPct, setDownPaymentPct] = useState(property.financing.downPaymentMin);
   const [months, setMonths] = useState(property.financing.months[1] || property.financing.months[0]);
   const [interestRate, setInterestRate] = useState(property.financing.interestRate);
-  const [monthlyRent, setMonthlyRent] = useState(mlEstimatedRent || property.roi.rentalMonthly);
   const [appreciation, setAppreciation] = useState(property.roi.appreciation);
+
+  // Rent is NOT editable — comes from comparables analysis
+  const monthlyRent = mlEstimatedRent || property.roi.rentalMonthly;
 
   const price = property.price.mxn;
   const closingCostRate = getClosingCostRate(state || 'Quintana Roo');
@@ -56,7 +60,6 @@ export default function FinancialSimulator({ property, mlEstimatedRent, state }:
     const capRate = calculateCapRate(annualRentNet, totalPropertyCost);
     const monthlyNet = monthlyRent * 0.75 - monthly;
 
-    // IRR: cash flows for 5yr and 10yr
     const annualNetFlow = monthlyNet * 12;
     const sale5 = calculateProjectedValue(price, appreciation, 5);
     const remaining5 = Math.max(0, price * (1 - downPaymentPct / 100) - monthly * 60);
@@ -71,51 +74,113 @@ export default function FinancialSimulator({ property, mlEstimatedRent, state }:
     return { monthly, roi1, roi3, roi5, cashOnCash, breakeven, projectedValue, grossYield, netYield, capRate, monthlyNet, irr5, irr10 };
   }, [price, downPaymentPct, months, interestRate, monthlyRent, appreciation, totalInvested, totalPropertyCost]);
 
+  const freshnessDate = dataFreshness
+    ? new Date(dataFreshness).toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric' })
+    : new Date().toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric' });
+
   return (
-    <div className="bg-[#F4F6F8] rounded-xl p-6 md:p-8">
-      <h2 className="text-xl font-semibold text-[#2C2C2C] mb-6">{t('title')}</h2>
+    <div className="space-y-6">
+      {/* ── Investment Overview Card ── */}
+      <div className="bg-[#0F1923] rounded-2xl p-6 md:p-8 text-white">
+        <h2 className="text-lg font-semibold mb-6 flex items-center gap-2">
+          {t('investmentAnalysis')}
+          <span className="px-2 py-0.5 bg-[#5CE0D2]/20 text-[#5CE0D2] text-[10px] font-bold rounded-full uppercase tracking-wider">
+            Análisis en vivo
+          </span>
+        </h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Inputs */}
+        {/* Investment breakdown */}
+        <div className="space-y-3 mb-6">
+          <Row label={t('propertyPrice')} value={formatPrice(price)} />
+          <Row label={`${t('closingCosts')} (${Math.round(closingCostRate * 100)}%)`} value={formatPrice(closingCosts)} />
+          <div className="border-t border-white/10 pt-3">
+            <Row label={t('totalInvestment')} value={formatPrice(totalPropertyCost)} bold />
+          </div>
+        </div>
+
+        {/* Rent estimate — READ ONLY, prominent */}
+        <div className="bg-[#5CE0D2]/10 border border-[#5CE0D2]/20 rounded-xl p-4 mb-6">
+          <div className="flex items-baseline justify-between">
+            <span className="text-sm text-[#5CE0D2] font-medium">{t('estimatedMonthlyRent')}</span>
+            <span className="text-2xl font-bold text-white">{formatPrice(monthlyRent)}<span className="text-sm font-normal text-gray-400">/mes</span></span>
+          </div>
+          <p className="text-[11px] text-gray-400 mt-2 leading-relaxed">
+            Valor promedio analizado en nuestra base de datos con más de {(totalComparables || 10000).toLocaleString()} registros de renta, actualizada al {freshnessDate}.
+          </p>
+        </div>
+
+        {/* Key financial metrics — table style like Fraccional */}
+        <div className="rounded-xl overflow-hidden border border-white/10">
+          <table className="w-full text-sm">
+            <tbody>
+              <MetricRow label="Yield bruto anual" value={formatPercentage(results.grossYield)} accent />
+              <MetricRow label="Yield neto anual" value={formatPercentage(results.netYield)} />
+              <MetricRow label="Cap rate" value={formatPercentage(results.capRate)} accent />
+              <MetricRow label="Cash-on-cash" value={formatPercentage(results.cashOnCash)} color={results.cashOnCash >= 0 ? '#22C55E' : '#EF4444'} />
+              <MetricRow label="Flujo neto mensual" value={formatPrice(Math.round(results.monthlyNet))} color={results.monthlyNet >= 0 ? '#22C55E' : '#EF4444'} accent />
+              <MetricRow label="Punto de equilibrio" value={results.breakeven === Infinity ? '—' : `${results.breakeven} meses`} />
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* ── ROI Projection Card ── */}
+      <div className="bg-white rounded-2xl border border-gray-100 p-6 md:p-8">
+        <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Retorno proyectado</h3>
+        <div className="grid grid-cols-3 gap-4 mb-6">
+          <ProjectionBlock label="1 año" value={`${results.roi1.toFixed(1)}%`} />
+          <ProjectionBlock label="3 años" value={`${results.roi3.toFixed(1)}%`} />
+          <ProjectionBlock label="5 años" value={`${results.roi5.toFixed(1)}%`} highlight />
+        </div>
+
+        {/* IRR */}
+        <div className="grid grid-cols-2 gap-4 mb-6">
+          <div className="bg-gray-50 rounded-xl p-4 text-center">
+            <div className="text-xs text-gray-400 mb-1">TIR 5 años</div>
+            <div className="text-xl font-bold text-[#5CE0D2]">{results.irr5 != null ? formatPercentage(results.irr5) : '—'}</div>
+          </div>
+          <div className="bg-gray-50 rounded-xl p-4 text-center">
+            <div className="text-xs text-gray-400 mb-1">TIR 10 años</div>
+            <div className="text-xl font-bold text-[#5CE0D2]">{results.irr10 != null ? formatPercentage(results.irr10) : '—'}</div>
+          </div>
+        </div>
+
+        {/* Projected value bar */}
+        <div className="bg-gray-50 rounded-xl p-4">
+          <div className="text-xs text-gray-400 mb-2">Valor proyectado (5 años)</div>
+          <div className="text-xl font-bold text-[#2C2C2C] mb-2">{formatPrice(results.projectedValue)}</div>
+          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-gradient-to-r from-[#5CE0D2] to-[#22C55E] rounded-full transition-all"
+              style={{ width: `${Math.min((results.projectedValue / price) * 50, 100)}%` }}
+            />
+          </div>
+          <div className="flex justify-between text-[10px] text-gray-400 mt-1">
+            <span>{formatPrice(price)}</span>
+            <span>{formatPrice(results.projectedValue)}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Financing Simulator (inputs) ── */}
+      <div className="bg-white rounded-2xl border border-gray-100 p-6 md:p-8">
+        <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-5">{t('title')}</h3>
+
         <div className="space-y-5">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">{t('propertyPrice')}</label>
-            <div className="h-11 px-3 bg-gray-100 border border-gray-200 rounded-lg flex items-center text-sm font-semibold text-gray-500">
-              {formatPrice(price)}
-            </div>
-          </div>
-
-          {/* Closing costs (read-only) */}
-          <div className="bg-[#5CE0D2]/5 border border-[#5CE0D2]/15 rounded-lg p-3 space-y-1">
-            <div className="flex justify-between text-sm">
-              <span className="text-gray-500">{t('closingCosts')} ({Math.round(closingCostRate * 100)}%)</span>
-              <span className="font-medium">{formatPrice(closingCosts)}</span>
-            </div>
-            <div className="flex justify-between text-sm border-t border-[#5CE0D2]/10 pt-1">
-              <span className="font-semibold text-gray-700">{t('totalInvestment')}</span>
-              <span className="font-bold text-gray-900">{formatPrice(totalPropertyCost)}</span>
-            </div>
-          </div>
-
+          {/* Down payment */}
           <div>
             <div className="flex justify-between text-sm mb-1">
               <label className="font-medium text-gray-700">{t('downPayment')}</label>
               <span className="font-semibold">{downPaymentPct}% ({formatPrice(downPayment)})</span>
             </div>
             <input
-              type="range"
-              min={10}
-              max={100}
-              value={downPaymentPct}
+              type="range" min={10} max={100} value={downPaymentPct}
               onChange={e => setDownPaymentPct(Number(e.target.value))}
               className="w-full accent-[#5CE0D2]"
-              aria-valuemin={10}
-              aria-valuemax={100}
-              aria-valuenow={downPaymentPct}
-              aria-label={t('downPayment')}
             />
           </div>
 
+          {/* Term */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">{t('term')}</label>
             <div className="flex gap-2 flex-wrap">
@@ -131,161 +196,72 @@ export default function FinancialSimulator({ property, mlEstimatedRent, state }:
             </div>
           </div>
 
+          {/* Interest rate */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">{t('interestRate')}</label>
             <div className="flex items-center gap-2">
               <input
-                type="number"
-                min={0}
-                max={15}
-                step={0.5}
-                value={interestRate}
+                type="number" min={0} max={15} step={0.5} value={interestRate}
                 onChange={e => setInterestRate(Number(e.target.value))}
                 className="w-24 h-11 px-3 border border-gray-200 rounded-lg text-sm focus:border-[#5CE0D2] focus:outline-none"
-                aria-label={t('interestRate')}
               />
               <span className="text-sm text-gray-500">%</span>
             </div>
           </div>
 
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <label className="block text-sm font-medium text-gray-700">{t('monthlyRent')}</label>
-              {mlEstimatedRent && (
-                <span className="px-1.5 py-0.5 bg-[#5CE0D2]/15 text-[#5CE0D2] text-[10px] font-medium rounded">
-                  {t('mlEstimated')}
-                </span>
-              )}
-            </div>
-            <input
-              type="number"
-              min={5000}
-              max={100000}
-              step={1000}
-              value={monthlyRent}
-              onChange={e => setMonthlyRent(Number(e.target.value))}
-              className="w-full h-11 px-3 border border-gray-200 rounded-lg text-sm focus:border-[#5CE0D2] focus:outline-none"
-              aria-label={t('monthlyRent')}
-            />
-          </div>
-
+          {/* Appreciation */}
           <div>
             <div className="flex justify-between text-sm mb-1">
               <label className="font-medium text-gray-700">{t('appreciation')}</label>
               <span className="font-semibold">{appreciation}%</span>
             </div>
             <input
-              type="range"
-              min={0}
-              max={20}
-              step={0.5}
-              value={appreciation}
+              type="range" min={0} max={20} step={0.5} value={appreciation}
               onChange={e => setAppreciation(Number(e.target.value))}
               className="w-full accent-[#5CE0D2]"
-              aria-valuemin={0}
-              aria-valuemax={20}
-              aria-valuenow={appreciation}
-              aria-label={t('appreciation')}
             />
           </div>
-        </div>
 
-        {/* Outputs */}
-        <div className="space-y-4">
-          <div className="bg-white rounded-xl p-5 border border-gray-100">
-            <div className="text-sm text-gray-500 mb-1">{t('monthlyPayment')}</div>
-            <div className="text-2xl font-bold text-[#2C2C2C]">{formatPrice(results.monthly)}</div>
-          </div>
-
-          <div className="bg-white rounded-xl p-5 border border-gray-100">
-            <div className="text-sm text-gray-500 mb-3">{t('projectedRoi')}</div>
-            <div className="grid grid-cols-3 gap-4 text-center">
-              <div>
-                <div className="text-lg font-bold text-[#5CE0D2]">{results.roi1.toFixed(1)}%</div>
-                <div className="text-xs text-gray-400">{t('years1')}</div>
-              </div>
-              <div>
-                <div className="text-lg font-bold text-[#5CE0D2]">{results.roi3.toFixed(1)}%</div>
-                <div className="text-xs text-gray-400">{t('years3')}</div>
-              </div>
-              <div>
-                <div className="text-lg font-bold text-[#5CE0D2]">{results.roi5.toFixed(1)}%</div>
-                <div className="text-xs text-gray-400">{t('years5')}</div>
-              </div>
+          {/* Monthly payment result */}
+          {results.monthly > 0 && (
+            <div className="bg-[#0F1923] rounded-xl p-4 flex justify-between items-center">
+              <span className="text-sm text-gray-400">{t('monthlyPayment')}</span>
+              <span className="text-xl font-bold text-white">{formatPrice(results.monthly)}</span>
             </div>
-          </div>
-
-          <div className="bg-white rounded-xl p-5 border border-gray-100">
-            <div className="text-sm text-gray-500 mb-1">{t('cashOnCash')}</div>
-            <div className={`text-xl font-bold ${results.cashOnCash >= 0 ? 'text-[#22C55E]' : 'text-[#EF4444]'}`}>
-              {results.cashOnCash.toFixed(1)}%
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl p-5 border border-gray-100">
-            <div className="text-sm text-gray-500 mb-1">{t('breakeven')}</div>
-            <div className="text-xl font-bold text-[#2C2C2C]">
-              {results.breakeven === Infinity ? '—' : `${results.breakeven} ${t('months')}`}
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl p-5 border border-gray-100">
-            <div className="text-sm text-gray-500 mb-1">{t('projectedValue')}</div>
-            <div className="text-xl font-bold text-[#2C2C2C]">{formatPrice(results.projectedValue)}</div>
-            <div className="mt-2 h-2 bg-gray-100 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-[#5CE0D2] rounded-full"
-                style={{ width: `${Math.min((results.projectedValue / price) * 50, 100)}%` }}
-              />
-            </div>
-            <div className="flex justify-between text-xs text-gray-400 mt-1">
-              <span>{formatPrice(price)}</span>
-              <span>{formatPrice(results.projectedValue)}</span>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <div className="bg-white rounded-xl p-4 border border-gray-100">
-              <div className="text-xs text-gray-500 mb-1">{t('grossYield')}</div>
-              <div className="text-lg font-bold text-[#5CE0D2]">{formatPercentage(results.grossYield)}</div>
-            </div>
-            <div className="bg-white rounded-xl p-4 border border-gray-100">
-              <div className="text-xs text-gray-500 mb-1">{t('netYield')}</div>
-              <div className="text-lg font-bold text-[#5CE0D2]">{formatPercentage(results.netYield)}</div>
-            </div>
-            <div className="bg-white rounded-xl p-4 border border-gray-100">
-              <div className="text-xs text-gray-500 mb-1">{t('capRate')}</div>
-              <div className="text-lg font-bold text-[#5CE0D2]">{formatPercentage(results.capRate)}</div>
-            </div>
-            <div className="bg-white rounded-xl p-4 border border-gray-100">
-              <div className="text-xs text-gray-500 mb-1">{t('netCashFlow')}</div>
-              <div className={`text-lg font-bold ${results.monthlyNet >= 0 ? 'text-[#22C55E]' : 'text-[#EF4444]'}`}>
-                {formatPrice(Math.round(results.monthlyNet))}
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl p-5 border border-gray-100">
-            <div className="text-sm text-gray-500 mb-3">{t('irrProjected')}</div>
-            <div className="grid grid-cols-2 gap-4 text-center">
-              <div>
-                <div className="text-lg font-bold text-[#5CE0D2]">
-                  {results.irr5 != null ? formatPercentage(results.irr5) : '—'}
-                </div>
-                <div className="text-xs text-gray-400">{t('irr5yr')}</div>
-              </div>
-              <div>
-                <div className="text-lg font-bold text-[#5CE0D2]">
-                  {results.irr10 != null ? formatPercentage(results.irr10) : '—'}
-                </div>
-                <div className="text-xs text-gray-400">{t('irr10yr')}</div>
-              </div>
-            </div>
-          </div>
+          )}
         </div>
       </div>
 
-      <p className="mt-6 text-xs text-gray-400 leading-relaxed">{t('disclaimer')}</p>
+      <p className="text-[11px] text-gray-400 leading-relaxed px-2">{t('disclaimer')}</p>
+    </div>
+  );
+}
+
+// ── Table row sub-components ──
+
+function Row({ label, value, bold }: { label: string; value: string; bold?: boolean }) {
+  return (
+    <div className="flex justify-between items-center">
+      <span className={`text-sm ${bold ? 'font-semibold text-white' : 'text-gray-400'}`}>{label}</span>
+      <span className={`text-sm ${bold ? 'font-bold text-white' : 'font-medium text-gray-200'}`}>{value}</span>
+    </div>
+  );
+}
+
+function MetricRow({ label, value, accent, color }: { label: string; value: string; accent?: boolean; color?: string }) {
+  return (
+    <tr className={accent ? 'bg-white/[0.03]' : ''}>
+      <td className="px-4 py-3 text-gray-400 text-sm">{label}</td>
+      <td className="px-4 py-3 text-right font-bold text-sm" style={color ? { color } : { color: '#5CE0D2' }}>{value}</td>
+    </tr>
+  );
+}
+
+function ProjectionBlock({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {
+  return (
+    <div className={`rounded-xl p-4 text-center ${highlight ? 'bg-[#0F1923] text-white' : 'bg-gray-50'}`}>
+      <div className={`text-xl font-bold ${highlight ? 'text-[#5CE0D2]' : 'text-[#5CE0D2]'}`}>{value}</div>
+      <div className={`text-xs mt-1 ${highlight ? 'text-gray-400' : 'text-gray-400'}`}>{label}</div>
     </div>
   );
 }

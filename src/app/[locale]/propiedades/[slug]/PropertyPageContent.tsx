@@ -26,9 +26,11 @@ interface PropertyPageContentProps {
   similar: Property[];
   locale: string;
   smartRentEstimate?: number | null;
+  totalComparables?: number;
+  dataFreshness?: string | null;
 }
 
-export default function PropertyPageContent({ property, similar, locale, smartRentEstimate }: PropertyPageContentProps) {
+export default function PropertyPageContent({ property, similar, locale, smartRentEstimate, totalComparables, dataFreshness }: PropertyPageContentProps) {
   const t = useTranslations('property');
   const tStages = useTranslations('stages');
   const tTypes = useTranslations('types');
@@ -170,7 +172,7 @@ export default function PropertyPageContent({ property, similar, locale, smartRe
 
             <PropertySpecs property={property} />
             <PriceTimeline property={property} />
-            <FinancialSimulator property={property} state={property.location.state} mlEstimatedRent={smartRentEstimate || undefined} />
+            <FinancialSimulator property={property} state={property.location.state} mlEstimatedRent={smartRentEstimate || undefined} totalComparables={totalComparables} dataFreshness={dataFreshness || undefined} />
 
             {/* Location & Proximity */}
             <div>

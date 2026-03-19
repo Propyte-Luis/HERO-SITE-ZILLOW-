@@ -57,26 +57,32 @@ export default async function PropertyPage({ params }: { params: Promise<{ local
 
   const similar = getSimilarProperties(property, 4);
 
-  // Fetch dynamic rent estimate from comparables
+  // Fetch dynamic rent estimate + total comparables count from Supabase
   let smartRentEstimate: number | null = null;
+  let totalComparables = 10000;
+  let dataFreshness: string | null = null;
   try {
     const supabase = await createServerSupabaseClient();
     if (supabase) {
-      const result = await getRentalEstimate(
-        supabase,
-        property.location.city,
-        property.specs.type || 'departamento',
-        property.specs.bedrooms,
-        property.location.zone,
-      );
+      const [result, countResult] = await Promise.all([
+        getRentalEstimate(
+          supabase,
+          property.location.city,
+          property.specs.type || 'departamento',
+          property.specs.bedrooms,
+          property.location.zone,
+        ),
+        supabase.from('rental_comparables').select('id', { count: 'exact', head: true }).eq('active', true),
+      ]);
       if (result.data) {
-        // Smart estimate: rent/m² × area
         if (result.data.avg_rent_per_m2 && result.data.avg_rent_per_m2 > 0 && property.specs.area > 0) {
           smartRentEstimate = Math.round(result.data.avg_rent_per_m2 * property.specs.area);
         } else {
           smartRentEstimate = result.data.median_rent_mxn;
         }
+        dataFreshness = result.data.last_updated;
       }
+      if (countResult.count) totalComparables = countResult.count;
     }
   } catch {
     // Continue with static data
@@ -104,7 +110,7 @@ export default async function PropertyPage({ params }: { params: Promise<{ local
           },
         }}
       />
-      <PropertyPageContent property={property} similar={similar} locale={locale} smartRentEstimate={smartRentEstimate} />
+      <PropertyPageContent property={property} similar={similar} locale={locale} smartRentEstimate={smartRentEstimate} totalComparables={totalComparables} dataFreshness={dataFreshness} />
     </>
   );
 }
