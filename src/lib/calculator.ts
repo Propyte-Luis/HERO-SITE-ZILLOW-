@@ -19,6 +19,54 @@ export function calculateTotalInvestment(price: number, state: string): number {
   return price + calculateClosingCosts(price, state);
 }
 
+// ── Vacation vs Residential constants ──
+export const VAC = {
+  EXPENSE_RATIO: 0.35,      // limpieza, amenidades, consumibles
+  PLATFORM_FEE: 0.03,       // comisión Airbnb host
+  MGMT_FEE: 0.15,           // administrador de propiedad
+  DEFAULT_OCCUPANCY: 0.70,   // fallback sin datos AirDNA
+  get TOTAL_COST_RATIO() { return this.EXPENSE_RATIO + this.PLATFORM_FEE + this.MGMT_FEE; }, // 0.53
+} as const;
+
+export const RES = {
+  EXPENSE_RATIO: 0.20,      // mantenimiento, predial, seguros
+  OCCUPANCY: 0.95,           // ~11.4 meses/año ocupado
+} as const;
+
+// ── AirDNA market mapping ──
+export const CITY_TO_AIRDNA: Record<string, string> = {
+  'Cancun': 'cancun',
+  'Playa del Carmen': 'playa_del_carmen',
+  'Tulum': 'tulum',
+  'Merida': 'merida',
+  'Puerto Morelos': 'puerto_morelos',
+  'Cozumel': 'cozumel',
+  'Bacalar': 'bacalar',
+  'Isla Mujeres': 'isla_mujeres',
+};
+
+// ── Vacation rental calculators ──
+
+export function calculateVacEffectiveRent(monthlyRent: number, occupancy: number): number {
+  return Math.round(monthlyRent * occupancy);
+}
+
+export function calculateVacNetRent(monthlyRent: number, occupancy: number): number {
+  const effective = monthlyRent * occupancy;
+  return Math.round(effective * (1 - VAC.EXPENSE_RATIO - VAC.PLATFORM_FEE - VAC.MGMT_FEE));
+}
+
+export function calculateVacGrossYield(monthlyRent: number, occupancy: number, totalInvestment: number): number {
+  if (totalInvestment === 0) return 0;
+  return (monthlyRent * occupancy * 12 / totalInvestment) * 100;
+}
+
+export function calculateVacNetYield(monthlyRent: number, occupancy: number, totalInvestment: number): number {
+  if (totalInvestment === 0) return 0;
+  const annualNet = calculateVacNetRent(monthlyRent, occupancy) * 12;
+  return (annualNet / totalInvestment) * 100;
+}
+
 // ── Financial calculators ──
 
 export function calculateMonthlyPayment(

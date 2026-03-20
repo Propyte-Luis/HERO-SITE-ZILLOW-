@@ -7,7 +7,8 @@ import { formatPrice } from '@/lib/formatters';
 import PropertyPageContent from './PropertyPageContent';
 import SchemaMarkup from '@/components/shared/SchemaMarkup';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
-import { getRentalEstimate } from '@/lib/supabase/queries';
+import { getRentalEstimate, getAirdnaMarketSummary } from '@/lib/supabase/queries';
+import { CITY_TO_AIRDNA } from '@/lib/calculator';
 
 export async function generateStaticParams() {
   return getAllProperties().map(p => ({ slug: p.slug }));
@@ -57,22 +58,22 @@ export default async function PropertyPage({ params }: { params: Promise<{ local
 
   const similar = getSimilarProperties(property, 4);
 
-  // Fetch dynamic rent estimate + total comparables count from Supabase
+  // Fetch dynamic rent estimate + AirDNA market data
   let smartRentEstimate: number | null = null;
+  let smartRentEstimateVac: number | null = null;
   let totalComparables = 10000;
   let dataFreshness: string | null = null;
+  let airdnaOccupancy: number | undefined;
+  let airdnaAdr: number | undefined;
   try {
     const supabase = await createServerSupabaseClient();
     if (supabase) {
-      const [result, countResult] = await Promise.all([
-        getRentalEstimate(
-          supabase,
-          property.location.city,
-          property.specs.type || 'departamento',
-          property.specs.bedrooms,
-          property.location.zone,
-        ),
+      const airdnaMarket = CITY_TO_AIRDNA[property.location.city] || '';
+      const [result, vacResult, countResult, airdnaResult] = await Promise.all([
+        getRentalEstimate(supabase, property.location.city, property.specs.type || 'departamento', property.specs.bedrooms, property.location.zone, 'residencial'),
+        getRentalEstimate(supabase, property.location.city, property.specs.type || 'departamento', property.specs.bedrooms, property.location.zone, 'vacacional'),
         supabase.from('rental_comparables').select('id', { count: 'exact', head: true }).eq('active', true),
+        airdnaMarket ? getAirdnaMarketSummary(supabase, airdnaMarket) : Promise.resolve(null),
       ]);
       if (result.data) {
         if (result.data.avg_rent_per_m2 && result.data.avg_rent_per_m2 > 0 && property.specs.area > 0) {
@@ -82,7 +83,16 @@ export default async function PropertyPage({ params }: { params: Promise<{ local
         }
         dataFreshness = result.data.last_updated;
       }
+      if (vacResult.data) {
+        smartRentEstimateVac = vacResult.data.median_rent_mxn;
+      }
       if (countResult.count) totalComparables = countResult.count;
+      if (airdnaResult) {
+        airdnaOccupancy = airdnaResult.current_occupancy ?? undefined;
+        // Get ADR for matching bedroom count
+        const bedKey = `${property.specs.bedrooms}_bedroom`;
+        airdnaAdr = airdnaResult.adr_by_beds[bedKey] ?? airdnaResult.current_adr ?? undefined;
+      }
     }
   } catch {
     // Continue with static data
@@ -110,7 +120,7 @@ export default async function PropertyPage({ params }: { params: Promise<{ local
           },
         }}
       />
-      <PropertyPageContent property={property} similar={similar} locale={locale} smartRentEstimate={smartRentEstimate} totalComparables={totalComparables} dataFreshness={dataFreshness} />
+      <PropertyPageContent property={property} similar={similar} locale={locale} smartRentEstimate={smartRentEstimate} smartRentEstimateVac={smartRentEstimateVac} totalComparables={totalComparables} dataFreshness={dataFreshness} airdnaOccupancy={airdnaOccupancy} airdnaAdr={airdnaAdr} />
     </>
   );
 }

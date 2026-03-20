@@ -196,6 +196,14 @@ export async function GET(request: NextRequest) {
           rent_yield_net: f.rent_yield_net,
           estimated_rent: f.estimated_rent_residencial,
           estimated_rent_vac: f.estimated_rent_vacacional,
+          // Vacation metrics
+          roi_annual_pct_vac: f.roi_annual_pct_vac,
+          irr_5yr_vac: f.irr_5yr_vac,
+          cap_rate_vac: f.cap_rate_vac,
+          rent_yield_gross_vac: f.rent_yield_gross_vac,
+          rent_yield_net_vac: f.rent_yield_net_vac,
+          monthly_net_flow_vac: f.monthly_net_flow_vac,
+          occupancy_rate_vac: f.occupancy_rate_vac,
         };
       }),
       city_stats: Object.values(cityStats).sort((a, b) => b.count - a.count),

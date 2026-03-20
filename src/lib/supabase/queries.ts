@@ -476,6 +476,116 @@ export async function getMlRentalEstimateForUnit(
 }
 
 // ============================================================
+// AIRDNA MARKET DATA
+// ============================================================
+
+export interface AirdnaMarketSummary {
+  current_occupancy: number | null;
+  avg_occupancy_12m: number | null;
+  current_adr: number | null;
+  adr_by_beds: Record<string, number>;
+  active_listings: number | null;
+  rate_tiers: Record<string, number>;
+  latest_date: string | null;
+  occupancy_trend: Array<{ date: string; value: number }>;
+}
+
+export async function getAirdnaMarketSummary(
+  client: Client,
+  market: string,
+): Promise<AirdnaMarketSummary | null> {
+  if (!market) return null;
+
+  // Fetch latest data points in parallel
+  const [occResult, adrResult, adrBedsResult, listingsResult, tiersResult] = await Promise.all([
+    // Occupancy trend (last 12 unique dates, market-level)
+    client.from('airdna_metrics')
+      .select('metric_date, metric_value')
+      .eq('market', market).eq('section', 'occupancy').eq('chart', 'chart_1').eq('metric_name', 'occupancy')
+      .is('submarket', null)
+      .order('metric_date', { ascending: false }).limit(12),
+    // ADR overall
+    client.from('airdna_metrics')
+      .select('metric_value, metric_date')
+      .eq('market', market).eq('section', 'rates').eq('chart', 'chart_1').eq('metric_name', 'daily_rate')
+      .is('submarket', null)
+      .order('metric_date', { ascending: false }).limit(1),
+    // ADR by bedrooms (latest)
+    client.from('airdna_metrics')
+      .select('metric_name, metric_value, metric_date')
+      .eq('market', market).eq('section', 'rates').eq('chart', 'chart_2')
+      .is('submarket', null)
+      .order('metric_date', { ascending: false }).limit(12),
+    // Listings by bedrooms (latest)
+    client.from('airdna_metrics')
+      .select('metric_name, metric_value, metric_date')
+      .eq('market', market).eq('section', 'listings').eq('chart', 'chart_1')
+      .is('submarket', null)
+      .order('metric_date', { ascending: false }).limit(6),
+    // Rate tiers (latest)
+    client.from('airdna_metrics')
+      .select('metric_name, metric_value')
+      .eq('market', market).eq('section', 'rates').eq('chart', 'chart_3')
+      .is('submarket', null)
+      .order('metric_date', { ascending: false }).limit(5),
+  ]);
+
+  const occData = occResult.data || [];
+  if (occData.length === 0) return null; // No AirDNA data for this market
+
+  // Deduplicate occupancy by date (take first per date)
+  const seenDates = new Set<string>();
+  const uniqueOcc: Array<{ date: string; value: number }> = [];
+  for (const r of occData) {
+    if (r.metric_value != null && !seenDates.has(r.metric_date)) {
+      seenDates.add(r.metric_date);
+      uniqueOcc.push({ date: r.metric_date, value: r.metric_value });
+    }
+  }
+
+  const currentOcc = uniqueOcc[0]?.value ?? null;
+  const avgOcc = uniqueOcc.length > 0
+    ? Math.round((uniqueOcc.reduce((s, r) => s + r.value, 0) / uniqueOcc.length) * 100) / 100
+    : null;
+
+  // ADR by bedrooms — deduplicate by metric_name (take latest per name)
+  const adrByBeds: Record<string, number> = {};
+  for (const r of (adrBedsResult.data || [])) {
+    if (r.metric_value != null && !adrByBeds[r.metric_name]) {
+      adrByBeds[r.metric_name] = Math.round(r.metric_value);
+    }
+  }
+
+  // Total listings
+  const totalListings = (listingsResult.data || [])
+    .filter((r, i, arr) => {
+      // Take latest date only
+      const latestDate = arr[0]?.metric_date;
+      return r.metric_date === latestDate && r.metric_value != null;
+    })
+    .reduce((sum, r) => sum + (r.metric_value || 0), 0);
+
+  // Rate tiers
+  const rateTiers: Record<string, number> = {};
+  for (const r of (tiersResult.data || [])) {
+    if (r.metric_value != null && !rateTiers[r.metric_name]) {
+      rateTiers[r.metric_name] = Math.round(r.metric_value);
+    }
+  }
+
+  return {
+    current_occupancy: currentOcc,
+    avg_occupancy_12m: avgOcc,
+    current_adr: adrResult.data?.[0]?.metric_value ? Math.round(adrResult.data[0].metric_value) : null,
+    adr_by_beds: adrByBeds,
+    active_listings: totalListings || null,
+    rate_tiers: rateTiers,
+    latest_date: uniqueOcc[0]?.date ?? null,
+    occupancy_trend: uniqueOcc.reverse(),
+  };
+}
+
+// ============================================================
 // ADMIN: DEVELOPMENT CRUD
 // ============================================================
 

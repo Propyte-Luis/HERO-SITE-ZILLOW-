@@ -279,6 +279,7 @@ export interface RentalMlEstimateRow {
 export interface DevelopmentFinancialsRow {
   id: string;
   development_id: string;
+  // Residencial metrics
   roi_annual_pct: number | null;
   irr_5yr: number | null;
   irr_10yr: number | null;
@@ -290,8 +291,34 @@ export interface DevelopmentFinancialsRow {
   rent_yield_net: number | null;
   estimated_rent_residencial: number | null;
   estimated_rent_vacacional: number | null;
+  occupancy_rate_res: number | null;
+  // Vacacional metrics
+  roi_annual_pct_vac: number | null;
+  irr_5yr_vac: number | null;
+  irr_10yr_vac: number | null;
+  cash_on_cash_pct_vac: number | null;
+  breakeven_months_vac: number | null;
+  monthly_net_flow_vac: number | null;
+  cap_rate_vac: number | null;
+  rent_yield_gross_vac: number | null;
+  rent_yield_net_vac: number | null;
+  occupancy_rate_vac: number | null;
+  // Meta
   model_version: string | null;
   last_computed: string;
+}
+
+export interface AirdnaMetricRow {
+  id: number;
+  market: string;
+  submarket: string | null;
+  section: string;
+  chart: string;
+  metric_date: string;
+  metric_name: string;
+  metric_value: number | null;
+  scraped_at: string;
+  created_at: string;
 }
 
 // ============================================================
@@ -486,6 +513,11 @@ export interface Database {
         Row: DevelopmentFinancialsRow;
         Insert: Partial<DevelopmentFinancialsRow> & { development_id: string };
         Update: Partial<DevelopmentFinancialsRow>;
+      };
+      airdna_metrics: {
+        Row: AirdnaMetricRow;
+        Insert: Omit<AirdnaMetricRow, 'id' | 'created_at'>;
+        Update: Partial<Omit<AirdnaMetricRow, 'id' | 'created_at'>>;
       };
     };
     Views: {
