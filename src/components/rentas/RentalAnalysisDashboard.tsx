@@ -856,6 +856,33 @@ export default function RentalAnalysisDashboard({ locale }: { locale: string }) 
               </div>
             )}
 
+            {/* Zone-level breakdown */}
+            {airdnaData.zones && airdnaData.zones.length > 0 && (
+              <div className="mt-6">
+                <div className="text-xs text-gray-400 uppercase tracking-wider mb-3">Ocupación y tarifa por zona</div>
+                <div className="rounded-xl overflow-hidden border border-white/10">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="bg-white/5">
+                        <th className="px-4 py-2 text-left text-gray-400 font-medium">Zona</th>
+                        <th className="px-4 py-2 text-right text-gray-400 font-medium">Ocupación</th>
+                        <th className="px-4 py-2 text-right text-gray-400 font-medium">ADR/noche</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {(airdnaData.zones as Array<{zone: string; occupancy: number | null; adr: number | null}>).map((z, i) => (
+                        <tr key={z.zone} className={i % 2 === 0 ? '' : 'bg-white/[0.02]'}>
+                          <td className="px-4 py-2 text-gray-300">{z.zone}</td>
+                          <td className="px-4 py-2 text-right font-bold text-[#5CE0D2]">{z.occupancy != null ? `${Math.round(z.occupancy)}%` : '—'}</td>
+                          <td className="px-4 py-2 text-right font-bold text-white">{z.adr != null ? `$${z.adr.toLocaleString()}` : '—'}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
             {airdnaData.latest_date && (
               <p className="text-[10px] text-gray-500 mt-4">
                 Fuente: AirDNA · Datos al {new Date(airdnaData.latest_date).toLocaleDateString('es-MX', { month: 'long', year: 'numeric' })}

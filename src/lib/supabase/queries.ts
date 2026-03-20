@@ -1,5 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { RENT_BOUNDS } from '@/lib/calculator';
+import { RENT_BOUNDS, AIRDNA_SUBMARKET_TO_ZONE } from '@/lib/calculator';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Client = SupabaseClient<any, any, any>;
@@ -482,6 +482,13 @@ export async function getMlRentalEstimateForUnit(
 // AIRDNA MARKET DATA
 // ============================================================
 
+export interface AirdnaZoneSummary {
+  zone: string;
+  submarket: string;
+  occupancy: number | null;
+  adr: number | null;
+}
+
 export interface AirdnaMarketSummary {
   current_occupancy: number | null;
   avg_occupancy_12m: number | null;
@@ -491,6 +498,7 @@ export interface AirdnaMarketSummary {
   rate_tiers: Record<string, number>;
   latest_date: string | null;
   occupancy_trend: Array<{ date: string; value: number }>;
+  zones: AirdnaZoneSummary[];
 }
 
 export async function getAirdnaMarketSummary(
@@ -585,7 +593,47 @@ export async function getAirdnaMarketSummary(
     rate_tiers: rateTiers,
     latest_date: uniqueOcc[0]?.date ?? null,
     occupancy_trend: uniqueOcc.reverse(),
+    zones: await fetchSubmarketZones(client, market),
   };
+}
+
+async function fetchSubmarketZones(
+  client: Client,
+  market: string,
+): Promise<AirdnaZoneSummary[]> {
+  // Get latest occupancy and ADR per submarket
+  const { data } = await client
+    .from('airdna_metrics')
+    .select('submarket, section, chart, metric_name, metric_value, metric_date')
+    .eq('market', market)
+    .not('submarket', 'is', null)
+    .in('section', ['occupancy', 'rates'])
+    .order('metric_date', { ascending: false })
+    .limit(2000);
+
+  if (!data || data.length === 0) return [];
+
+  // Group by submarket, take latest occupancy and ADR
+  const bySubmarket: Record<string, { occupancy: number | null; adr: number | null }> = {};
+  for (const r of data) {
+    const sub = r.submarket!;
+    if (!bySubmarket[sub]) bySubmarket[sub] = { occupancy: null, adr: null };
+    if (r.section === 'occupancy' && r.chart === 'chart_1' && r.metric_name === 'occupancy' && bySubmarket[sub].occupancy === null) {
+      bySubmarket[sub].occupancy = r.metric_value;
+    }
+    if (r.section === 'rates' && r.chart === 'chart_1' && r.metric_name === 'daily_rate' && bySubmarket[sub].adr === null) {
+      bySubmarket[sub].adr = r.metric_value ? Math.round(r.metric_value) : null;
+    }
+  }
+
+  return Object.entries(bySubmarket)
+    .map(([submarket, vals]) => ({
+      zone: AIRDNA_SUBMARKET_TO_ZONE[submarket] || submarket.toUpperCase(),
+      submarket,
+      occupancy: vals.occupancy,
+      adr: vals.adr,
+    }))
+    .sort((a, b) => (b.adr || 0) - (a.adr || 0));
 }
 
 // ============================================================

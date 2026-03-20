@@ -45,6 +45,32 @@ export const CITY_TO_AIRDNA: Record<string, string> = {
   'Isla Mujeres': 'isla_mujeres',
 };
 
+// AirDNA submarket → canonical zone mapping (Cancún supermanzanas)
+export const AIRDNA_SUBMARKET_TO_ZONE: Record<string, string> = {
+  'smz_4': 'Zona Hotelera',
+  'sm_2a': 'Puerto Cancún',
+  'smz_16': 'Puerto Cancún',
+  'sm_2': 'Centro',
+  'sm_23': 'Supermanzana 11-17',
+  'sm_24': 'Arbolada',
+  'smz_25': 'Aqua / Cumbres',
+  'sm_27': 'Lagos del Sol',
+  'sm_28': 'Alfredo V. Bonfil',
+  'sm_32': 'Las Torres',
+  'sm_63': 'Isla Dorada',
+  'sm_69': 'Residencial Río',
+  'sm_72': 'Selvamar',
+  'smz_35': 'Palmaris',
+  'sm_64': 'Campestre',
+};
+
+// Reverse: canonical zone → submarket codes
+export const ZONE_TO_AIRDNA_SUBMARKETS: Record<string, string[]> = {};
+for (const [sub, zone] of Object.entries(AIRDNA_SUBMARKET_TO_ZONE)) {
+  if (!ZONE_TO_AIRDNA_SUBMARKETS[zone]) ZONE_TO_AIRDNA_SUBMARKETS[zone] = [];
+  ZONE_TO_AIRDNA_SUBMARKETS[zone].push(sub);
+}
+
 // ── Vacation rental calculators ──
 
 export function calculateVacEffectiveRent(monthlyRent: number, occupancy: number): number {

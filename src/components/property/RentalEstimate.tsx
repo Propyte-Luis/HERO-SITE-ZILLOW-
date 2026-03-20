@@ -254,32 +254,7 @@ export default async function RentalEstimate({
 
       {/* AirDNA Market Insight */}
       {airdnaSummary && (
-        <div className="mt-4 p-3 bg-[#0F1923] rounded-xl">
-          <div className="flex items-center gap-2 mb-2">
-            <span className="px-1.5 py-0.5 bg-[#5CE0D2]/20 text-[#5CE0D2] text-[9px] font-bold rounded uppercase tracking-wider">AirDNA</span>
-            <span className="text-[11px] text-gray-400">{city}</span>
-          </div>
-          <div className="grid grid-cols-3 gap-3 text-center">
-            {airdnaSummary.current_occupancy != null && (
-              <div>
-                <div className="text-lg font-bold text-white">{Math.round(airdnaSummary.current_occupancy)}%</div>
-                <div className="text-[10px] text-gray-500">{isEn ? 'Occupancy' : 'Ocupación'}</div>
-              </div>
-            )}
-            {airdnaSummary.current_adr != null && (
-              <div>
-                <div className="text-lg font-bold text-white">${airdnaSummary.current_adr.toLocaleString()}</div>
-                <div className="text-[10px] text-gray-500">ADR/{isEn ? 'night' : 'noche'}</div>
-              </div>
-            )}
-            {airdnaSummary.active_listings != null && (
-              <div>
-                <div className="text-lg font-bold text-white">{airdnaSummary.active_listings.toLocaleString()}</div>
-                <div className="text-[10px] text-gray-500">Listings</div>
-              </div>
-            )}
-          </div>
-        </div>
+        <AirdnaInsight summary={airdnaSummary} city={city} zone={zone} isEn={isEn} />
       )}
 
       {/* Investment analysis with closing costs */}
@@ -299,6 +274,47 @@ export default async function RentalEstimate({
             : 'Estimación basada en listings de renta activos en portales inmobiliarios. No constituye una garantía de ingresos.'
           }
         </p>
+      </div>
+    </div>
+  );
+}
+
+function AirdnaInsight({ summary, city, zone, isEn }: {
+  summary: AirdnaMarketSummary;
+  city: string;
+  zone?: string | null;
+  isEn: boolean;
+}) {
+  const zoneMatch = zone ? summary.zones.find(z => z.zone === zone) : null;
+  const displayOcc = zoneMatch?.occupancy ?? summary.current_occupancy;
+  const displayAdr = zoneMatch?.adr ?? summary.current_adr;
+  const displayLabel = zoneMatch ? `${zoneMatch.zone}, ${city}` : city;
+
+  return (
+    <div className="mt-4 p-3 bg-[#0F1923] rounded-xl">
+      <div className="flex items-center gap-2 mb-2">
+        <span className="px-1.5 py-0.5 bg-[#5CE0D2]/20 text-[#5CE0D2] text-[9px] font-bold rounded uppercase tracking-wider">AirDNA</span>
+        <span className="text-[11px] text-gray-400">{displayLabel}</span>
+      </div>
+      <div className="grid grid-cols-3 gap-3 text-center">
+        {displayOcc != null && (
+          <div>
+            <div className="text-lg font-bold text-white">{Math.round(displayOcc)}%</div>
+            <div className="text-[10px] text-gray-500">{isEn ? 'Occupancy' : 'Ocupación'}</div>
+          </div>
+        )}
+        {displayAdr != null && (
+          <div>
+            <div className="text-lg font-bold text-white">${displayAdr.toLocaleString()}</div>
+            <div className="text-[10px] text-gray-500">ADR/{isEn ? 'night' : 'noche'}</div>
+          </div>
+        )}
+        {summary.active_listings != null && (
+          <div>
+            <div className="text-lg font-bold text-white">{summary.active_listings.toLocaleString()}</div>
+            <div className="text-[10px] text-gray-500">Listings</div>
+          </div>
+        )}
       </div>
     </div>
   );
