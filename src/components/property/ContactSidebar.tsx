@@ -7,9 +7,10 @@ import { formatPrice } from '@/lib/formatters';
 
 interface ContactSidebarProps {
   property: Property;
+  smartRentEstimate?: number | null;
 }
 
-export default function ContactSidebar({ property }: ContactSidebarProps) {
+export default function ContactSidebar({ property, smartRentEstimate }: ContactSidebarProps) {
   const locale = useLocale();
   const t = useTranslations('property');
   const phone = process.env.NEXT_PUBLIC_WHATSAPP_PHONE || '521XXXXXXXXXX';
@@ -27,9 +28,9 @@ export default function ContactSidebar({ property }: ContactSidebarProps) {
       <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
         {/* Price reminder */}
         <div className="text-2xl font-bold text-[#2C2C2C] mb-1">{formatPrice(property.price.mxn)}</div>
-        {property.roi.rentalMonthly > 0 && (
+        {(smartRentEstimate || property.roi.rentalMonthly) > 0 && (
           <p className="text-sm text-gray-500 mb-4">
-            {locale === 'es' ? 'Renta estimada' : 'Est. rent'}: {formatPrice(property.roi.rentalMonthly)}/mes
+            {locale === 'es' ? 'Renta estimada' : 'Est. rent'}: {formatPrice(smartRentEstimate || property.roi.rentalMonthly)}/mes
           </p>
         )}
 

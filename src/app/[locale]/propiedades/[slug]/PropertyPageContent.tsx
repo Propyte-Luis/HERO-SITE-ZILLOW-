@@ -25,9 +25,15 @@ interface PropertyPageContentProps {
   property: Property;
   similar: Property[];
   locale: string;
+  smartRentEstimate?: number | null;
+  smartRentEstimateVac?: number | null;
+  totalComparables?: number;
+  dataFreshness?: string | null;
+  airdnaOccupancy?: number;
+  airdnaAdr?: number;
 }
 
-export default function PropertyPageContent({ property, similar, locale }: PropertyPageContentProps) {
+export default function PropertyPageContent({ property, similar, locale, smartRentEstimate, smartRentEstimateVac, totalComparables, dataFreshness, airdnaOccupancy, airdnaAdr }: PropertyPageContentProps) {
   const t = useTranslations('property');
   const tStages = useTranslations('stages');
   const tTypes = useTranslations('types');
@@ -169,7 +175,7 @@ export default function PropertyPageContent({ property, similar, locale }: Prope
 
             <PropertySpecs property={property} />
             <PriceTimeline property={property} />
-            <FinancialSimulator property={property} />
+            <FinancialSimulator property={property} state={property.location.state} mlEstimatedRent={smartRentEstimate || undefined} mlEstimatedRentVac={smartRentEstimateVac || undefined} totalComparables={totalComparables} dataFreshness={dataFreshness || undefined} airdnaOccupancy={airdnaOccupancy} airdnaAdr={airdnaAdr} />
 
             {/* Location & Proximity */}
             <div>
@@ -198,7 +204,7 @@ export default function PropertyPageContent({ property, similar, locale }: Prope
 
           {/* Desktop Sidebar */}
           <div className="hidden lg:block">
-            <ContactSidebar property={property} />
+            <ContactSidebar property={property} smartRentEstimate={smartRentEstimate} />
           </div>
         </div>
       </div>
