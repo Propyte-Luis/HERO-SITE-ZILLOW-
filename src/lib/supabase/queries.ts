@@ -343,17 +343,20 @@ export async function getRentalEstimate(
 ): Promise<{ data: RentalEstimate | null; fallback: boolean }> {
   const MIN_SAMPLE = 3;
 
+  // Normalize property type: penthouse → departamento for comparables search
+  const normalizedType = propertyType === 'penthouse' ? 'departamento' : propertyType;
+
   // Build queries in fallback order
   const attempts: Array<{ filter: Record<string, unknown>; isFallback: boolean }> = [];
 
-  if (zone && propertyType && bedrooms) {
-    attempts.push({ filter: { city, zone, property_type: propertyType, bedrooms, rental_type: rentalType }, isFallback: false });
+  if (zone && normalizedType && bedrooms) {
+    attempts.push({ filter: { city, zone, property_type: normalizedType, bedrooms, rental_type: rentalType }, isFallback: false });
   }
-  if (propertyType && bedrooms) {
-    attempts.push({ filter: { city, property_type: propertyType, bedrooms, rental_type: rentalType }, isFallback: true });
+  if (normalizedType && bedrooms) {
+    attempts.push({ filter: { city, property_type: normalizedType, bedrooms, rental_type: rentalType }, isFallback: true });
   }
-  if (propertyType) {
-    attempts.push({ filter: { city, property_type: propertyType, rental_type: rentalType }, isFallback: true });
+  if (normalizedType) {
+    attempts.push({ filter: { city, property_type: normalizedType, rental_type: rentalType }, isFallback: true });
   }
   attempts.push({ filter: { city, rental_type: rentalType }, isFallback: true });
 
