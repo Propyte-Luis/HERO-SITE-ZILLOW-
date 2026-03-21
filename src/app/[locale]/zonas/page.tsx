@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 import { getZoneScores } from '@/lib/supabase/queries';
-import { ZoneScoreCard } from '@/components/analytics/ZoneScoreCard';
-import { MarketAlertBanner } from '@/components/analytics/MarketAlertBanner';
+import { ZonasExplorer } from './ZonasExplorer';
+
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -12,19 +13,15 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     ? 'Zone Intelligence — Vacation Rental Market Scores | Propyte'
     : 'Inteligencia de Zonas — Scores del Mercado de Renta Vacacional | Propyte';
   const description = isEn
-    ? 'Compare investment zones in Cancun with AI-powered scores. Occupancy rates, ADR trends, RevPAR, seasonal patterns and supply-demand analysis for each zone.'
-    : 'Compara zonas de inversión en Cancún con scores potenciados por IA. Tasas de ocupación, tendencias de ADR, RevPAR, estacionalidad y análisis de oferta-demanda por zona.';
+    ? 'Compare investment zones across Cancun, Playa del Carmen, Tulum and Merida. AI-powered scores with occupancy rates, ADR trends, RevPAR, and seasonal patterns.'
+    : 'Compara zonas de inversión en Cancún, Playa del Carmen, Tulum y Mérida. Scores con IA: ocupación, ADR, RevPAR y estacionalidad.';
 
   return {
     title,
     description,
     openGraph: { title, description, type: 'website', locale: isEn ? 'en_US' : 'es_MX' },
     alternates: {
-      languages: {
-        es: '/es/zonas',
-        en: '/en/zonas',
-        'x-default': '/es/zonas',
-      },
+      languages: { es: '/es/zonas', en: '/en/zonas', 'x-default': '/es/zonas' },
     },
   };
 }
@@ -33,19 +30,17 @@ export default async function ZonasPage({ params }: { params: Promise<{ locale: 
   const { locale } = await params;
   const isEn = locale === 'en';
 
+  // Fetch ALL zone scores (no city filter)
   const supabase = await createServerSupabaseClient();
-  const scores = supabase ? await getZoneScores(supabase, 'Cancun') : [];
+  const allScores = supabase ? await getZoneScores(supabase) : [];
 
-  // Sort by score descending
-  const sorted = [...scores].sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
+  // Get unique cities
+  const cities = [...new Set(allScores.map((s) => s.city))].sort();
 
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: isEn ? 'Investment Zone Rankings — Cancun' : 'Rankings de Zonas de Inversión — Cancún',
-    description: isEn
-      ? 'AI-powered zone intelligence scores for vacation rental investment in Cancun'
-      : 'Scores de inteligencia de zonas para inversión en renta vacacional en Cancún',
+    name: isEn ? 'Investment Zone Rankings' : 'Rankings de Zonas de Inversión',
   };
 
   return (
@@ -55,7 +50,6 @@ export default async function ZonasPage({ params }: { params: Promise<{ locale: 
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
       />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Breadcrumbs */}
         <nav className="text-sm text-gray-500 mb-6">
           <a href={`/${locale}`} className="hover:text-gray-700">
             {isEn ? 'Home' : 'Inicio'}
@@ -64,49 +58,23 @@ export default async function ZonasPage({ params }: { params: Promise<{ locale: 
           <span className="text-gray-900 font-medium">{isEn ? 'Zones' : 'Zonas'}</span>
         </nav>
 
-        {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">
             {isEn ? 'Zone Intelligence' : 'Inteligencia de Zonas'}
           </h1>
           <p className="text-lg text-gray-500 mt-1">
             {isEn
-              ? 'AI-powered investment scores for vacation rental zones in Cancun'
-              : 'Scores de inversión potenciados por IA para zonas de renta vacacional en Cancún'}
+              ? 'AI-powered investment scores for vacation rental zones'
+              : 'Scores de inversión potenciados por IA para zonas de renta vacacional'}
           </p>
         </div>
 
-        {/* Alerts */}
-        <div className="mb-6">
-          <MarketAlertBanner city="Cancun" maxAlerts={2} />
-        </div>
+        <ZonasExplorer
+          scores={allScores}
+          cities={cities}
+          locale={locale}
+        />
 
-        {/* Zone Grid */}
-        {sorted.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {sorted.map((score) => {
-              const slug = score.zone
-                .toLowerCase()
-                .replace(/\s+/g, '-')
-                .replace(/[\/]/g, '-');
-              return (
-                <a key={score.id} href={`/${locale}/zonas/${slug}`} className="block">
-                  <ZoneScoreCard score={score} />
-                </a>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="text-center py-16 text-gray-400">
-            <p className="text-lg">
-              {isEn
-                ? 'Zone scores are being computed. Check back soon.'
-                : 'Los scores de zona están siendo calculados. Vuelve pronto.'}
-            </p>
-          </div>
-        )}
-
-        {/* Methodology */}
         <div className="mt-12 bg-gray-50 rounded-xl p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-3">
             {isEn ? 'Methodology' : 'Metodología'}
@@ -121,4 +89,3 @@ export default async function ZonasPage({ params }: { params: Promise<{ locale: 
     </>
   );
 }
-// redeploy
