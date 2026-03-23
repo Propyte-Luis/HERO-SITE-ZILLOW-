@@ -38,15 +38,31 @@ export const CITY_TO_AIRDNA: Record<string, string> = {
   'Cancun': 'cancun',
   'Playa del Carmen': 'playa_del_carmen',
   'Tulum': 'tulum',
+  'CDMX': 'cdmx',
   'Merida': 'merida',
   'Puerto Morelos': 'puerto_morelos',
   'Cozumel': 'cozumel',
   'Bacalar': 'bacalar',
-  'Isla Mujeres': 'isla_mujeres',
+  'Mahahual': 'mahahual',
+  'Holbox': 'holbox',
+  'Chetumal': 'chetumal',
+  'Akumal': 'akumal',
+  'Puerto Aventuras': 'puerto_aventuras',
+  'Valladolid': 'valladolid',
+  'Progreso': 'progreso',
+  'Telchac Puerto': 'telchac_puerto',
+  'Izamal': 'izamal',
+  'Sisal': 'sisal',
+  'Celestun': 'celestun',
+  'Chelem': 'chelem',
+  'Chicxulub Puerto': 'chicxulub_puerto',
+  'Felipe Carrillo Puerto': 'felipe_carrillo_puerto',
+  'Jose Maria Morelos': 'jose_maria_morelos',
 };
 
-// AirDNA submarket → canonical zone mapping (Cancún supermanzanas)
+// AirDNA submarket → canonical zone mapping
 export const AIRDNA_SUBMARKET_TO_ZONE: Record<string, string> = {
+  // Cancún
   'smz_4': 'Zona Hotelera',
   'sm_2a': 'Puerto Cancún',
   'smz_16': 'Puerto Cancún',
@@ -62,6 +78,42 @@ export const AIRDNA_SUBMARKET_TO_ZONE: Record<string, string> = {
   'sm_72': 'Selvamar',
   'smz_35': 'Palmaris',
   'sm_64': 'Campestre',
+  // Playa del Carmen
+  'playacar': 'Playacar',
+  '28_junio': '28 de Junio',
+  'ejidal': 'Ejidal',
+  'los_olivos': 'Los Olivos',
+  'zazil_ha': 'Zazil-Ha',
+  // Tulum
+  'region_9': 'Tulum Centro',
+  'region_15': 'Aldea Zamá',
+  // CDMX
+  'roma_norte': 'Roma Norte',
+  'roma_sur': 'Roma Sur',
+  'polanco': 'Polanco',
+  'condesa': 'Condesa',
+  'hipodromo': 'Hipódromo',
+  'coyoacan': 'Coyoacán',
+  'cuauhtemoc': 'Cuauhtémoc',
+  'centro_historico': 'Centro Histórico',
+  'juarez': 'Juárez',
+  'napoles': 'Nápoles',
+  'tabacalera': 'Tabacalera',
+  'doctores': 'Doctores',
+  'escandon': 'Escandón',
+  'escandon_ii': 'Escandón II',
+  'san_rafael': 'San Rafael',
+  'narvarte': 'Narvarte',
+  'del_valle_sur': 'Del Valle Sur',
+  'anzures': 'Anzures',
+  // Mérida
+  '97314': 'CP 97314',
+  // Akumal
+  'bay_area': 'Bahía de Akumal',
+  'centro': 'Akumal Centro',
+  'resorts': 'Zona de Resorts',
+  'bahia_principe': 'Bahía Príncipe',
+  'tulum_country_club': 'Tulum Country Club',
 };
 
 // Reverse: canonical zone → submarket codes

@@ -23,6 +23,28 @@ const CITY_LABELS: Record<string, string> = {
   'Puerto Morelos': 'Puerto Morelos',
   'Cozumel': 'Cozumel',
   'Bacalar': 'Bacalar',
+  'CDMX': 'Ciudad de México',
+  'Mahahual': 'Mahahual',
+  'Holbox': 'Holbox',
+  'Chetumal': 'Chetumal',
+  'Akumal': 'Akumal',
+  'Puerto Aventuras': 'Puerto Aventuras',
+  'Valladolid': 'Valladolid',
+  'Progreso': 'Progreso',
+  'Telchac Puerto': 'Telchac Puerto',
+  'Sisal': 'Sisal',
+  'Celestun': 'Celestún',
+  'Chelem': 'Chelem',
+  'Chicxulub Puerto': 'Chicxulub Puerto',
+  'Izamal': 'Izamal',
+};
+
+// Group cities by region for the dropdown
+const CITY_REGIONS: Record<string, string[]> = {
+  'Riviera Maya': ['Cancun', 'Playa del Carmen', 'Tulum', 'Puerto Morelos', 'Akumal', 'Puerto Aventuras', 'Cozumel', 'Holbox'],
+  'Costa Maya': ['Bacalar', 'Mahahual', 'Chetumal'],
+  'Yucatán': ['Merida', 'Valladolid', 'Progreso', 'Telchac Puerto', 'Sisal', 'Celestun', 'Chelem', 'Chicxulub Puerto', 'Izamal'],
+  'CDMX': ['CDMX'],
 };
 
 export function ZonasExplorer({ scores, cities, locale }: ZonasExplorerProps) {
@@ -98,10 +120,23 @@ export function ZonasExplorer({ scores, cities, locale }: ZonasExplorerProps) {
 
   const SortIcon = sortDir === 'asc' ? SortAsc : SortDesc;
 
+  // Compute latest data date
+  const latestDate = useMemo(() => {
+    if (scores.length === 0) return null;
+    const dates = scores.map((s) => s.computed_at).filter(Boolean).sort().reverse();
+    if (dates.length === 0) return null;
+    const d = new Date(dates[0]);
+    return d.toLocaleDateString(isEn ? 'en-US' : 'es-MX', { month: 'long', year: 'numeric' });
+  }, [scores, isEn]);
+
   return (
     <div className="space-y-6">
-      {/* Alerts */}
-      <MarketAlertBanner city={selectedCity === 'all' ? undefined : selectedCity} maxAlerts={2} />
+      {/* Data source & freshness */}
+      <p className="text-xs text-gray-400 text-center">
+        {isEn
+          ? `Propyte analysis based on +2.5M short-term rental records in Mexico${latestDate ? ` · Updated ${latestDate}` : ''}`
+          : `Análisis Propyte basado en +2.5 millones de registros de renta vacacional en México${latestDate ? ` · Actualizado ${latestDate}` : ''}`}
+      </p>
 
       {/* Filters Bar */}
       <div className="flex flex-wrap gap-3 items-center">
@@ -114,11 +149,19 @@ export function ZonasExplorer({ scores, cities, locale }: ZonasExplorerProps) {
             className="text-sm font-medium text-gray-900 bg-transparent border-none outline-none cursor-pointer"
           >
             <option value="all">{isEn ? 'All Cities' : 'Todas las Ciudades'}</option>
-            {cities.map((city) => (
-              <option key={city} value={city}>
-                {CITY_LABELS[city] || city}
-              </option>
-            ))}
+            {Object.entries(CITY_REGIONS).map(([region, regionCities]) => {
+              const available = regionCities.filter((c) => cities.includes(c));
+              if (available.length === 0) return null;
+              return (
+                <optgroup key={region} label={region}>
+                  {available.map((city) => (
+                    <option key={city} value={city}>
+                      {CITY_LABELS[city] || city}
+                    </option>
+                  ))}
+                </optgroup>
+              );
+            })}
           </select>
         </div>
 
@@ -152,11 +195,11 @@ export function ZonasExplorer({ scores, cities, locale }: ZonasExplorerProps) {
       {/* Sort Pills */}
       <div className="flex flex-wrap gap-2">
         {([
-          ['score', isEn ? 'Score' : 'Score'],
+          ['score', isEn ? 'Propyte Index' : 'Índice Propyte'],
           ['occupancy', isEn ? 'Occupancy' : 'Ocupación'],
-          ['adr', 'ADR'],
-          ['revpar', 'RevPAR'],
-          ['listings', 'Listings'],
+          ['adr', isEn ? 'Rate/night' : 'Tarifa/noche'],
+          ['revpar', isEn ? 'Revenue/night' : 'Ingreso/noche'],
+          ['listings', isEn ? 'Properties' : 'Propiedades'],
           ['zone', isEn ? 'Name' : 'Nombre'],
         ] as [SortField, string][]).map(([field, label]) => (
           <button
@@ -183,7 +226,7 @@ export function ZonasExplorer({ scores, cities, locale }: ZonasExplorerProps) {
           </div>
           <div className="bg-white border border-gray-200 rounded-lg p-3 text-center">
             <div className="text-2xl font-bold text-teal-700">{cityStats.avgScore}/100</div>
-            <div className="text-xs text-gray-500">{isEn ? 'Avg Score' : 'Score Promedio'}</div>
+            <div className="text-xs text-gray-500">{isEn ? 'Avg Index' : 'Índice Promedio'}</div>
           </div>
           <div className="bg-white border border-gray-200 rounded-lg p-3 text-center">
             <div className="text-2xl font-bold text-gray-900">{cityStats.avgOcc}%</div>
@@ -191,7 +234,7 @@ export function ZonasExplorer({ scores, cities, locale }: ZonasExplorerProps) {
           </div>
           <div className="bg-white border border-gray-200 rounded-lg p-3 text-center">
             <div className="text-2xl font-bold text-gray-900">{cityStats.totalListings.toLocaleString()}</div>
-            <div className="text-xs text-gray-500">{isEn ? 'Total Listings' : 'Listings Totales'}</div>
+            <div className="text-xs text-gray-500">{isEn ? 'Active Properties' : 'Propiedades Activas'}</div>
           </div>
         </div>
       )}
@@ -206,7 +249,7 @@ export function ZonasExplorer({ scores, cities, locale }: ZonasExplorerProps) {
               .replace(/[\/]/g, '-');
             return (
               <a key={score.id} href={`/${locale}/zonas/${slug}`} className="block">
-                <ZoneScoreCard score={score} />
+                <ZoneScoreCard score={score} locale={locale} />
               </a>
             );
           })}

@@ -1,150 +1,105 @@
 'use client';
 
+import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
 import type { ZoneScore } from '@/lib/supabase/queries';
 
 interface ZoneScoreCardProps {
   score: ZoneScore;
   compact?: boolean;
+  locale?: string;
 }
 
-function ScoreGauge({ value, size = 80 }: { value: number; size?: number }) {
-  const radius = (size - 8) / 2;
-  const circumference = Math.PI * radius; // half circle
-  const fillPct = Math.min(100, Math.max(0, value)) / 100;
-  const strokeDashoffset = circumference * (1 - fillPct);
-
-  // Color based on score
-  const color =
-    value >= 70 ? '#059669' : // green
-    value >= 50 ? '#D97706' : // amber
-    value >= 30 ? '#EA580C' : // orange
-    '#DC2626'; // red
+function IndexBadge({ value }: { value: number }) {
+  const label =
+    value >= 70 ? 'Alto potencial' :
+    value >= 50 ? 'Potencial moderado' :
+    'En observación';
+  const colors =
+    value >= 70 ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
+    value >= 50 ? 'bg-amber-50 text-amber-700 border-amber-200' :
+    'bg-gray-50 text-gray-500 border-gray-200';
 
   return (
-    <div className="relative" style={{ width: size, height: size / 2 + 16 }}>
-      <svg
-        width={size}
-        height={size / 2 + 8}
-        viewBox={`0 0 ${size} ${size / 2 + 8}`}
-      >
-        {/* Background arc */}
-        <path
-          d={`M 4 ${size / 2 + 4} A ${radius} ${radius} 0 0 1 ${size - 4} ${size / 2 + 4}`}
-          fill="none"
-          stroke="#e5e7eb"
-          strokeWidth={6}
-          strokeLinecap="round"
-        />
-        {/* Value arc */}
-        <path
-          d={`M 4 ${size / 2 + 4} A ${radius} ${radius} 0 0 1 ${size - 4} ${size / 2 + 4}`}
-          fill="none"
-          stroke={color}
-          strokeWidth={6}
-          strokeLinecap="round"
-          strokeDasharray={circumference}
-          strokeDashoffset={strokeDashoffset}
-          style={{ transition: 'stroke-dashoffset 1s ease-out' }}
-        />
-      </svg>
-      <div className="absolute inset-0 flex items-end justify-center pb-0">
-        <span className="text-2xl font-bold" style={{ color }}>
-          {Math.round(value)}
+    <div className="flex items-center gap-2">
+      <span className={`text-3xl font-bold ${value >= 70 ? 'text-emerald-600' : value >= 50 ? 'text-amber-600' : 'text-gray-400'}`}>
+        {Math.round(value)}
+      </span>
+      <div className="flex flex-col">
+        <span className="text-[10px] text-gray-400 uppercase tracking-wide leading-tight">Índice Propyte</span>
+        <span className={`text-xs font-medium px-1.5 py-0.5 rounded border ${colors}`}>
+          {label}
         </span>
       </div>
     </div>
   );
 }
 
-function MetricPill({ label, value, suffix = '' }: { label: string; value: number | null; suffix?: string }) {
-  if (value == null) return null;
+function MetricRow({ label, value, context, trend }: {
+  label: string;
+  value: string;
+  context?: string;
+  trend?: 'up' | 'down' | 'flat';
+}) {
+  const TrendIcon = trend === 'up' ? TrendingUp : trend === 'down' ? TrendingDown : Minus;
+  const trendColor = trend === 'up' ? 'text-emerald-500' : trend === 'down' ? 'text-red-400' : 'text-gray-300';
+
   return (
-    <div className="flex flex-col items-center px-3 py-1.5">
+    <div className="flex items-center justify-between py-1.5">
       <span className="text-xs text-gray-500">{label}</span>
-      <span className="text-sm font-semibold text-gray-900">
-        {typeof value === 'number' ? value.toLocaleString() : value}{suffix}
-      </span>
+      <div className="flex items-center gap-1.5">
+        <span className="text-sm font-semibold text-gray-900">{value}</span>
+        {trend && <TrendIcon className={`w-3.5 h-3.5 ${trendColor}`} />}
+        {context && <span className="text-[10px] text-gray-400">{context}</span>}
+      </div>
     </div>
   );
 }
 
-export function ZoneScoreCard({ score, compact = false }: ZoneScoreCardProps) {
+export function ZoneScoreCard({ score, compact = false, locale = 'es' }: ZoneScoreCardProps) {
+  const isEn = locale === 'en';
+
+  // Determine ADR trend
+  const adrGrowth = score.adr_growth_component;
+  const adrTrend: 'up' | 'down' | 'flat' =
+    adrGrowth != null && adrGrowth > 60 ? 'up' :
+    adrGrowth != null && adrGrowth < 40 ? 'down' :
+    'flat';
+
+  // Competition level label
+  const listings = score.active_listings ?? 0;
+  const competitionLabel = isEn
+    ? (listings > 200 ? 'High' : listings > 50 ? 'Moderate' : 'Low')
+    : (listings > 200 ? 'Alta' : listings > 50 ? 'Moderada' : 'Baja');
+
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-md transition-shadow">
-      <div className="flex items-start justify-between mb-2">
-        <div>
-          <h3 className="font-semibold text-gray-900">{score.zone}</h3>
-          <p className="text-xs text-gray-500">{score.city}</p>
-          {score.cluster_label && (
-            <span className="inline-block mt-1 px-2 py-0.5 text-xs rounded-full bg-teal-50 text-teal-700">
-              {score.cluster_label}
-            </span>
-          )}
+    <div className="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-md hover:border-gray-300 transition-all">
+      {/* Header: zone name + index */}
+      <div className="flex items-start justify-between mb-3">
+        <div className="min-w-0 flex-1">
+          <h3 className="font-semibold text-gray-900 truncate">{score.zone}</h3>
+          <p className="text-xs text-gray-400">{score.city}</p>
         </div>
-        <ScoreGauge value={score.score ?? 0} size={compact ? 64 : 80} />
+        <IndexBadge value={score.score ?? 0} />
       </div>
 
       {!compact && (
-        <div className="flex flex-wrap justify-center gap-1 mt-3 border-t border-gray-100 pt-3">
-          <MetricPill
-            label="Ocupación"
-            value={score.median_occupancy ? Math.round(score.median_occupancy) : null}
-            suffix="%"
+        <div className="border-t border-gray-100 pt-3 space-y-0.5">
+          <MetricRow
+            label={isEn ? 'Occupancy' : 'Ocupación'}
+            value={score.median_occupancy ? `${Math.round(score.median_occupancy)}%` : '—'}
+            trend={score.median_occupancy != null && score.median_occupancy > 58 ? 'up' : score.median_occupancy != null && score.median_occupancy < 40 ? 'down' : 'flat'}
           />
-          <MetricPill
-            label="ADR"
-            value={score.median_adr ? Math.round(score.median_adr) : null}
-            suffix=""
+          <MetricRow
+            label={isEn ? 'Avg. rate / night' : 'Tarifa prom. / noche'}
+            value={score.median_adr ? `$${Math.round(score.median_adr).toLocaleString()} MXN` : '—'}
+            trend={adrTrend}
           />
-          <MetricPill
-            label="RevPAR"
-            value={score.revpar ? Math.round(score.revpar) : null}
+          <MetricRow
+            label={isEn ? 'Competition' : 'Competencia'}
+            value={`${competitionLabel} · ${listings} ${isEn ? 'properties' : 'propiedades'}`}
           />
-          <MetricPill
-            label="Listings"
-            value={score.active_listings}
-          />
-          {score.price_to_rent_ratio && (
-            <MetricPill
-              label="P/R Ratio"
-              value={Math.round(score.price_to_rent_ratio * 10) / 10}
-              suffix="x"
-            />
-          )}
         </div>
       )}
-
-      {/* Component breakdown */}
-      {!compact && (
-        <div className="mt-3 space-y-1">
-          <ComponentBar label="Yield" value={score.yield_component} />
-          <ComponentBar label="Ocupación" value={score.occupancy_component} />
-          <ComponentBar label="ADR Growth" value={score.adr_growth_component} />
-          <ComponentBar label="Baja Oferta" value={score.supply_pressure_component} />
-        </div>
-      )}
-    </div>
-  );
-}
-
-function ComponentBar({ label, value }: { label: string; value: number | null }) {
-  const v = value ?? 0;
-  const color =
-    v >= 70 ? 'bg-teal-500' :
-    v >= 50 ? 'bg-amber-500' :
-    v >= 30 ? 'bg-orange-500' :
-    'bg-red-500';
-
-  return (
-    <div className="flex items-center gap-2 text-xs">
-      <span className="w-20 text-gray-500 text-right">{label}</span>
-      <div className="flex-1 bg-gray-100 rounded-full h-1.5">
-        <div
-          className={`h-1.5 rounded-full ${color}`}
-          style={{ width: `${Math.min(100, v)}%`, transition: 'width 0.5s ease' }}
-        />
-      </div>
-      <span className="w-8 text-gray-600 text-right">{Math.round(v)}</span>
     </div>
   );
 }

@@ -10,11 +10,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const isEn = locale === 'en';
 
   const title = isEn
-    ? 'Zone Intelligence — Vacation Rental Market Scores | Propyte'
-    : 'Inteligencia de Zonas — Scores del Mercado de Renta Vacacional | Propyte';
+    ? 'Profitability Map — Compare Vacation Rental Zones in Mexico | Propyte'
+    : 'Mapa de Rentabilidad — Compara Zonas de Renta Vacacional en México | Propyte';
   const description = isEn
-    ? 'Compare investment zones across Cancun, Playa del Carmen, Tulum and Merida. AI-powered scores with occupancy rates, ADR trends, RevPAR, and seasonal patterns.'
-    : 'Compara zonas de inversión en Cancún, Playa del Carmen, Tulum y Mérida. Scores con IA: ocupación, ADR, RevPAR y estacionalidad.';
+    ? 'Compare occupancy, nightly rates and competition across investment zones in Cancun, Playa del Carmen, Tulum, CDMX and Merida. Based on +2.5M rental records.'
+    : 'Compara ocupación, tarifa por noche y competencia entre zonas de inversión en Cancún, Playa del Carmen, Tulum, CDMX y Mérida. Basado en +2.5M registros de renta.';
 
   return {
     title,
@@ -60,12 +60,12 @@ export default async function ZonasPage({ params }: { params: Promise<{ locale: 
 
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">
-            {isEn ? 'Zone Intelligence' : 'Inteligencia de Zonas'}
+            {isEn ? 'Profitability Map' : 'Mapa de Rentabilidad'}
           </h1>
           <p className="text-lg text-gray-500 mt-1">
             {isEn
-              ? 'AI-powered investment scores for vacation rental zones'
-              : 'Scores de inversión potenciados por IA para zonas de renta vacacional'}
+              ? 'Compare occupancy, nightly rates and competition across zones before investing'
+              : 'Compara ocupación, ingreso por noche y competencia entre zonas antes de invertir'}
           </p>
         </div>
 
