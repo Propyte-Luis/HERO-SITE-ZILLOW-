@@ -26,6 +26,9 @@ const UNIQUE_ZONES = ZONE_CONFIGS.reduce((acc, z) => {
   return acc;
 }, [] as typeof ZONE_CONFIGS);
 
+// Force dynamic rendering — SSG can't access cookies() needed by Supabase client
+export const dynamic = 'force-dynamic';
+
 export async function generateStaticParams() {
   return UNIQUE_ZONES.map((z) => ({ slug: z.slug }));
 }
@@ -76,26 +79,37 @@ export default async function ZonePage({
   const market = CITY_TO_AIRDNA[city] || 'cancun';
 
   const supabase = await createServerSupabaseClient();
-  if (!supabase) notFound();
 
-  // Fetch all data in parallel
-  const [
-    zoneDetail,
-    occupancyTrend,
-    adrTrend,
-    forecasts,
-    seasonality,
-    devsResult,
-  ] = await Promise.all([
-    getZoneDetail(supabase, city, zone),
-    getOccupancyTrend(supabase, market, submarket, 36),
-    getADRTrend(supabase, market, submarket, 36),
-    getForecasts(supabase, market, submarket),
-    getSeasonalIndices(supabase, market, submarket),
-    getDevelopments(supabase, { city, zone, orderBy: 'roi', limit: 10 }),
-  ]);
+  // Fetch all data in parallel — gracefully handle missing Supabase
+  let zoneDetail = { score: null, submarkets: [] as string[] };
+  let occupancyTrend: Array<{ date: string; value: number }> = [];
+  let adrTrend: Array<{ date: string; value: number }> = [];
+  let forecasts: Awaited<ReturnType<typeof getForecasts>> = [];
+  let seasonality: Awaited<ReturnType<typeof getSeasonalIndices>> = [];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let developments: any[] = [];
 
-  const developments = devsResult.data || [];
+  if (supabase) {
+    try {
+      const results = await Promise.allSettled([
+        getZoneDetail(supabase, city, zone),
+        getOccupancyTrend(supabase, market, submarket, 36),
+        getADRTrend(supabase, market, submarket, 36),
+        getForecasts(supabase, market, submarket),
+        getSeasonalIndices(supabase, market, submarket),
+        getDevelopments(supabase, { city, zone, orderBy: 'roi', limit: 10 }),
+      ]);
+
+      if (results[0].status === 'fulfilled') zoneDetail = results[0].value;
+      if (results[1].status === 'fulfilled') occupancyTrend = results[1].value;
+      if (results[2].status === 'fulfilled') adrTrend = results[2].value;
+      if (results[3].status === 'fulfilled') forecasts = results[3].value;
+      if (results[4].status === 'fulfilled') seasonality = results[4].value;
+      if (results[5].status === 'fulfilled') developments = results[5].value?.data || [];
+    } catch (e) {
+      console.error('Zone page data fetch error:', e);
+    }
+  }
 
   // Separate forecasts and seasonality by metric
   const occupancyForecasts = forecasts.filter((f) => f.metric_name === 'occupancy');
