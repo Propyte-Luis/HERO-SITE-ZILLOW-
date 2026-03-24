@@ -7,12 +7,13 @@ import { useLocale } from 'next-intl';
 interface WhatsAppButtonProps {
   propertyName?: string;
   propertyId?: string;
+  phone?: string; // Override global phone (per-agent/per-project)
 }
 
-export default function WhatsAppButton({ propertyName, propertyId }: WhatsAppButtonProps) {
+export default function WhatsAppButton({ propertyName, propertyId, phone: propPhone }: WhatsAppButtonProps) {
   const locale = useLocale();
   const [visible, setVisible] = useState(false);
-  const phone = process.env.NEXT_PUBLIC_WHATSAPP_PHONE || '521XXXXXXXXXX';
+  const phone = propPhone || process.env.NEXT_PUBLIC_WHATSAPP_PHONE || '521XXXXXXXXXX';
 
   useEffect(() => {
     function handleScroll() {

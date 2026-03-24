@@ -564,6 +564,19 @@ export default async function DesarrolloDetailPage({ params }: { params: Promise
           <div className="space-y-6">
             {/* Contact Card */}
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sticky top-24">
+              {/* Named agent */}
+              {property.contact_name && (
+                <div className="flex items-center gap-3 mb-4 pb-4 border-b border-gray-100">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#5CE0D2] to-[#1A2F3F] flex items-center justify-center text-white font-bold text-sm">
+                    {property.contact_name.charAt(0)}
+                  </div>
+                  <div>
+                    <div className="font-bold text-gray-900 text-sm">{property.contact_name}</div>
+                    <div className="text-xs text-gray-400">{isEn ? 'Verified Advisor' : 'Asesor Verificado'}</div>
+                  </div>
+                </div>
+              )}
+
               <h3 className="text-lg font-bold text-gray-900 mb-4">
                 {isEn ? 'Interested in this development?' : 'Te interesa este desarrollo?'}
               </h3>
@@ -574,6 +587,22 @@ export default async function DesarrolloDetailPage({ params }: { params: Promise
                 }
               </p>
               <ContactForm propertyId={property.id} propertyName={property.name} />
+
+              {/* Direct WhatsApp for this agent */}
+              {property.contact_phone && (
+                <a
+                  href={`https://wa.me/${property.contact_phone.replace(/\D/g, '')}?text=${encodeURIComponent(
+                    isEn
+                      ? `Hi, I'm interested in ${property.name}. I saw it on Propyte.`
+                      : `Hola, me interesa ${property.name}. Lo vi en Propyte.`
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 w-full h-12 mt-3 bg-[#25D366] hover:bg-[#1EBE57] text-white font-semibold rounded-lg transition-colors"
+                >
+                  WhatsApp {property.contact_name ? `· ${property.contact_name.split(' ')[0]}` : ''}
+                </a>
+              )}
             </div>
           </div>
         </div>

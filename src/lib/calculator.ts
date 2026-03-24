@@ -250,6 +250,11 @@ export function calculateCapRate(annualNetRent: number, price: number): number {
   return (annualNetRent / price) * 100;
 }
 
+export function calculateDSCR(noi: number, annualDebtService: number): number {
+  if (annualDebtService <= 0) return Infinity;
+  return Math.round((noi / annualDebtService) * 100) / 100;
+}
+
 export function calculateGrossYield(annualRent: number, price: number): number {
   if (price === 0) return 0;
   return (annualRent / price) * 100;

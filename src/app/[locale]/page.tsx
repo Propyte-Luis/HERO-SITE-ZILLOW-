@@ -9,6 +9,7 @@ import WhyPropyte from '@/components/home/WhyPropyte';
 import DeveloperBanner from '@/components/home/DeveloperBanner';
 import DeveloperLogos from '@/components/home/DeveloperLogos';
 import Testimonials from '@/components/home/Testimonials';
+import LeadMagnet from '@/components/home/LeadMagnet';
 import AppDownloadBanner from '@/components/home/AppDownloadBanner';
 import RecentBlog from '@/components/home/RecentBlog';
 import SchemaMarkup from '@/components/shared/SchemaMarkup';
@@ -59,6 +60,7 @@ export default async function HomePage() {
       <WhyPropyte />
       <DeveloperBanner />
       {developers.length > 0 && <DeveloperLogos developers={developers} />}
+      <LeadMagnet />
       <AppDownloadBanner />
       {/* TODO: Habilitar cuando haya articulos reales — fase de contenido */}
       {/* <RecentBlog /> */}
