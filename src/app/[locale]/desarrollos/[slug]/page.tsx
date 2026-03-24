@@ -1,14 +1,15 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { ChevronRight, MapPin, Building2, Calendar, ExternalLink } from 'lucide-react';
+import { ChevronRight, MapPin, Building2, Calendar, ExternalLink, FileDown } from 'lucide-react';
 import { createServerSupabaseClient, createServiceRoleClient } from '@/lib/supabase/server';
-import { getPropertyBySlug, getRentalEstimate, getDevelopmentFinancials, getMlRentalEstimates, getAirdnaMarketSummary } from '@/lib/supabase/queries';
+import { getPropertyBySlug, getDevelopmentWithUnits, getRentalEstimate, getDevelopmentFinancials, getMlRentalEstimates, getAirdnaMarketSummary } from '@/lib/supabase/queries';
 import { formatPrice } from '@/lib/formatters';
 import { CITY_TO_AIRDNA } from '@/lib/calculator';
 import SchemaMarkup from '@/components/shared/SchemaMarkup';
 import ContactForm from '@/components/property/ContactForm';
 import RentalEstimate from '@/components/property/RentalEstimate';
 import InvestmentSummary from '@/components/property/InvestmentSummary';
+import UnitModelsTable from '@/components/property/UnitModelsTable';
 import { slugify } from '@/lib/utils';
 import { getAllDesarrollos, getDesarrolloBySlug, getDesarrollosByCity } from '@/data/desarrollos';
 
@@ -241,13 +242,26 @@ export default async function DesarrolloDetailPage({ params }: { params: Promise
 
   // ── DEVELOPMENT DETAIL PAGE ───────────────────────
   let property: any = null;
+  let units: any[] = [];
 
   try {
     if (!supabase) throw new Error('No Supabase');
-    const { data } = await getPropertyBySlug(supabase, slug);
-    if (data) property = data;
+    const { data } = await getDevelopmentWithUnits(supabase, slug);
+    if (data) {
+      const { units: devUnits, ...devData } = data;
+      property = devData;
+      units = devUnits || [];
+    }
   } catch {
-    // Supabase not available
+    // Supabase not available — try basic query
+    try {
+      if (supabase) {
+        const { data } = await getPropertyBySlug(supabase, slug);
+        if (data) property = data;
+      }
+    } catch {
+      // Also failed
+    }
   }
 
   // Fallback to static data
@@ -494,6 +508,9 @@ export default async function DesarrolloDetailPage({ params }: { params: Promise
               </div>
             )}
 
+            {/* Unit Models Table */}
+            <UnitModelsTable units={units} mlEstimates={mlEstimates} isEn={isEn} />
+
             {/* Amenities */}
             {property.amenities?.length > 0 && (
               <div>
@@ -507,6 +524,21 @@ export default async function DesarrolloDetailPage({ params }: { params: Promise
                     </span>
                   ))}
                 </div>
+              </div>
+            )}
+
+            {/* Brochure download */}
+            {property.brochure_url && (
+              <div>
+                <a
+                  href={property.brochure_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-[#1A2F3F] hover:bg-[#0F1923] text-white font-semibold rounded-xl transition-colors"
+                >
+                  <FileDown size={20} />
+                  {isEn ? 'Download Brochure' : 'Descargar Brochure'}
+                </a>
               </div>
             )}
 

@@ -80,11 +80,23 @@ export default function PropertyCard({ property }: PropertyCardProps) {
             </div>
           )}
 
-          {property.roi.projected > 0 && (
-            <div className="mt-2 text-sm font-medium text-[#5CE0D2]">
-              ROI {property.roi.projected}%
-            </div>
-          )}
+          <div className="flex flex-wrap items-center gap-1.5 mt-2">
+            {property.roi.projected > 0 && (
+              <span className="text-sm font-medium text-[#5CE0D2]">
+                ROI {property.roi.projected}%
+              </span>
+            )}
+            {property.capRate != null && property.capRate > 0 && (
+              <span className="text-xs font-semibold text-[#1A2F3F]/70 bg-[#1A2F3F]/8 px-2 py-0.5 rounded-full">
+                Cap {property.capRate.toFixed(1)}%
+              </span>
+            )}
+            {property.annualRevenue != null && property.annualRevenue > 0 && (
+              <span className="text-xs text-gray-400">
+                ${(property.annualRevenue / 1000).toFixed(0)}K/{locale === 'es' ? 'año' : 'yr'}
+              </span>
+            )}
+          </div>
         </div>
       </article>
     </Link>

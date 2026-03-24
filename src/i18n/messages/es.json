@@ -176,7 +176,9 @@
     "preventa": "Preventa",
     "nuevo": "Nuevo",
     "construcción": "En construcción",
-    "entrega_inmediata": "Entrega inmediata"
+    "entrega_inmediata": "Entrega inmediata",
+    "proximamente": "Próximamente",
+    "vendido": "Vendido"
   },
   "types": {
     "departamento": "Departamento",

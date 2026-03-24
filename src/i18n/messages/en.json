@@ -176,7 +176,9 @@
     "preventa": "Pre-sale",
     "nuevo": "New",
     "construccion": "Under construction",
-    "entrega_inmediata": "Ready to move in"
+    "entrega_inmediata": "Ready to move in",
+    "proximamente": "Coming Soon",
+    "vendido": "Sold Out"
   },
   "types": {
     "departamento": "Apartment",

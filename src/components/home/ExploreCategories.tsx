@@ -5,32 +5,41 @@ import Image from 'next/image';
 const categories = [
   {
     key: 'apartments',
+    typeKey: 'departamento',
     image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400&h=300&fit=crop',
     query: 'type=departamento',
   },
   {
     key: 'penthouses',
+    typeKey: 'penthouse',
     image: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=400&h=300&fit=crop',
     query: 'type=penthouse',
   },
   {
     key: 'houses',
+    typeKey: 'casa',
     image: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400&h=300&fit=crop',
     query: 'type=casa',
   },
   {
     key: 'land',
+    typeKey: 'terreno',
     image: 'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=400&h=300&fit=crop',
     query: 'type=terreno',
   },
   {
     key: 'presale',
+    typeKey: 'preventa',
     image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=400&h=300&fit=crop',
     query: 'stage=preventa',
   },
 ];
 
-export default function ExploreCategories() {
+interface ExploreCategoriesProps {
+  typeCounts?: Record<string, number>;
+}
+
+export default function ExploreCategories({ typeCounts }: ExploreCategoriesProps) {
   const t = useTranslations('explore');
   const locale = useLocale();
 
@@ -55,10 +64,15 @@ export default function ExploreCategories() {
                 className="object-cover group-hover:scale-110 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-              <div className="absolute bottom-0 left-0 right-0 p-3">
+              <div className="absolute bottom-0 left-0 right-0 p-3 flex items-end justify-between">
                 <span className="text-white font-bold text-sm md:text-base drop-shadow-md">
                   {t(cat.key)}
                 </span>
+                {typeCounts && typeCounts[cat.typeKey] > 0 && (
+                  <span className="bg-white/90 backdrop-blur-sm text-gray-700 text-[10px] font-bold px-2 py-0.5 rounded-full">
+                    {typeCounts[cat.typeKey]}
+                  </span>
+                )}
               </div>
             </Link>
           ))}

@@ -47,6 +47,8 @@ export const properties: Property[] = [
     badge: 'preventa',
     featured: true,
     createdAt: '2025-06-15T10:00:00Z',
+    capRate: 7.2,
+    annualRevenue: 216_000,
   },
 
   // 2. Nativa Cancún — Departamento Tipo B
@@ -82,6 +84,8 @@ export const properties: Property[] = [
     badge: 'preventa',
     featured: true,
     createdAt: '2025-06-20T12:00:00Z',
+    capRate: 6.8,
+    annualRevenue: 336_000,
   },
 
   // 3. Nativa Cancún — Penthouse

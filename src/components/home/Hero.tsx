@@ -3,14 +3,23 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations, useLocale } from 'next-intl';
-import { Search, MapPin, Sparkles } from 'lucide-react';
+import { Search, MapPin, Sparkles, Building2, Home, Map, BarChart3 } from 'lucide-react';
 import Link from 'next/link';
 
 // TODO: Habilitar 'rentar' cuando haya inventario de renta
 const TABS = ['comprar', 'preventa'] as const;
 type Tab = typeof TABS[number];
 
-export default function Hero() {
+interface HeroProps {
+  stats?: {
+    developments: number;
+    units: number;
+    cities: number;
+    zones: number;
+  };
+}
+
+export default function Hero({ stats }: HeroProps) {
   const t = useTranslations('hero');
   const locale = useLocale();
   const router = useRouter();
@@ -122,6 +131,24 @@ export default function Hero() {
             </Link>
           ))}
         </div>
+
+        {/* Social proof stats */}
+        {stats && (
+          <div className="flex flex-wrap justify-center gap-4 md:gap-6 mt-8">
+            {[
+              { icon: Building2, value: `${stats.developments}+`, label: locale === 'es' ? 'Desarrollos' : 'Developments' },
+              { icon: Home, value: `${stats.units}+`, label: locale === 'es' ? 'Unidades' : 'Units' },
+              { icon: Map, value: `${stats.cities}`, label: locale === 'es' ? 'Ciudades' : 'Cities' },
+              { icon: BarChart3, value: `${stats.zones}+`, label: locale === 'es' ? 'Zonas analizadas' : 'Zones Analyzed' },
+            ].map((stat) => (
+              <div key={stat.label} className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/15">
+                <stat.icon size={16} className="text-[#5CE0D2]" />
+                <span className="text-white font-bold text-sm">{stat.value}</span>
+                <span className="text-white/70 text-xs">{stat.label}</span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

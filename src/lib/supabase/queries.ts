@@ -148,6 +148,52 @@ export async function getCityCounts(client: Client) {
     .is('deleted_at', null);
 }
 
+export async function getGlobalStats(client: Client) {
+  const [devsRes, unitsRes] = await Promise.all([
+    client
+      .from('developments')
+      .select('id, city, zone, property_types', { count: 'exact' })
+      .eq('published', true)
+      .is('deleted_at', null),
+    client
+      .from('units')
+      .select('id', { count: 'exact', head: true })
+      .eq('published', true)
+      .is('deleted_at', null),
+  ]);
+
+  const devs = devsRes.data || [];
+  const cities = new Set(devs.map(d => d.city).filter(Boolean));
+  const zones = new Set(devs.map(d => d.zone).filter(Boolean));
+
+  // Count by property type (flatten arrays)
+  const typeCounts: Record<string, number> = {};
+  for (const d of devs) {
+    if (d.property_types && Array.isArray(d.property_types)) {
+      for (const t of d.property_types) {
+        typeCounts[t] = (typeCounts[t] || 0) + 1;
+      }
+    }
+  }
+
+  return {
+    developments: devsRes.count || devs.length,
+    units: unitsRes.count || 0,
+    cities: cities.size,
+    zones: zones.size,
+    typeCounts,
+  };
+}
+
+export async function getBatchFinancials(client: Client, developmentIds: string[]) {
+  if (developmentIds.length === 0) return [];
+  const { data } = await client
+    .from('development_financials')
+    .select('development_id, cap_rate, estimated_rent_residencial, roi_annual_pct')
+    .in('development_id', developmentIds);
+  return data || [];
+}
+
 // ============================================================
 // UNIT QUERIES
 // ============================================================

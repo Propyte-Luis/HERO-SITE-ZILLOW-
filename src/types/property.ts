@@ -64,4 +64,7 @@ export interface Property {
   badge: PropertyBadge;
   featured: boolean;
   createdAt: string;
+  // Financial metrics from development_financials (optional, enriched at listing level)
+  capRate?: number;
+  annualRevenue?: number;
 }
