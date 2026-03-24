@@ -49,10 +49,15 @@ export default function Header() {
   ];
 
   const moreLinks = [
+    { href: `/${locale}/como-comprar`, label: locale === 'es' ? 'Cómo Comprar' : 'How to Buy' },
+    { href: `/${locale}/como-invertir`, label: locale === 'es' ? 'Cómo Invertir' : 'How to Invest' },
+    { href: `/${locale}/financiamiento`, label: locale === 'es' ? 'Financiamiento' : 'Financing' },
+    { href: `/${locale}/promociones`, label: locale === 'es' ? 'Promociones' : 'Promotions' },
     { href: `/${locale}/desarrolladores`, label: t('developers') },
     { href: `/${locale}/corredores`, label: t('brokers') },
     { href: `/${locale}/built`, label: t('built') },
-    { href: `/${locale}/unete`, label: 'Únete' },
+    { href: `/${locale}/faq`, label: 'FAQ' },
+    { href: `/${locale}/unete`, label: locale === 'es' ? 'Únete' : 'Join Us' },
   ];
 
   const linkClass = "px-3 py-2 text-sm font-semibold text-[#2C2C2C] hover:text-[#5CE0D2] rounded-lg hover:bg-gray-50 transition-colors";
@@ -86,17 +91,19 @@ export default function Header() {
                     {t('more')} <ChevronDown size={14} className={`transition-transform ${moreOpen ? 'rotate-180' : ''}`} />
                   </button>
                   {moreOpen && (
-                    <div className="absolute top-full left-0 mt-1 w-56 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
-                      {moreLinks.map(link => (
-                        <Link
-                          key={link.href}
-                          href={link.href}
-                          className="block px-4 py-2.5 text-sm font-medium text-[#2C2C2C] hover:text-[#5CE0D2] hover:bg-gray-50 transition-colors"
-                          onClick={() => setMoreOpen(false)}
-                        >
-                          {link.label}
-                        </Link>
-                      ))}
+                    <div className="absolute top-full right-0 mt-1 w-[400px] bg-white rounded-xl shadow-lg border border-gray-100 p-4 z-50">
+                      <div className="grid grid-cols-2 gap-1">
+                        {moreLinks.map(link => (
+                          <Link
+                            key={link.href}
+                            href={link.href}
+                            className="block px-3 py-2.5 text-sm font-medium text-[#2C2C2C] hover:text-[#5CE0D2] hover:bg-gray-50 rounded-lg transition-colors"
+                            onClick={() => setMoreOpen(false)}
+                          >
+                            {link.label}
+                          </Link>
+                        ))}
+                      </div>
                     </div>
                   )}
                 </div>

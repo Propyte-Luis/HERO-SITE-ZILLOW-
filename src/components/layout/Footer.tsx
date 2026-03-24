@@ -61,18 +61,22 @@ export default function Footer() {
             <h4 className="font-bold text-sm mb-4 uppercase tracking-wider text-white/80">{t('company')}</h4>
             <ul className="space-y-2.5">
               <li><Link href={`/${locale}/nosotros/quienes-somos`} className="text-sm text-white/50 hover:text-white transition-colors">{t('aboutUs')}</Link></li>
+              <li><Link href={`/${locale}/como-comprar`} className="text-sm text-white/50 hover:text-white transition-colors">{locale === 'es' ? 'Cómo Comprar' : 'How to Buy'}</Link></li>
+              <li><Link href={`/${locale}/como-invertir`} className="text-sm text-white/50 hover:text-white transition-colors">{locale === 'es' ? 'Cómo Invertir' : 'How to Invest'}</Link></li>
+              <li><Link href={`/${locale}/financiamiento`} className="text-sm text-white/50 hover:text-white transition-colors">{locale === 'es' ? 'Financiamiento' : 'Financing'}</Link></li>
               <li><Link href={`/${locale}/desarrolladores`} className="text-sm text-white/50 hover:text-white transition-colors">{t('developersLink')}</Link></li>
               <li><Link href={`/${locale}/corredores`} className="text-sm text-white/50 hover:text-white transition-colors">{t('brokersLink')}</Link></li>
-              <li><Link href={`/${locale}/built`} className="text-sm text-white/50 hover:text-white transition-colors">{t('builtLink')}</Link></li>
               <li><Link href={`/${locale}/unete`} className="text-sm text-white/50 hover:text-white transition-colors">{t('careers')}</Link></li>
-              {/* TODO: Habilitar cuando haya blog — fase de contenido */}
             </ul>
           </div>
 
-          {/* Legal */}
+          {/* Resources & Legal */}
           <div>
-            <h4 className="font-bold text-sm mb-4 uppercase tracking-wider text-white/80">{t('legal')}</h4>
+            <h4 className="font-bold text-sm mb-4 uppercase tracking-wider text-white/80">{locale === 'es' ? 'Recursos' : 'Resources'}</h4>
             <ul className="space-y-2.5">
+              <li><Link href={`/${locale}/faq`} className="text-sm text-white/50 hover:text-white transition-colors">FAQ</Link></li>
+              <li><Link href={`/${locale}/glosario`} className="text-sm text-white/50 hover:text-white transition-colors">{locale === 'es' ? 'Glosario' : 'Glossary'}</Link></li>
+              <li><Link href={`/${locale}/promociones`} className="text-sm text-white/50 hover:text-white transition-colors">{locale === 'es' ? 'Promociones' : 'Promotions'}</Link></li>
               <li><span className="text-sm text-white/30 cursor-default" title="Próximamente" aria-disabled="true">{t('privacy')}</span></li>
               <li><span className="text-sm text-white/30 cursor-default" title="Próximamente" aria-disabled="true">{t('terms')}</span></li>
             </ul>

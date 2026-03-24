@@ -29,10 +29,16 @@ export default function MobileMenu({ isOpen, onClose, locale, translations }: Mo
     return () => { document.body.style.overflow = ''; };
   }, [isOpen]);
 
+  const isEn = locale === 'en';
   const links = [
     { href: `/${locale}`, label: translations.home },
     { href: `/${locale}/propiedades`, label: translations.properties },
+    { href: `/${locale}/como-comprar`, label: isEn ? 'How to Buy' : 'Cómo Comprar' },
+    { href: `/${locale}/como-invertir`, label: isEn ? 'How to Invest' : 'Cómo Invertir' },
+    { href: `/${locale}/financiamiento`, label: isEn ? 'Financing' : 'Financiamiento' },
+    { href: `/${locale}/promociones`, label: isEn ? 'Promotions' : 'Promociones' },
     { href: `/${locale}/desarrolladores`, label: translations.developers },
+    { href: `/${locale}/faq`, label: 'FAQ' },
     { href: `/${locale}/contacto`, label: translations.contact },
   ];
 

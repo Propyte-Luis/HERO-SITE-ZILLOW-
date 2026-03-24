@@ -8,6 +8,7 @@ import TrendingMarket from '@/components/home/TrendingMarket';
 import WhyPropyte from '@/components/home/WhyPropyte';
 import DeveloperBanner from '@/components/home/DeveloperBanner';
 import DeveloperLogos from '@/components/home/DeveloperLogos';
+import Testimonials from '@/components/home/Testimonials';
 import AppDownloadBanner from '@/components/home/AppDownloadBanner';
 import RecentBlog from '@/components/home/RecentBlog';
 import SchemaMarkup from '@/components/shared/SchemaMarkup';
@@ -53,6 +54,7 @@ export default async function HomePage() {
       <Hero stats={stats} />
       <ExploreCategories typeCounts={stats.typeCounts} />
       <FeaturedProperties />
+      <Testimonials />
       <TrendingMarket />
       <WhyPropyte />
       <DeveloperBanner />
